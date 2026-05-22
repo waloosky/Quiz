@@ -18,6 +18,7 @@
       --red-glow: #ff1744;
       --text-main: #e0f7fa;
       --text-dim: #80cbc4;
+      --green-wa: #25D366;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -33,7 +34,6 @@
       position: relative;
     }
 
-    /* ── Animated background blobs ── */
     .bg-layer {
       position: fixed;
       inset: 0;
@@ -74,7 +74,6 @@
       100% { transform: translate(-40px,70px) scale(0.95); }
     }
 
-    /* Particle grid overlay */
     .grid-overlay {
       position: fixed;
       inset: 0;
@@ -86,7 +85,6 @@
       pointer-events: none;
     }
 
-    /* ── Main card ── */
     .card {
       position: relative;
       z-index: 10;
@@ -108,7 +106,6 @@
       to   { opacity: 1; transform: none; }
     }
 
-    /* Glowing top border accent */
     .card::before {
       content: '';
       position: absolute;
@@ -119,7 +116,6 @@
       filter: blur(1px);
     }
 
-    /* ── Icon area ── */
     .icon-ring {
       width: 72px; height: 72px;
       border-radius: 50%;
@@ -136,7 +132,6 @@
       50%      { box-shadow: 0 0 40px rgba(0,229,255,0.35), inset 0 0 20px rgba(0,229,255,0.1); }
     }
 
-    /* ── Typography ── */
     .title {
       font-family: 'Orbitron', 'Cairo', sans-serif;
       font-size: 20px;
@@ -156,7 +151,6 @@
       letter-spacing: 0.5px;
     }
 
-    /* ── Step sections ── */
     .step { display: none; }
     .step.active { display: block; animation: fadeSlide 0.4s ease both; }
     @keyframes fadeSlide {
@@ -164,7 +158,6 @@
       to   { opacity: 1; transform: none; }
     }
 
-    /* ── Google button ── */
     .btn-google {
       display: flex;
       align-items: center;
@@ -183,6 +176,7 @@
       transition: all 0.3s ease;
       box-shadow: 0 0 0 rgba(0,229,255,0);
       letter-spacing: 0.4px;
+      text-decoration: none;
     }
     .btn-google:hover {
       background: rgba(0,229,255,0.08);
@@ -193,6 +187,71 @@
     .btn-google:active { transform: scale(0.98); }
     .google-icon {
       width: 22px; height: 22px; flex-shrink: 0;
+    }
+
+    /* ── Contact buttons ── */
+    .contact-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .btn-call {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 14px;
+      border-radius: 50px;
+      border: 1px solid rgba(0,229,255,0.3);
+      background: rgba(0,229,255,0.06);
+      color: var(--cyan);
+      font-family: 'Cairo', sans-serif;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      direction: ltr;
+    }
+    .btn-call:hover {
+      background: rgba(0,229,255,0.13);
+      border-color: var(--cyan);
+      box-shadow: 0 0 18px rgba(0,229,255,0.18);
+      transform: translateY(-1px);
+    }
+    .btn-call:active { transform: scale(0.97); }
+
+    .btn-whatsapp {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 14px;
+      border-radius: 50px;
+      border: 1px solid rgba(37,211,102,0.3);
+      background: rgba(37,211,102,0.06);
+      color: var(--green-wa);
+      font-family: 'Cairo', sans-serif;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      direction: ltr;
+    }
+    .btn-whatsapp:hover {
+      background: rgba(37,211,102,0.13);
+      border-color: var(--green-wa);
+      box-shadow: 0 0 18px rgba(37,211,102,0.2);
+      transform: translateY(-1px);
+    }
+    .btn-whatsapp:active { transform: scale(0.97); }
+
+    .btn-icon {
+      width: 18px; height: 18px; flex-shrink: 0;
     }
 
     /* ── Loading ── */
@@ -236,7 +295,6 @@
     }
     @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
 
-    /* ── Code input step ── */
     .field-label {
       font-size: 12px;
       color: var(--text-dim);
@@ -280,7 +338,6 @@
       box-shadow: 0 0 0 3px rgba(0,229,255,0.08), 0 0 16px rgba(0,229,255,0.12);
     }
 
-    /* ── Enter button ── */
     .btn-enter {
       width: 100%;
       padding: 14px;
@@ -310,7 +367,6 @@
     .btn-enter:hover::after { opacity: 1; }
     .btn-enter:active { transform: scale(0.98); }
 
-    /* ── Error message ── */
     .error-msg {
       display: none;
       margin-top: 12px;
@@ -333,7 +389,6 @@
       display: inline-block;
     }
 
-    /* ── Success overlay ── */
     .success-overlay {
       display: none;
       position: fixed;
@@ -356,7 +411,6 @@
     .success-title { font-family: 'Orbitron', sans-serif; color: var(--cyan); font-size: 18px; text-shadow: 0 0 20px var(--cyan); }
     .success-sub { color: var(--text-dim); font-size: 13px; }
 
-    /* ── Divider ── */
     .divider {
       display: flex; align-items: center; gap: 12px;
       margin: 24px 0 20px;
@@ -364,7 +418,6 @@
     .divider-line { flex: 1; height: 1px; background: rgba(0,229,255,0.1); }
     .divider-text { font-size: 11px; color: rgba(128,203,196,0.5); letter-spacing: 1px; white-space: nowrap; }
 
-    /* ── Footer ── */
     .card-footer {
       margin-top: 28px;
       text-align: center;
@@ -374,7 +427,6 @@
     }
     .footer-name { color: var(--amber); font-weight: 700; opacity: 0.8; }
 
-    /* ── Back link ── */
     .back-link {
       display: inline-block;
       margin-top: 16px;
@@ -390,7 +442,6 @@
 </head>
 <body>
 
-  <!-- Background -->
   <div class="bg-layer">
     <div class="blob blob-1"></div>
     <div class="blob blob-2"></div>
@@ -398,7 +449,6 @@
   </div>
   <div class="grid-overlay"></div>
 
-  <!-- Main Card -->
   <div class="card">
     <div class="icon-ring">⚛️</div>
     <h1 class="title">بوابة الفيزياء الحديثة</h1>
@@ -410,7 +460,6 @@
         مرحباً بك! سجّل دخولك للوصول إلى منصة الاختبارات
       </p>
       <button class="btn-google" onclick="startGoogleFlow()">
-        <!-- Google SVG logo -->
         <svg class="google-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
           <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -426,9 +475,28 @@
         <div class="divider-line"></div>
       </div>
 
-      <p style="font-size:11.5px; color:rgba(128,203,196,0.4); text-align:center; line-height:1.8;">
+      <p style="font-size:11.5px; color:rgba(128,203,196,0.4); text-align:center; line-height:1.8; margin-bottom: 8px;">
         🔒 بياناتك محمية ولا يتم مشاركتها مع أي طرف ثالث
       </p>
+
+      <!-- زرا الاتصال والواتساب -->
+      <div class="contact-buttons">
+        <a href="tel:+9647718597632" class="btn-call">
+          <!-- Phone icon -->
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24 11.36 11.36 0 003.55.57 1 1 0 011 1V21a1 1 0 01-1 1A17 17 0 013 5a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1.01l-2.2 2.21z" fill="currentColor"/>
+          </svg>
+          اتصل بنا
+        </a>
+        <a href="https://wa.me/9647718597632" target="_blank" class="btn-whatsapp">
+          <!-- WhatsApp icon -->
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.558 4.121 1.533 5.853L.057 23.486a.5.5 0 00.609.61l5.722-1.502A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.9a9.893 9.893 0 01-5.031-1.374l-.36-.214-3.733.979.997-3.645-.235-.374A9.861 9.861 0 012.1 12C2.1 6.534 6.534 2.1 12 2.1S21.9 6.534 21.9 12 17.466 21.9 12 21.9z"/>
+          </svg>
+          واتساب
+        </a>
+      </div>
     </div>
 
     <!-- Step 2: Loading -->
@@ -487,19 +555,6 @@
   </div>
 
   <script>
-    /* ============================================================
-       ✏️  تعليمات للمدرس وليد خالد الفتلاوي:
-       ------------------------------------------------------------
-       لإضافة كود جديد لطالب:
-         1. افتح هذا الملف بـ Notepad أو أي محرر نصوص.
-         2. ابحث عن السطر أدناه: let VALID_ACCESS_CODES = [
-         3. أضف الكود الجديد داخل القوسين، بين علامتي اقتباس
-            وافصله بفاصلة (,) عن الكود السابق.
-            مثال: 'WK-2024-X', 'ATOM-99', 'STUDENT-55'
-         4. احفظ الملف وأعد رفعه أو أرسله للطلاب.
-       لا تحذف أي شيء خارج القوسين المربعين [ ].
-    ============================================================ */
-
     let VALID_ACCESS_CODES = [
       'WK-2024-X',
       'ATOM-99',
@@ -508,10 +563,8 @@
       'WKF-2025'
     ];
 
-    /* الموقع النهائي بعد الدخول الناجح */
     const REDIRECT_URL = 'dashboard.html';
 
-    /* ── Flow functions ── */
     function showStep(id) {
       document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
       document.getElementById(id).classList.add('active');
@@ -533,12 +586,10 @@
       const normalized = VALID_ACCESS_CODES.map(c => c.toUpperCase());
 
       if (normalized.includes(input)) {
-        /* ✅ كود صحيح */
         document.getElementById('errorMsg').classList.remove('visible');
         document.getElementById('successOverlay').classList.add('visible');
         setTimeout(() => { window.location.href = REDIRECT_URL; }, 1800);
       } else {
-        /* ❌ كود خاطئ */
         const err = document.getElementById('errorMsg');
         err.classList.add('visible');
         const inp = document.getElementById('codeInput');
