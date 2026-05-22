@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<header style="text-align: center; padding: 20px;">
+    <h1>الاختبار الأول</h1>
+    <a href="dashboard.html" style="color: #ffab00; font-size: 16px; text-decoration: none;">
+        ⬅ العودة لمركز الاختبارات
+    </a>
+</header>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>اختبار الفيزياء | الفصل السادس - الفيزياء الحديثة</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    /* ═══════════════════════════════════════
+       CSS VARIABLES & RESET
+    ═══════════════════════════════════════ */
+    :root {
+      --bg-deep:       #0b1120;
+      --bg-card:       #111827;
+      --bg-card2:      #1a2540;
+      --bg-glass:      rgba(255,255,255,0.04);
+      --border:        rgba(99,179,237,0.18);
+      --accent-blue:   #63b3ed;
+      --accent-cyan:   #4fd1c5;
+      --accent-gold:   #f6c90e;
+      --accent-purple: #b794f4;
+      --text-primary:  #e8f0fe;
+      --text-muted:    #8fa3bf;
+      --correct:       #48bb78;
+      --correct-bg:    rgba(72,187,120,0.12);
+      --wrong:         #fc8181;
+      --wrong-bg:      rgba(252,129,129,0.12);
+      --radius-sm:     10px;
+      --radius-md:     16px;
+      --radius-lg:     24px;
+      --shadow:        0 8px 40px rgba(0,0,0,0.45);
+      --transition:    0.28s cubic-bezier(.4,0,.2,1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Cairo', 'Tajawal', sans-serif;
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      min-height: 100vh;
+      direction: rtl;
+      overflow-x: hidden;
+    }
+
+    /* ═══════════════════════════════════════
+       ANIMATED BACKGROUND
+    ═══════════════════════════════════════ */
+    .bg-canvas {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(99,179,237,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 90%, rgba(183,148,244,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 100% 80% at 50% 50%, rgba(11,17,32,1) 0%, transparent 100%);
+    }
+    .bg-canvas::before {
+      content:'';
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle, rgba(99,179,237,0.08) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
+    }
+
+    /* ═══════════════════════════════════════
+       LAYOUT
+    ═══════════════════════════════════════ */
+    .app-wrapper {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 20px 16px 60px;
+    }
+
+    /* ═══════════════════════════════════════
+       HEADER
+    ═══════════════════════════════════════ */
+    .app-header {
+      width: 100%; max-width: 780px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 0 28px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 36px;
+    }
+    .header-brand { display: flex; align-items: center; gap: 12px; }
+    .header-icon {
+      width: 48px; height: 48px;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; box-shadow: 0 4px 16px rgba(99,179,237,0.3);
+    }
+    .header-title { display: flex; flex-direction: column; }
+    .header-title span:first-child {
+      font-size: 18px; font-weight: 700; color: var(--text-primary);
+      line-height: 1.2;
+    }
+    .header-title span:last-child {
+      font-size: 12px; color: var(--text-muted); font-weight: 400;
+    }
+    .header-badge {
+      background: linear-gradient(135deg, rgba(99,179,237,0.15), rgba(79,209,197,0.1));
+      border: 1px solid var(--accent-cyan);
+      border-radius: 20px; padding: 5px 14px;
+      font-size: 12px; color: var(--accent-cyan); font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* ═══════════════════════════════════════
+       SCREENS (start / quiz / result)
+    ═══════════════════════════════════════ */
+    .screen { width: 100%; max-width: 780px; animation: fadeUp .5s ease both; }
+    .screen.hidden { display: none !important; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ═══════════════════════════════════════
+       START SCREEN
+    ═══════════════════════════════════════ */
+    .start-hero {
+      text-align: center; padding: 20px 0 40px;
+    }
+    .start-hero .atom-icon {
+      width: 100px; height: 100px; margin: 0 auto 28px;
+      background: radial-gradient(circle, rgba(99,179,237,0.15), transparent 70%);
+      border: 2px solid rgba(99,179,237,0.25);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 52px;
+      animation: pulse-glow 3s ease infinite;
+    }
+    @keyframes pulse-glow {
+      0%,100% { box-shadow: 0 0 20px rgba(99,179,237,0.2); }
+      50%      { box-shadow: 0 0 50px rgba(99,179,237,0.45); }
+    }
+    .start-hero h1 {
+      font-size: clamp(22px, 5vw, 34px);
+      font-weight: 900; line-height: 1.3;
+      background: linear-gradient(135deg, #e8f0fe, var(--accent-blue));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+    .start-hero p {
+      font-size: 15px; color: var(--text-muted); max-width: 500px; margin: 0 auto 36px;
+      line-height: 1.7;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px; margin-bottom: 40px;
+    }
+    .info-card {
+      background: var(--bg-glass);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 18px 16px; text-align: center;
+      transition: var(--transition);
+    }
+    .info-card:hover {
+      background: rgba(99,179,237,0.07);
+      border-color: var(--accent-blue);
+      transform: translateY(-3px);
+    }
+    .info-card .ic-icon { font-size: 28px; margin-bottom: 8px; }
+    .info-card .ic-val {
+      font-size: 22px; font-weight: 800; color: var(--accent-gold);
+      display: block; line-height: 1;
+    }
+    .info-card .ic-label { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+    .btn-start {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 16px 48px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 17px; font-weight: 700;
+      border: none; border-radius: 50px; cursor: pointer;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+      color: #0b1120;
+      box-shadow: 0 6px 30px rgba(99,179,237,0.4);
+      transition: var(--transition);
+      letter-spacing: 0.3px;
+    }
+    .btn-start:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 10px 40px rgba(99,179,237,0.55);
+    }
+    .btn-start:active { transform: scale(0.98); }
+
+    /* ═══════════════════════════════════════
+       QUIZ SCREEN
+    ═══════════════════════════════════════ */
+
+    /* Progress bar */
+    .progress-bar-wrap {
+      background: rgba(255,255,255,0.06);
+      border-radius: 50px; height: 7px; overflow: hidden;
+      margin-bottom: 8px;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+      border-radius: 50px;
+      transition: width 0.5s cubic-bezier(.4,0,.2,1);
+    }
+
+    .quiz-meta {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 26px; font-size: 13px;
+    }
+    .quiz-progress-text { color: var(--text-muted); }
+    .quiz-progress-text strong { color: var(--accent-blue); font-size: 15px; }
+
+    /* Score chips */
+    .score-chips { display: flex; gap: 10px; }
+    .chip {
+      display: flex; align-items: center; gap: 5px;
+      padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700;
+    }
+    .chip-correct {
+      background: rgba(72,187,120,0.12);
+      border: 1px solid rgba(72,187,120,0.3);
+      color: var(--correct);
+    }
+    .chip-wrong {
+      background: rgba(252,129,129,0.12);
+      border: 1px solid rgba(252,129,129,0.3);
+      color: var(--wrong);
+    }
+
+    /* Question card */
+    .question-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: clamp(22px, 4vw, 36px);
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+
+    .question-number {
+      font-size: 11px; font-weight: 700; letter-spacing: 1px;
+      color: var(--accent-cyan); margin-bottom: 14px; text-transform: uppercase;
+    }
+    .question-text {
+      font-size: clamp(15px, 2.4vw, 18px);
+      font-weight: 600; line-height: 1.75;
+      color: var(--text-primary); margin-bottom: 28px;
+    }
+
+    /* Options */
+    .options-list { display: flex; flex-direction: column; gap: 12px; }
+
+    .option-btn {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 16px 18px;
+      background: var(--bg-glass);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      text-align: right;
+      transition: background var(--transition), border-color var(--transition), transform .15s;
+      width: 100%;
+    }
+    .option-btn:not(:disabled):hover {
+      background: rgba(99,179,237,0.08);
+      border-color: var(--accent-blue);
+      transform: translateX(-3px);
+    }
+    .option-btn:not(:disabled):active { transform: scale(0.99); }
+
+    .option-label {
+      min-width: 32px; height: 32px;
+      border-radius: 8px;
+      background: rgba(99,179,237,0.1);
+      border: 1px solid rgba(99,179,237,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: var(--accent-blue);
+      flex-shrink: 0; margin-top: 2px;
+      transition: var(--transition);
+    }
+    .option-text {
+      font-size: clamp(13px, 2vw, 15px);
+      line-height: 1.65; color: var(--text-primary); font-weight: 400;
+    }
+
+    /* Correct state */
+    .option-btn.correct {
+      background: var(--correct-bg);
+      border-color: var(--correct);
+      animation: pop .35s ease;
+    }
+    .option-btn.correct .option-label {
+      background: var(--correct); border-color: var(--correct); color: #fff;
+    }
+    .option-btn.correct .option-text { color: var(--correct); font-weight: 600; }
+
+    /* Wrong state */
+    .option-btn.wrong {
+      background: var(--wrong-bg);
+      border-color: var(--wrong);
+      animation: shake .4s ease;
+    }
+    .option-btn.wrong .option-label {
+      background: var(--wrong); border-color: var(--wrong); color: #fff;
+    }
+    .option-btn.wrong .option-text { color: var(--wrong); font-weight: 500; }
+
+    @keyframes pop {
+      0%   { transform: scale(1); }
+      40%  { transform: scale(1.03) translateX(-4px); }
+      100% { transform: scale(1); }
+    }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%     { transform: translateX(-6px); }
+      40%     { transform: translateX(6px); }
+      60%     { transform: translateX(-4px); }
+      80%     { transform: translateX(4px); }
+    }
+
+    /* Disabled */
+    .option-btn:disabled { cursor: default; }
+    .option-btn:disabled:not(.correct):not(.wrong) { opacity: 0.55; }
+
+    /* Explanation */
+    .explanation-box {
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.45s ease, opacity 0.35s ease, margin-top 0.3s ease;
+      margin-top: 0;
+    }
+    .explanation-box.show {
+      max-height: 300px; opacity: 1; margin-top: 20px;
+    }
+    .explanation-inner {
+      display: flex; gap: 14px;
+      background: linear-gradient(135deg, rgba(99,179,237,0.07), rgba(79,209,197,0.05));
+      border: 1px solid rgba(99,179,237,0.22);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+    }
+    .explanation-icon {
+      font-size: 20px; flex-shrink: 0; margin-top: 2px;
+    }
+    .explanation-content { flex: 1; }
+    .explanation-title {
+      font-size: 12px; font-weight: 700; color: var(--accent-cyan);
+      margin-bottom: 6px; letter-spacing: 0.5px;
+    }
+    .explanation-text {
+      font-size: 13.5px; color: var(--text-primary); line-height: 1.7;
+      font-weight: 400;
+    }
+
+    /* Next button */
+    .btn-next {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      margin-top: 24px; width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, rgba(99,179,237,0.15), rgba(79,209,197,0.1));
+      border: 1.5px solid var(--accent-blue);
+      border-radius: var(--radius-md);
+      color: var(--accent-blue); font-family: 'Cairo',sans-serif;
+      font-size: 15px; font-weight: 700; cursor: pointer;
+      transition: var(--transition);
+      opacity: 0; pointer-events: none;
+    }
+    .btn-next.visible {
+      opacity: 1; pointer-events: all;
+      animation: fadeUp .3s ease .1s both;
+    }
+    .btn-next:hover {
+      background: linear-gradient(135deg, rgba(99,179,237,0.25), rgba(79,209,197,0.18));
+      box-shadow: 0 4px 20px rgba(99,179,237,0.25);
+      transform: translateY(-2px);
+    }
+
+    /* ═══════════════════════════════════════
+       RESULT SCREEN
+    ═══════════════════════════════════════ */
+    .result-screen { text-align: center; }
+
+    .result-trophy {
+      width: 110px; height: 110px; margin: 0 auto 24px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 60px;
+      animation: pulse-glow 3s ease infinite, fadeUp .5s ease;
+    }
+    .result-trophy.excellent { background: radial-gradient(circle, rgba(246,201,14,0.2), transparent 70%); border: 2px solid rgba(246,201,14,0.4); }
+    .result-trophy.good      { background: radial-gradient(circle, rgba(72,187,120,0.2), transparent 70%); border: 2px solid rgba(72,187,120,0.4); }
+    .result-trophy.fair      { background: radial-gradient(circle, rgba(99,179,237,0.2), transparent 70%); border: 2px solid rgba(99,179,237,0.4); }
+    .result-trophy.poor      { background: radial-gradient(circle, rgba(252,129,129,0.2), transparent 70%); border: 2px solid rgba(252,129,129,0.4); }
+
+    .result-grade {
+      font-size: clamp(14px,3vw,17px); font-weight: 700; margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+    .result-grade.excellent { color: var(--accent-gold); }
+    .result-grade.good      { color: var(--correct); }
+    .result-grade.fair      { color: var(--accent-blue); }
+    .result-grade.poor      { color: var(--wrong); }
+
+    .result-title {
+      font-size: clamp(24px,5vw,38px);
+      font-weight: 900; line-height: 1.2;
+      background: linear-gradient(135deg, var(--text-primary), var(--accent-blue));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+    .result-subtitle {
+      font-size: 14px; color: var(--text-muted); margin-bottom: 40px; line-height: 1.6;
+    }
+
+    /* Score ring */
+    .score-ring-wrap {
+      position: relative; width: 160px; height: 160px; margin: 0 auto 36px;
+    }
+    .score-ring-svg { transform: rotate(-90deg); }
+    .score-ring-bg  { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 10; }
+    .score-ring-fg  {
+      fill: none; stroke-width: 10; stroke-linecap: round;
+      stroke-dasharray: 440; stroke-dashoffset: 440;
+      transition: stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1) .3s;
+    }
+    .score-ring-fg.excellent { stroke: var(--accent-gold); }
+    .score-ring-fg.good      { stroke: var(--correct); }
+    .score-ring-fg.fair      { stroke: var(--accent-blue); }
+    .score-ring-fg.poor      { stroke: var(--wrong); }
+
+    .score-ring-inner {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .score-ring-num {
+      font-size: 40px; font-weight: 900; line-height: 1;
+      background: linear-gradient(135deg, var(--text-primary), var(--accent-blue));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .score-ring-denom {
+      font-size: 14px; color: var(--text-muted);
+    }
+
+    /* Stats grid */
+    .stats-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 36px;
+    }
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 20px 16px; text-align: center;
+    }
+    .stat-card .s-icon { font-size: 24px; margin-bottom: 8px; }
+    .stat-card .s-val  { font-size: 28px; font-weight: 900; line-height: 1; margin-bottom: 4px; }
+    .stat-card .s-label{ font-size: 12px; color: var(--text-muted); }
+    .stat-card.c .s-val { color: var(--correct); }
+    .stat-card.w .s-val { color: var(--wrong); }
+    .stat-card.p .s-val { color: var(--accent-gold); }
+    .stat-card.t .s-val { color: var(--accent-cyan); }
+
+    /* Restart button */
+    .btn-restart {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 17px 52px;
+      font-family: 'Cairo',sans-serif; font-size: 17px; font-weight: 700;
+      border: none; border-radius: 50px; cursor: pointer;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+      color: #0b1120;
+      box-shadow: 0 6px 30px rgba(99,179,237,0.4);
+      transition: var(--transition);
+    }
+    .btn-restart:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 10px 40px rgba(99,179,237,0.55);
+    }
+
+    /* ═══════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════ */
+    @media (max-width: 500px) {
+      .app-header { flex-direction: column; gap: 12px; text-align: center; }
+      .info-grid  { grid-template-columns: 1fr 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .score-chips { gap: 6px; }
+      .chip { padding: 4px 9px; font-size: 11px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-canvas"></div>
+
+<div class="app-wrapper">
+
+  <!-- ─── HEADER ─── -->
+  <header class="app-header">
+    <div class="header-brand">
+      <div class="header-icon">⚛️</div>
+      <div class="header-title">
+        <span>اختبار الفيزياء الحديثة</span>
+        <span>المنهج العراقي — الصف السادس العلمي</span>
+      </div>
+    </div>
+    <div class="header-badge">الفصل السادس</div>
+  </header>
+
+  <!-- ─── SCREEN: START ─── -->
+  <section id="startScreen" class="screen">
+    <div class="start-hero">
+      <div class="atom-icon">⚛️</div>
+      <h1>اختبر معلوماتك في الفيزياء الحديثة</h1>
+      <p>
+        يشمل الاختبار مواضيع: إشعاع الجسم الأسود، الظاهرة الكهروضوئية، ازدواجية الموجة والجسيم،
+        موجات دي برولي، دالة الموجة، ومبدأ اللادقة لهايزنبرغ.
+      </p>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="ic-icon">📝</div>
+          <span class="ic-val">20</span>
+          <div class="ic-label">سؤالاً لكل جلسة</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-icon">🔀</div>
+          <span class="ic-val">100</span>
+          <div class="ic-label">سؤال في بنك الأسئلة</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-icon">💡</div>
+          <span class="ic-val">فوري</span>
+          <div class="ic-label">ردّ فعل وشرح علمي</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-icon">🏆</div>
+          <span class="ic-val">تفصيلي</span>
+          <div class="ic-label">ملخص النتائج</div>
+        </div>
+      </div>
+
+      <button class="btn-start" onclick="startQuiz()">
+        🚀 ابدأ الاختبار الآن
+      </button>
+    </div>
+  </section>
+
+  <!-- ─── SCREEN: QUIZ ─── -->
+  <section id="quizScreen" class="screen hidden">
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+
+    <div class="quiz-meta">
+      <span class="quiz-progress-text">
+        السؤال <strong id="qCurrent">1</strong> من <strong>20</strong>
+      </span>
+      <div class="score-chips">
+        <div class="chip chip-correct">✓ <span id="liveCorrect">0</span></div>
+        <div class="chip chip-wrong">✗ <span id="liveWrong">0</span></div>
+      </div>
+    </div>
+
+    <div class="question-card" id="questionCard">
+      <div class="question-number" id="qNumLabel">السؤال 1 / 20</div>
+      <div class="question-text" id="qText"></div>
+
+      <div class="options-list" id="optionsList"></div>
+
+      <div class="explanation-box" id="explanationBox">
+        <div class="explanation-inner">
+          <div class="explanation-icon">💡</div>
+          <div class="explanation-content">
+            <div class="explanation-title">الشرح والتوضيح العلمي</div>
+            <div class="explanation-text" id="explanationText"></div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-next" id="btnNext" onclick="nextQuestion()">
+        السؤال التالي ←
+      </button>
+    </div>
+  </section>
+
+  <!-- ─── SCREEN: RESULT ─── -->
+  <section id="resultScreen" class="screen hidden result-screen">
+    <div class="result-trophy" id="resultTrophy"></div>
+    <div class="result-grade" id="resultGrade"></div>
+    <div class="result-title" id="resultTitle"></div>
+    <div class="result-subtitle" id="resultSubtitle"></div>
+
+    <div class="score-ring-wrap">
+      <svg class="score-ring-svg" width="160" height="160" viewBox="0 0 160 160">
+        <circle class="score-ring-bg" cx="80" cy="80" r="70"/>
+        <circle class="score-ring-fg" id="scoreRingFg" cx="80" cy="80" r="70"/>
+      </svg>
+      <div class="score-ring-inner">
+        <span class="score-ring-num" id="scoreNum">0</span>
+        <span class="score-ring-denom">/ 20</span>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card c">
+        <div class="s-icon">✅</div>
+        <div class="s-val" id="resCorrect">0</div>
+        <div class="s-label">إجابات صحيحة</div>
+      </div>
+      <div class="stat-card w">
+        <div class="s-icon">❌</div>
+        <div class="s-val" id="resWrong">0</div>
+        <div class="s-label">إجابات خاطئة</div>
+      </div>
+      <div class="stat-card p">
+        <div class="s-icon">📊</div>
+        <div class="s-val" id="resPercent">0%</div>
+        <div class="s-label">النسبة المئوية</div>
+      </div>
+      <div class="stat-card t">
+        <div class="s-icon">🎯</div>
+        <div class="s-val" id="resTotal">20</div>
+        <div class="s-label">مجموع الأسئلة</div>
+      </div>
+    </div>
+
+    <button class="btn-restart" onclick="restartQuiz()">
+      🔄 إعادة الاختبار
+    </button>
+  </section>
+
+</div><!-- /app-wrapper -->
+
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   QUESTION BANK — 100 questions on Iraqi Physics Ch.6 (Modern Physics)
+   Covers: Black body radiation, Photoelectric effect, Wave-particle duality,
+   Photons, de Broglie waves, Wave function, Uncertainty principle, Planck's law
+═══════════════════════════════════════════════════════════ */
+const questionBank = [
+
+  /* ── BLOCK 1: BLACK BODY & PLANCK ── */
+  {
+    id:1,
+    question:"ما هو تعريف الجسم الأسود في الفيزياء الحديثة؟",
+    options:["جسم يمتص جميع الإشعاعات الساقطة عليه","جسم يعكس جميع الإشعاعات","جسم لا يُشعّ أي طاقة","جسم درجة حرارته صفر مطلق"],
+    correctAnswer:0,
+    explanation:"الجسم الأسود نظام مثالي يمتص جميع الإشعاعات الساقطة عليه، وهو أيضاً مُشعّ مثالي عندما يكون مصدراً للإشعاع. يُمثَّل عملياً بفتحة ضيقة داخل تجويف أجوف."
+  },
+  {
+    id:2,
+    question:"كيف يُمثَّل الجسم الأسود عملياً في المختبر؟",
+    options:["سطح مطلي بالأسود","فتحة ضيقة داخل جسم أجوف","قطعة فحم","مرآة عاكسة"],
+    correctAnswer:1,
+    explanation:"يُمثَّل الجسم الأسود عملياً بفتحة ضيقة داخل فجوة (تجويف أجوف)؛ أي إشعاع يدخل من الفتحة يُمتص بالكامل دون أن يخرج."
+  },
+  {
+    id:3,
+    question:"كيف تتغير شدة إشعاع الجسم الأسود مع درجة الحرارة المطلقة؟",
+    options:["تتناسب طردياً مع الأس الثاني","تتناسب طردياً مع الأس الرابع","تتناسب عكسياً مع الأس الثاني","لا تتغير"],
+    correctAnswer:1,
+    explanation:"تتناسب شدة إشعاع الجسم الأسود طردياً مع الأس الرابع لدرجة الحرارة المطلقة وفقاً لقانون ستيفان-بولتزمان: I ∝ T⁴."
+  },
+  {
+    id:4,
+    question:"ما الذي يحدث لذروة التوزيع الطيفي للجسم الأسود عند ارتفاع درجة الحرارة؟",
+    options:["تنتقل نحو أطوال موجية أطول","تبقى ثابتة","تنتقل نحو أطوال موجية أقصر","تختفي"],
+    correctAnswer:2,
+    explanation:"وفقاً لقانون إزاحة وين: λₘ × T = 2.898×10⁻³ m·K، تنتقل الذروة نحو الأطوال الموجية الأقصر كلما ارتفعت درجة الحرارة (تناسب عكسي)."
+  },
+  {
+    id:5,
+    question:"ما سبب فشل الفيزياء الكلاسيكية في تفسير إشعاع الجسم الأسود؟",
+    options:["افترضت أن الطاقة مُكمَّمة","افترضت أن الطاقة المُشعَّة مستمرة (غير منفصلة)","جهلت مفهوم الحرارة","لم تعرف مفهوم الطيف الكهرومغناطيسي"],
+    correctAnswer:1,
+    explanation:"فشلت الفيزياء الكلاسيكية لأنها افترضت أن الطاقة المُشعَّة مقادير مستمرة (غير محددة) غير منفصلة، بينما أثبت بلانك أن الطاقة تُبعَث على شكل كمات (كوانتا)."
+  },
+  {
+    id:6,
+    question:"ما هي العلاقة الرياضية لقانون إزاحة وين؟",
+    options:["λₘ + T = ثابت","λₘ × T = 2.898×10⁻³ m·K","λₘ / T = ثابت","λₘ² × T = ثابت"],
+    correctAnswer:1,
+    explanation:"ينص قانون إزاحة وين على أن: λₘ × T = 2.898×10⁻³ m·K، حيث λₘ هو الطول الموجي عند ذروة الإشعاع و T درجة الحرارة المطلقة."
+  },
+  {
+    id:7,
+    question:"اقترح بلانك أن الطاقة تُصدَر على شكل:",
+    options:["موجات مستمرة","حزم (كوانتا) منفصلة تُسمى الكمّات","جسيمات مشحونة","مجالات كهرومغناطيسية مستمرة"],
+    correctAnswer:1,
+    explanation:"اقترح ماكس بلانك عام 1900 أن الطاقة تُبعَث وتُمتَص في كميات منفصلة تسمى الكمّات (Quanta)، وأن طاقة الكم الواحد تساوي: E = hf."
+  },
+  {
+    id:8,
+    question:"ما قيمة ثابت بلانك؟",
+    options:["6.63×10⁻³⁴ J·s","9.11×10⁻³¹ kg","1.6×10⁻¹⁹ C","3×10⁸ m/s"],
+    correctAnswer:0,
+    explanation:"ثابت بلانك h = 6.63×10⁻³⁴ J·s، وهو ثابت أساسي في ميكانيكا الكم يربط طاقة الفوتون بترددها: E = hf."
+  },
+
+  /* ── BLOCK 2: PHOTOELECTRIC EFFECT ── */
+  {
+    id:9,
+    question:"ما الظاهرة الكهروضوئية؟",
+    options:["انبعاث الضوء من سطح مُسخَّن","انبعاث إلكترونات من سطح معدني عند سقوط ضوء عليه","إشعاع الأجسام عند ارتفاع حرارتها","انكسار الضوء في الوسط الزجاجي"],
+    correctAnswer:1,
+    explanation:"الظاهرة الكهروضوئية هي انبعاث إلكترونات من سطح معدني عند سقوط ضوء بتردد كافٍ (≥ تردد العتبة) عليه. فسّرها أينشتاين عام 1905 بنظرية الفوتونات."
+  },
+  {
+    id:10,
+    question:"ما تردد العتبة في الظاهرة الكهروضوئية؟",
+    options:["أكبر تردد يمكن أن يسقط على المعدن","أقل تردد يولّد الانبعاث الكهروضوئي لمعدن معين","متوسط الترددات المرئية","تردد الضوء الأحمر دائماً"],
+    correctAnswer:1,
+    explanation:"تردد العتبة f₀ هو أقل تردد للضوء الساقط الذي يولّد الانبعاث الكهروضوئي لمعدن معين، وهو خاصية مميزة لكل معدن."
+  },
+  {
+    id:11,
+    question:"ما دالة الشغل لمعدن؟",
+    options:["أقل طاقة لتحرير إلكترون من سطح المعدن","شغل المجال الكهربائي على الإلكترون","طاقة الفوتون الساقط","الطاقة الحركية العظمى للإلكترونات"],
+    correctAnswer:0,
+    explanation:"دالة الشغل w هي أقل طاقة مطلوبة لتحرير إلكترون من سطح المعدن: w = hf₀، حيث f₀ هو تردد العتبة."
+  },
+  {
+    id:12,
+    question:"معادلة أينشتاين للظاهرة الكهروضوئية هي:",
+    options:["KE_max = hf + w","KE_max = hf - w","KE_max = hf × w","KE_max = w - hf"],
+    correctAnswer:1,
+    explanation:"معادلة أينشتاين: (KE)_max = hf − w، حيث hf طاقة الفوتون، w دالة شغل المعدن، و(KE)_max أعظم طاقة حركية للإلكترونات المنبعثة."
+  },
+  {
+    id:13,
+    question:"ماذا يحدث لتيار الإشباع عند مضاعفة شدة الضوء الساقط (لتردد ثابت)؟",
+    options:["يبقى ثابتاً","يتضاعف","يتنصف","يصبح صفراً"],
+    correctAnswer:1,
+    explanation:"عند مضاعفة شدة الضوء الساقط لتردد ثابت، يتضاعف تيار الإشباع؛ لأن الشدة تزيد عدد الفوتونات ومن ثم عدد الإلكترونات المنبعثة."
+  },
+  {
+    id:14,
+    question:"هل يعتمد جهد الإيقاف على شدة الضوء الساقط؟",
+    options:["نعم، يزداد بزيادة الشدة","نعم، ينقص بزيادة الشدة","لا، جهد الإيقاف لا يعتمد على شدة الضوء","نعم، يتضاعف بتضاعف الشدة"],
+    correctAnswer:2,
+    explanation:"جهد الإيقاف Vₛ لا يعتمد على شدة الضوء الساقط؛ فهو يرتبط بالطاقة الحركية العظمى للإلكترونات التي تعتمد فقط على تردد الضوء ودالة شغل المعدن."
+  },
+  {
+    id:15,
+    question:"ما العلاقة بين جهد الإيقاف والطاقة الحركية العظمى للإلكترونات؟",
+    options:["KE_max = eVₛ","KE_max = Vₛ/e","KE_max = e/Vₛ","KE_max = e + Vₛ"],
+    correctAnswer:0,
+    explanation:"(KE)_max = e × Vₛ، حيث e = 1.6×10⁻¹⁹ C شحنة الإلكترون. جهد الإيقاف هو قياس مباشر للطاقة الحركية العظمى."
+  },
+  {
+    id:16,
+    question:"ما طول موجة العتبة λ₀؟",
+    options:["أقصر طول موجي يُحرّر إلكترونات","أطول طول موجي قادر على تحرير إلكترونات ضوئية","متوسط أطوال الطيف المرئي","الطول الموجي للضوء الأزرق دائماً"],
+    correctAnswer:1,
+    explanation:"طول موجة العتبة λ₀ هو أطول طول موجي قادر على تحرير الإلكترونات الضوئية من سطح معدن معين. يرتبط بدالة الشغل: λ₀ = hc/w."
+  },
+  {
+    id:17,
+    question:"ماذا تُستخدم الخلية الكهروضوئية في الحياة العملية؟",
+    options:["قياس درجة الحرارة فقط","قياس شدة الضوء وتحويل الطاقة الضوئية إلى كهربائية","توليد الحرارة","قياس الزخم فقط"],
+    correctAnswer:1,
+    explanation:"تُستخدم الخلية الكهروضوئية في: (1) قياس شدة الضوء، (2) تحويل الطاقة الضوئية إلى طاقة كهربائية، وتوجد في كاميرات، أنظمة إنذار، وقارئات الباركود."
+  },
+  {
+    id:18,
+    question:"لماذا يُفضَّل استخدام خلية كهروضوئية ذات نافذة كوارتز بدلاً من الزجاج؟",
+    options:["الكوارتز أرخص","الكوارتز يُمرّر الأشعة فوق البنفسجية زيادة على الضوء المرئي","الزجاج يُكسر بسهولة","الكوارتز أكثر شفافية للضوء الأحمر"],
+    correctAnswer:1,
+    explanation:"الكوارتز يُمرّر الأشعة فوق البنفسجية إضافة إلى الضوء المرئي، مما يوسّع نطاق الترددات المستخدمة في التجربة، خلافاً للزجاج الذي يمتص الأشعة فوق البنفسجية."
+  },
+  {
+    id:19,
+    question:"ماذا يحدث للتيار الكهروضوئي عند عكس قطبية مصدر الجهد؟",
+    options:["يزداد بشكل كبير","يبقى ثابتاً","يتناقص تدريجياً لأن الإلكترونات تتنافر مع اللوح الجامع السالب","يصبح صفراً فوراً"],
+    correctAnswer:2,
+    explanation:"عند عكس قطبية المصدر يصبح اللوح الجامع سالباً، فيتنافر مع الإلكترونات الضوئية ويتناقص التيار تدريجياً؛ فقط الإلكترونات ذات الطاقة الأعلى من (eΔV) تصل."
+  },
+  {
+    id:20,
+    question:"ما تيار الإشباع في الخلية الكهروضوئية؟",
+    options:["التيار عند انعدام الجهد","أكبر قيمة ثابتة للتيار الكهروضوئي تُحقَّق عند زيادة الجهد الموجب","التيار عند جهد الإيقاف","التيار في الظلام"],
+    correctAnswer:1,
+    explanation:"تيار الإشباع هو أعظم قيمة ثابتة يبلغها التيار الكهروضوئي عند زيادة الجهد الموجب للوح الجامع، ويُشير إلى أن جميع الإلكترونات المنبعثة تصل إلى اللوح الجامع."
+  },
+
+  /* ── BLOCK 3: PHOTON PROPERTIES ── */
+  {
+    id:21,
+    question:"ما طاقة الفوتون وفق نظرية بلانك-أينشتاين؟",
+    options:["E = mv²","E = hf","E = mc","E = hλ"],
+    correctAnswer:1,
+    explanation:"طاقة الفوتون: E = hf، حيث h ثابت بلانك (6.63×10⁻³⁴ J·s) وf تردد الضوء. وبما أن c = fλ فيمكن كتابتها: E = hc/λ."
+  },
+  {
+    id:22,
+    question:"ما زخم الفوتون وفق نظرية الازدواجية؟",
+    options:["p = hf","p = h/λ","p = mc²","p = hλ"],
+    correctAnswer:1,
+    explanation:"زخم الفوتون: p = h/λ = hf/c. الفوتون ليس له كتلة سكون لكنه يمتلك زخماً محدداً مرتبطاً بطوله الموجي."
+  },
+  {
+    id:23,
+    question:"أيٌّ من التجارب التالية يُثبت الطبيعة الجسيمية للضوء؟",
+    options:["الحيود","التداخل","الظاهرة الكهروضوئية","الاستقطاب"],
+    correctAnswer:2,
+    explanation:"الظاهرة الكهروضوئية تُثبت الطبيعة الجسيمية للضوء؛ لأنها تُظهر أن الضوء يتفاعل مع المعدن عبر وحدات منفصلة (فوتونات) لا كموجة مستمرة."
+  },
+  {
+    id:24,
+    question:"ما النظرية الحديثة لطبيعة الضوء؟",
+    options:["الضوء موجة بحتة","الضوء جسيم بحت","الضوء ذو طبيعة مزدوجة (موجة وجسيم)","الضوء جسيمات تنتقل في وسط"],
+    correctAnswer:2,
+    explanation:"النظرة الحديثة: الضوء ذو طبيعة مزدوجة، تنتقل طاقته في صورة فوتونات يقودها مجال موجي. بعض التجارب تكشف طبيعته الموجية وبعضها الجسيمية."
+  },
+  {
+    id:25,
+    question:"كيف تُفسَّر ازدواجية الموجة والجسيم للفوتون رياضياً؟",
+    options:["E = mc² فقط","λ = h/p تجمع بين مفهومَي الموجة (λ) والجسيم (p)","E = hf فقط","c = fλ فقط"],
+    correctAnswer:1,
+    explanation:"العلاقة λ = h/p (أو λ = h/mc) تعكس الازدواجية: يسار المعادلة (λ) خاصية موجية، ويمين المعادلة (p = mc) خاصية جسيمية."
+  },
+
+  /* ── BLOCK 4: DE BROGLIE WAVES ── */
+  {
+    id:26,
+    question:"ما نص فرضية دي برولي؟",
+    options:["لكل موجة كهرومغناطيسية جسيم مصاحب","في كل نظام ميكانيكي توجد موجات تصاحب حركة جسيمات المادة","الضوء فقط له طبيعة مزدوجة","الإلكترونات لا تتداخل مع بعضها"],
+    correctAnswer:1,
+    explanation:"فرضية دي برولي (1924): في كل نظام ميكانيكي توجد موجات مصاحبة لحركة جسيمات المادة. الطول الموجي المصاحب: λ = h/(mv) = h/p."
+  },
+  {
+    id:27,
+    question:"ما طول موجة دي برولي المصاحب لجسيم كتلته m يتحرك بسرعة v؟",
+    options:["λ = mv/h","λ = h/(mv)","λ = hv/m","λ = m/(hv)"],
+    correctAnswer:1,
+    explanation:"طول موجة دي برولي: λ = h/(mv) = h/p، حيث p = mv زخم الجسيم. كلما زاد الزخم قلّ الطول الموجي (تناسب عكسي)."
+  },
+  {
+    id:28,
+    question:"لماذا لا نلاحظ الطبيعة الموجية للأجسام الكبيرة (كسيارة متحركة)؟",
+    options:["لأن سرعتها كبيرة","لأن كتلتها كبيرة فزخمها كبير وبالتالي طول موجة دي برولي صغير جداً","لأن ثابت بلانك كبير جداً","لأن الموجات لا تصاحب الأجسام الكبيرة أصلاً"],
+    correctAnswer:1,
+    explanation:"لأن الكتلة الكبيرة تعني زخماً كبيراً (p = mv)، وبما أن λ = h/p، فالطول الموجي يصبح صغيراً جداً لدرجة يتعذر معها ملاحظة ظواهر الحيود والتداخل."
+  },
+  {
+    id:29,
+    question:"إذا تضاعفت سرعة إلكترون، ماذا يحدث لطول موجة دي برولي المصاحبة؟",
+    options:["تتضاعف","تتنصف","تتربع","لا تتغير"],
+    correctAnswer:1,
+    explanation:"λ = h/(mv). إذا تضاعفت السرعة v فإن λ تتنصف (تناسب عكسي مباشر بين الطول الموجي والسرعة)."
+  },
+  {
+    id:30,
+    question:"هل موجات دي برولي موجات ميكانيكية أو كهرومغناطيسية؟",
+    options:["ميكانيكية طولية","كهرومغناطيسية مستعرضة","نوع جديد من الموجات يُسمى الموجات المادية","موجات صوتية"],
+    correctAnswer:2,
+    explanation:"موجات دي برولي (الموجات المادية) ليست ميكانيكية ولا كهرومغناطيسية، بل نوع جديد من الموجات؛ يُمثَّل الجسيم فيها كرزمة موجية ذات مدى محدود في الفضاء."
+  },
+  {
+    id:31,
+    question:"ما الرزمة الموجية (Wave Packet) وكيف تُحصَل عليها؟",
+    options:["موجة ذات طول موجي واحد ثابت","موجة ذات مدى محدود في الفضاء تُحصَل بإضافة موجات ذات أطوال موجية متقاربة","حزمة من الفوتونات","موجة ميكانيكية في الأوساط المادية"],
+    correctAnswer:1,
+    explanation:"الرزمة الموجية هي موجة محدودة المدى في الفضاء، تُحصَل بتراكب موجات ذات أطوال موجية متقاربة قليلاً. تُمثّل الجسيم في ميكانيكا الكم."
+  },
+  {
+    id:32,
+    question:"علام يعتمد طول موجة دي برولي للجسيم المتحرك؟",
+    options:["على كتلته فقط","على سرعته فقط","على زخمه (mv) تناسباً عكسياً","على طاقته الكامنة"],
+    correctAnswer:2,
+    explanation:"λ = h/p = h/(mv). يتناسب طول موجة دي برولي عكسياً مع زخم الجسيم p = mv. ولهذا الجسيمات الثقيلة أو السريعة لها أطوال موجية أصغر."
+  },
+
+  /* ── BLOCK 5: WAVE FUNCTION & QUANTUM MECHANICS ── */
+  {
+    id:33,
+    question:"ما هي دالة الموجة (ψ)؟",
+    options:["طاقة الجسيم المتحرك","الكمية التي تغيراتها تشكّل الموجات المادية، وترتبط قيمتها باحتمالية وجود الجسيم","سرعة الجسيم في الفضاء","الزخم الكونيّ للجسيم"],
+    correctAnswer:1,
+    explanation:"دالة الموجة ψ (بساي) كمية رياضية تغيراتها تُشكّل الموجات المادية. قيمة |ψ|² في نقطة معينة تتناسب مع احتمالية وجود الجسيم في تلك النقطة والزمن المحدد."
+  },
+  {
+    id:34,
+    question:"ماذا تشير قيمة |ψ|² الكبيرة في نقطة معينة؟",
+    options:["طاقة الجسيم كبيرة في تلك النقطة","احتمالية وجود الجسيم في تلك النقطة كبيرة","سرعة الجسيم كبيرة","الجسيم غائب عن تلك النقطة"],
+    correctAnswer:1,
+    explanation:"|ψ|² تُمثّل كثافة الاحتمالية: قيمة |ψ|² الكبيرة في نقطة معينة وزمن معين تعني ارتفاع احتمالية وجود الجسيم في تلك النقطة والزمن."
+  },
+  {
+    id:35,
+    question:"ما الميكانيكا الكمية؟",
+    options:["فرع يدرس حركة الأجسام الكبيرة","فرع الفيزياء المكرَّس لدراسة حركة الأشياء ذات الحجم الصغير جداً (الكميّ)","علم دراسة الموجات الصوتية","نظرية النسبية الخاصة"],
+    correctAnswer:1,
+    explanation:"الميكانيكا الكمية فرع من الفيزياء مكرَّس لدراسة حركة الجسيمات دون الذرية التي تأتي في حزم صغيرة جداً (كمات). تختلف اختلافاً جوهرياً عن الميكانيكا الكلاسيكية."
+  },
+
+  /* ── BLOCK 6: HEISENBERG UNCERTAINTY PRINCIPLE ── */
+  {
+    id:36,
+    question:"ما نص مبدأ اللادقة لهايزنبرغ؟",
+    options:["يمكن قياس الموضع والزخم في آنٍ واحد بدقة مطلقة","من المستحيل قياس الموضع والزخم الخطي في آنٍ واحد بالضبط","الطاقة والزمن لهما علاقة مباشرة","الزخم يتناسب مع التردد"],
+    correctAnswer:1,
+    explanation:"مبدأ اللادقة (هايزنبرغ): من المستحيل قياس الموضع الدقيق والزخم الخطي الدقيق لجسيم في الوقت ذاته. رياضياً: ΔX·ΔP ≥ h/(4π)."
+  },
+  {
+    id:37,
+    question:"ما العلاقة الرياضية لمبدأ اللادقة؟",
+    options:["ΔX + ΔP = h","ΔX · ΔP ≥ h/(4π)","ΔX · ΔP = 0","ΔX / ΔP = h"],
+    correctAnswer:1,
+    explanation:"ΔX · ΔP ≥ h/(4π)، حيث ΔX عدم دقة الموضع وΔP عدم دقة الزخم الخطي وh ثابت بلانك. المنتج لا يقل عن h/(4π) ≈ 5.27×10⁻³⁵ J·s."
+  },
+  {
+    id:38,
+    question:"لماذا لا نلاحظ مبدأ اللادقة في حياتنا اليومية (مثل كرة قدم متحركة)؟",
+    options:["لأن الأجسام اليومية بطيئة جداً","لأن قيمة ثابت بلانك صغيرة جداً (6.63×10⁻³⁴ J·s)","لأن مبدأ اللادقة ينطبق فقط على الضوء","لأن الزخم اليومي يساوي صفراً"],
+    correctAnswer:1,
+    explanation:"لأن ثابت بلانك h = 6.63×10⁻³⁴ J·s صغير للغاية مقارنة بالأجسام اليومية، فعدم الدقة ΔX·ΔP لا يتجاوز حداً يمكن قياسه لهذه الأجسام."
+  },
+  {
+    id:39,
+    question:"إذا قُيّد موضع جسيم بدقة مطلقة (ΔX = 0)، ماذا يحدث للادقة في زخمه؟",
+    options:["ΔP = 0 أيضاً","ΔP تصبح لانهاية","ΔP = h/2π","ΔP = h"],
+    correctAnswer:1,
+    explanation:"وفق ΔX·ΔP ≥ h/(4π)، إذا ΔX → 0 فإن ΔP → ∞، أي أن عدم دقة الزخم يصبح لانهاية. لا يمكن معرفة الزخم أبداً إذا عُرف الموضع بدقة مطلقة."
+  },
+
+  /* ── BLOCK 7: MIXED CONCEPTUAL ── */
+  {
+    id:40,
+    question:"أيٌّ من التجارب التالية يُثبت الطبيعة الموجية للضوء؟",
+    options:["الظاهرة الكهروضوئية","تشتت كومبتون","التداخل والحيود","انبعاث الضوء الحراري"],
+    correctAnswer:2,
+    explanation:"التداخل والحيود ظاهرتان موجيتان بامتياز؛ لا يمكن تفسيرهما إلا إذا كان الضوء موجة. بينما الظاهرة الكهروضوئية تكشف طبيعته الجسيمية."
+  },
+  {
+    id:41,
+    question:"ما نوع الموجات المصاحبة لحركة الإلكترون؟",
+    options:["موجات ميكانيكية طولية","موجات كهرومغناطيسية","موجات مادية (موجات دي برولي)","موجات صوتية"],
+    correctAnswer:2,
+    explanation:"الموجات المصاحبة لحركة الجسيمات كالإلكترونات هي موجات مادية (موجات دي برولي)، وهي ليست ميكانيكية ولا كهرومغناطيسية بل نوع جديد."
+  },
+  {
+    id:42,
+    question:"علام تعتمد الطاقة الحركية العظمى للإلكترونات الضوئية المنبعثة؟",
+    options:["على شدة الضوء الساقط فقط","على تردد الضوء الساقط ودالة شغل المعدن","على شدة الضوء ودالة الشغل معاً","على درجة حرارة المعدن"],
+    correctAnswer:1,
+    explanation:"(KE)_max = hf − w، تعتمد فقط على تردد الضوء (f) ودالة شغل المعدن (w)، ولا تعتمد على شدة الضوء؛ لأن الفوتون الواحد يتفاعل مع الإلكترون الواحد."
+  },
+  {
+    id:43,
+    question:"لماذا لا تعتمد الطاقة الحركية العظمى على شدة الضوء في الظاهرة الكهروضوئية؟",
+    options:["لأن الشدة لا تؤثر على الضوء","لأن الفوتون الواحد هو المسؤول عن التغيير في طاقة الإلكترون","لأن المعدن يمتص الشدة الزائدة","لأن الشدة تؤثر على التردد"],
+    correctAnswer:1,
+    explanation:"في الظاهرة الكهروضوئية، فوتون واحد يتفاعل مع إلكترون واحد. طاقة الفوتون (hf) هي المحدِّدة للطاقة الحركية، وليس عددها (الشدة). الشدة تؤثر على العدد فقط (تيار الإشباع)."
+  },
+  {
+    id:44,
+    question:"ما العلاقة بين تردد العتبة f₀ ودالة الشغل w؟",
+    options:["w = hf₀","f₀ = hw","w = h/f₀","f₀ = w/h²"],
+    correctAnswer:0,
+    explanation:"دالة الشغل: w = hf₀، حيث f₀ تردد العتبة وh ثابت بلانك. هذه أقل طاقة فوتونية كافية لتحرير إلكترون من المعدن."
+  },
+  {
+    id:45,
+    question:"ما الغاية من زيادة تردد الضوء الساقط في الخلية الكهروضوئية؟",
+    options:["زيادة تيار الإشباع","زيادة الطاقة الحركية العظمى للإلكترونات المنبعثة","تقليل جهد الإيقاف","تقليل دالة شغل المعدن"],
+    correctAnswer:1,
+    explanation:"زيادة تردد الضوء الساقط تزيد طاقة الفوتون (E = hf) ومن ثم تزيد الطاقة الحركية العظمى للإلكترونات: (KE)_max = hf − w."
+  },
+  {
+    id:46,
+    question:"ما الغاية من زيادة شدة الضوء الساقط (لتردد مؤثر ثابت) في الخلية الكهروضوئية؟",
+    options:["زيادة الطاقة الحركية العظمى للإلكترونات","تقليل تردد العتبة","زيادة تيار الإشباع","تقليل جهد الإيقاف"],
+    correctAnswer:2,
+    explanation:"زيادة شدة الضوء (لتردد مؤثر ثابت) تزيد عدد الفوتونات ومن ثم عدد الإلكترونات المنبعثة، مما يزيد تيار الإشباع دون تغيير طاقتها الحركية."
+  },
+  {
+    id:47,
+    question:"ما التفسير الذي قدمه أينشتاين للظاهرة الكهروضوئية عام 1905؟",
+    options:["الضوء موجة مستمرة والإلكترونات تمتص طاقة تدريجياً","الضوء يتكون من فوتونات طاقة كل فوتون hf، وفوتون واحد يُحرّر إلكتروناً","الطاقة الكهروضوئية تعتمد على شدة الضوء فقط","الظاهرة تتطلب شدة ضوء معينة لا تردداً محدداً"],
+    correctAnswer:1,
+    explanation:"أينشتاين فسّر الظاهرة بأن الضوء يتكون من فوتونات، طاقة كل منها E = hf. فوتون واحد يتفاعل مع إلكترون واحد، ويمنحه كل طاقته إذا كانت أكبر من دالة الشغل."
+  },
+  {
+    id:48,
+    question:"ما المقصود بالفوتون في الفيزياء الحديثة؟",
+    options:["إلكترون خفيف الكتلة","جسيم (كم) من الطاقة الكهرومغناطيسية (الضوء) طاقته E = hf","موجة ميكانيكية","بروتون في النواة"],
+    correctAnswer:1,
+    explanation:"الفوتون هو الجسيم أو الكم الذي يُمثّل أصغر وحدة من الطاقة الكهرومغناطيسية (الضوء). ليس له كتلة سكون، لكن طاقته E = hf وزخمه p = h/λ."
+  },
+
+  /* ── BLOCK 8: NUMERICAL CONCEPTS ── */
+  {
+    id:49,
+    question:"إذا كان ثابت بلانك h = 6.63×10⁻³⁴ J·s وتردد الضوء f = 10¹⁵ Hz، فما طاقة الفوتون؟",
+    options:["6.63×10⁻¹⁹ J","6.63×10⁻³⁴ J","10¹⁵ J","6.63×10¹ J"],
+    correctAnswer:0,
+    explanation:"E = hf = 6.63×10⁻³⁴ × 10¹⁵ = 6.63×10⁻¹⁹ J. هذه طاقة فوتون ضوء بتردد 10¹⁵ Hz (ضوء فوق بنفسجي قريب)."
+  },
+  {
+    id:50,
+    question:"ما الطول الموجي لفوتون زخمه p = h/λ؟",
+    options:["λ = h·p","λ = p/h","λ = h/p","λ = 1/(h·p)"],
+    correctAnswer:2,
+    explanation:"من علاقة زخم الفوتون p = h/λ، نحصل على الطول الموجي: λ = h/p. هذه العلاقة تجمع الطبيعتين الموجية (λ) والجسيمية (p) للفوتون."
+  },
+  {
+    id:51,
+    question:"ما الفرق الجوهري بين تأثير شدة الضوء وتأثير تردد الضوء في الظاهرة الكهروضوئية؟",
+    options:["الشدة تغيّر التردد","الشدة تغيّر عدد الإلكترونات المنبعثة بينما التردد يغيّر طاقتها الحركية","التردد يغيّر عدد الإلكترونات فقط","لا فرق بينهما"],
+    correctAnswer:1,
+    explanation:"زيادة الشدة (عدد الفوتونات) تزيد عدد الإلكترونات المنبعثة (تيار الإشباع). زيادة التردد (طاقة كل فوتون) تزيد الطاقة الحركية العظمى لكل إلكترون."
+  },
+  {
+    id:52,
+    question:"وحدة قياس دالة الشغل هي:",
+    options:["Volt","Ampere","Joule أو electron-volt (eV)","Watt"],
+    correctAnswer:2,
+    explanation:"دالة الشغل طاقة، وتُقاس بالجول (J) أو بالإلكترون-فولت (eV). التحويل: 1 eV = 1.6×10⁻¹⁹ J."
+  },
+  {
+    id:53,
+    question:"ما الرمز المستخدم لدالة الموجة في ميكانيكا الكم؟",
+    options:["Ω","Φ","ψ (بساي)","Δ"],
+    correctAnswer:2,
+    explanation:"دالة الموجة ترمز لها بالحرف اليوناني ψ (بساي). |ψ|² تمثل كثافة احتمالية وجود الجسيم عند نقطة معينة وزمن معين."
+  },
+  {
+    id:54,
+    question:"في معادلة دي برولي λ = h/(mv)، ماذا يعني الجانب الأيسر (λ) والجانب الأيمن (mv)؟",
+    options:["كلاهما مفاهيم جسيمية","كلاهما مفاهيم موجية","الجانب الأيسر موجي (طول موجي) والجانب الأيمن جسيمي (زخم)","الجانب الأيسر جسيمي والجانب الأيمن موجي"],
+    correctAnswer:2,
+    explanation:"λ في الجانب الأيسر خاصية موجية (طول موجي)، بينما mv في الجانب الأيمن خاصية جسيمية (زخم). هذه العلاقة تُجسّد ازدواجية الموجة والجسيم للمادة."
+  },
+  {
+    id:55,
+    question:"لماذا يمكن ملاحظة الطبيعة الموجية للإلكترونات ولا يمكن ملاحظتها للكرة الحديدية؟",
+    options:["لأن الإلكترون مشحون","لأن كتلة الإلكترون صغيرة جداً فطول موجة دي برولي كبير بما يكفي","لأن الكرة الحديدية مصنوعة من معدن","لأن الإلكترون لا يتبع قوانين نيوتن"],
+    correctAnswer:1,
+    explanation:"كتلة الإلكترون ≈ 9.11×10⁻³¹ kg صغيرة جداً؛ ومن ثم زخمه صغير وطول موجة دي برولي كبير نسبياً يقع في نطاق الأطوال الموجية للأشعة السينية، مما يجعل تداخله وحيوده قابلاً للقياس."
+  },
+  {
+    id:56,
+    question:"من الذي اقترح أن للجسيمات المادية طبيعة موجية؟",
+    options:["أينشتاين","نيلز بور","لويس دي برولي","هايزنبرغ"],
+    correctAnswer:2,
+    explanation:"الفيزيائي الفرنسي لويس دي برولي اقترح عام 1924 في أطروحة دكتوراه أن للجسيمات المادية طبيعة موجية وطول موجي λ = h/(mv)، وهو ما أُثبت تجريبياً بحيود الإلكترونات."
+  },
+  {
+    id:57,
+    question:"ما هو تأثير زيادة كتلة الجسيم على طول موجة دي برولي عند سرعة ثابتة؟",
+    options:["يزداد الطول الموجي","ينقص الطول الموجي","يبقى الطول الموجي ثابتاً","يتضاعف الطول الموجي"],
+    correctAnswer:1,
+    explanation:"λ = h/(mv). عند سرعة ثابتة، زيادة الكتلة m تزيد الزخم mv وبالتالي ينقص الطول الموجي (تناسب عكسي)."
+  },
+  {
+    id:58,
+    question:"أي من التالي هي وحدة الزخم (p) في النظام الدولي؟",
+    options:["N·m","kg·m/s","J·s","kg/m·s"],
+    correctAnswer:1,
+    explanation:"وحدة الزخم في النظام الدولي: kg·m/s أو N·s. زخم الجسيم p = mv، وكذلك زخم الفوتون p = h/λ بنفس الوحدة."
+  },
+  {
+    id:59,
+    question:"ما قانون ستيفان-بولتزمان الخاص بإشعاع الجسم الأسود؟",
+    options:["الشدة تتناسب مع الأس الثاني للحرارة","الشدة تتناسب طردياً مع الأس الرابع للحرارة المطلقة","الشدة تتناسب عكسياً مع الحرارة","الشدة لا تعتمد على الحرارة"],
+    correctAnswer:1,
+    explanation:"قانون ستيفان-بولتزمان: I = σT⁴، حيث σ = 5.67×10⁻⁸ W/(m²·K⁴) ثابت ستيفان-بولتزمان. تتناسب الشدة طردياً مع الأس الرابع لدرجة الحرارة المطلقة."
+  },
+  {
+    id:60,
+    question:"من هو العالم الذي فسّر الظاهرة الكهروضوئية وحصل على جائزة نوبل عام 1921؟",
+    options:["ماكس بلانك","نيلز بور","ألبرت أينشتاين","هايزنبرغ"],
+    correctAnswer:2,
+    explanation:"حصل ألبرت أينشتاين على جائزة نوبل في الفيزياء عام 1921 تحديداً لتفسيره الظاهرة الكهروضوئية باستخدام نظرية الفوتونات، وليس لنظرية النسبية."
+  },
+  {
+    id:61,
+    question:"إذا كان الطول الموجي للضوء الساقط على معدن أطول من طول موجة العتبة، ماذا يحدث؟",
+    options:["تُنبعث إلكترونات بطاقة أكبر","لا تُنبعث إلكترونات ضوئية مهما زادت شدة الضوء","تُنبعث إلكترونات أكثر","يرتفع تيار الإشباع"],
+    correctAnswer:1,
+    explanation:"إذا كان λ > λ₀ فإن f < f₀ وطاقة الفوتون hf < w (دالة الشغل)؛ الفوتون لا يملك طاقة كافية لتحرير إلكترون، ولا تُنبعث إلكترونات بصرف النظر عن شدة الضوء."
+  },
+  {
+    id:62,
+    question:"ما العلاقة بين الطول الموجي λ والتردد f وسرعة الضوء c؟",
+    options:["c = f/λ","f = c·λ","c = f·λ","λ = c·f"],
+    correctAnswer:2,
+    explanation:"c = f·λ، وهي علاقة أساسية لجميع الموجات الكهرومغناطيسية. بما أن c ≈ 3×10⁸ m/s ثابت، فالتردد والطول الموجي في تناسب عكسي."
+  },
+  {
+    id:63,
+    question:"ما الأمر الذي اقترحه بلانك لحل مشكلة إشعاع الجسم الأسود؟",
+    options:["أن الطاقة مستمرة","أن المُذبذبات لا تُشعّ","أن الطاقة تُبعَث وتُمتَص في كميات منفصلة تساوي hf","أن الضوء موجة ميكانيكية"],
+    correctAnswer:2,
+    explanation:"اقترح بلانك أن المذبذبات في جدران تجويف الجسم الأسود لا تُشعّ أو تمتص الطاقة باستمرار، بل في كميات منفصلة (كمات)، طاقة كل كمّ: E = hf."
+  },
+  {
+    id:64,
+    question:"علام يتوقف الطول الموجي المصاحب للفوتون؟",
+    options:["على تردده وكتلته","على زخمه فقط (تناسب عكسي)","على شدة الضوء","على درجة الحرارة"],
+    correctAnswer:1,
+    explanation:"الطول الموجي للفوتون: λ = h/p، يتناسب عكسياً مع زخم الفوتون p = mc = hf/c. كلما زاد زخم الفوتون (أي تردده) كلما قلّ طوله الموجي."
+  },
+  {
+    id:65,
+    question:"ما الحدث الذي يحدث في الخلية الكهروضوئية عند إضاءة اللوح الباعث بضوء ذي تردد مؤثر؟",
+    options:["لا يحدث شيء","تنطلق إلكترونات وينساب تيار كهربائي في الدائرة","يرتفع مقاومة الدائرة","يتوقف التيار"],
+    correctAnswer:1,
+    explanation:"عند سقوط ضوء بتردد مؤثر (≥ f₀) على اللوح الباعث، تمتص الإلكترونات طاقة الفوتونات وتنبعث، فتنساب إلى اللوح الجامع ويمر تيار كهربائي في الدائرة."
+  },
+
+  /* ── BLOCK 9: ADVANCED MIXED ── */
+  {
+    id:66,
+    question:"ما المقصود بجهد الإيقاف (الجهد الذي يجعل التيار صفراً في الظاهرة الكهروضوئية)؟",
+    options:["الجهد اللازم لتسريع الإلكترونات","الجهد السالب على اللوح الجامع الذي يُوقف جميع الإلكترونات الضوئية","جهد تيار الإشباع","الجهد الأدنى لتشغيل الخلية"],
+    correctAnswer:1,
+    explanation:"جهد الإيقاف Vₛ هو قيمة الجهد السالب على اللوح الجامع التي تجعل التيار يساوي صفراً، أي أنه يوقف حتى أسرع الإلكترونات. يرتبط بالطاقة الحركية العظمى: (KE)_max = eVₛ."
+  },
+  {
+    id:67,
+    question:"أيٌّ من الإجراءات التالية يزيد الطاقة الحركية العظمى للإلكترونات في الظاهرة الكهروضوئية؟",
+    options:["زيادة شدة الضوء","تقليل تردد الضوء","زيادة تردد الضوء الساقط","زيادة مساحة اللوح الباعث"],
+    correctAnswer:2,
+    explanation:"(KE)_max = hf − w. زيادة التردد f تزيد hf وبالتالي ترفع الطاقة الحركية العظمى. شدة الضوء ومساحة اللوح لا تؤثران على طاقة الإلكترون الفردي."
+  },
+  {
+    id:68,
+    question:"من أين تُحصَّل الطاقة اللازمة لانبعاث الإلكترونات الضوئية؟",
+    options:["من الجهد الكهربائي المُطبَّق","من طاقة الفوتون الساقط","من حرارة المعدن","من الطاقة الكامنة الكهربائية"],
+    correctAnswer:1,
+    explanation:"الإلكترون يمتص طاقة الفوتون الساقط كاملة (E = hf). جزء منها يُستخدم للتغلب على ربط المعدن (w) والباقي يتحول إلى طاقة حركية: KE_max = hf − w."
+  },
+  {
+    id:69,
+    question:"ما قيمة شحنة الإلكترون e؟",
+    options:["1.6×10⁻¹⁹ C","9.11×10⁻³¹ C","6.63×10⁻³⁴ C","3×10⁸ C"],
+    correctAnswer:0,
+    explanation:"شحنة الإلكترون: e = 1.6×10⁻¹⁹ C. تستخدم في حساب الطاقة الحركية من جهد الإيقاف: KE_max = eVₛ = 1.6×10⁻¹⁹ × Vₛ."
+  },
+  {
+    id:70,
+    question:"ما كتلة الإلكترون؟",
+    options:["1.67×10⁻²⁷ kg","9.11×10⁻³¹ kg","6.63×10⁻³⁴ kg","1.6×10⁻¹⁹ kg"],
+    correctAnswer:1,
+    explanation:"كتلة الإلكترون: mₑ = 9.11×10⁻³¹ kg. تستخدم في حساب زخمه وطول موجة دي برولي المصاحبة له."
+  },
+  {
+    id:71,
+    question:"ما سرعة الضوء في الفراغ؟",
+    options:["3×10⁶ m/s","3×10⁸ m/s","6.63×10⁻³⁴ m/s","9×10¹⁶ m/s"],
+    correctAnswer:1,
+    explanation:"سرعة الضوء في الفراغ: c ≈ 3×10⁸ m/s. تدخل في معادلات الفوتون: E = hc/λ وزخم الفوتون: p = h/λ = E/c."
+  },
+  {
+    id:72,
+    question:"ما الفرق بين الموجات المادية والموجات الكهرومغناطيسية؟",
+    options:["لا فرق بينهما","الموجات المادية تصاحب حركة الجسيمات وهي نوع جديد، بينما الكهرومغناطيسية تنتقل دون وسط","الكهرومغناطيسية تحتاج وسطاً مادياً","الموجات المادية أسرع"],
+    correctAnswer:1,
+    explanation:"الموجات المادية نوع جديد يصاحب حركة جسيمات المادة (مثل الإلكترونات)، ليست ميكانيكية ولا كهرومغناطيسية. الموجات الكهرومغناطيسية هي الضوء والأشعة وتنتقل في الفراغ."
+  },
+  {
+    id:73,
+    question:"أيٌّ من التالي ليس خاصية لتيار الإشباع؟",
+    options:["هو الحد الأقصى للتيار الكهروضوئي","يزداد بزيادة شدة الضوء","يزداد بزيادة تردد الضوء الساقط","يُمثّل وصول جميع الإلكترونات المنبعثة إلى اللوح الجامع"],
+    correctAnswer:2,
+    explanation:"تيار الإشباع يعتمد على شدة الضوء (عدد الإلكترونات) لا على تردده. زيادة التردد ترفع طاقة الإلكترونات لا عددها، فلا تغيّر تيار الإشباع."
+  },
+  {
+    id:74,
+    question:"في تجربة الظاهرة الكهروضوئية، يُوصَل اللوح الباعث بـ:",
+    options:["القطب الموجب لمصدر الجهد","القطب السالب لمصدر الجهد","وسط الدائرة الكهربائية","طرف الأميتر مباشرة"],
+    correctAnswer:1,
+    explanation:"اللوح الباعث (الكاثود) يُوصَل بالقطب السالب لمصدر الجهد. الإلكترونات تنبعث منه باتجاه اللوح الجامع (الأنود) الموصول بالقطب الموجب."
+  },
+  {
+    id:75,
+    question:"في مشعاع الجسم الأسود، ما أثر رفع درجة الحرارة المطلقة على شدة الإشعاع الكلية وطول الموجة الذروية معاً؟",
+    options:["الشدة ترتفع والطول الموجي الذروي يطول","الشدة ترتفع (∝T⁴) والطول الموجي الذروي يقصر","الشدة تنقص والطول الموجي يقصر","كلاهما يبقى ثابتاً"],
+    correctAnswer:1,
+    explanation:"عند رفع درجة الحرارة: (1) الشدة الكلية ترتفع بنسبة T⁴ (قانون ستيفان)، (2) ذروة التوزيع الطيفي تنزاح نحو الأطوال الموجية الأقصر (قانون وين)."
+  },
+  {
+    id:76,
+    question:"ما الجسيم الذي يُعبّر عنه بدالة الموجة في ميكانيكا الكم؟",
+    options:["الفوتون فقط","أي جسيم كمومي مثل الإلكترون أو البروتون","الأجسام الكبيرة فقط","الجسيمات الكلاسيكية"],
+    correctAnswer:1,
+    explanation:"دالة الموجة تصف أي جسيم كمومي (إلكترون، بروتون، نيوترون... إلخ). تعطي ψ معلومات احتمالية عن حالة الجسيم وموضعه وزخمه."
+  },
+  {
+    id:77,
+    question:"ما القانون الذي يعبّر رياضياً عن مبدأ اللادقة؟",
+    options:["ΔE·Δt = h","ΔX·ΔP ≥ h/(4π)","ΔX·ΔP = 0","ΔP = mΔv"],
+    correctAnswer:1,
+    explanation:"ΔX·ΔP ≥ h/(4π): عدم الدقة في الموضع مضروباً في عدم الدقة في الزخم لا يقل عن h/(4π)."
+  },
+  {
+    id:78,
+    question:"أيٌّ من العلماء التاليين صاغ مبدأ اللادقة؟",
+    options:["ماكس بلانك","لويس دي برولي","ورنر هايزنبرغ","نيلز بور"],
+    correctAnswer:2,
+    explanation:"صاغ الفيزيائي الألماني ورنر هايزنبرغ مبدأ اللادقة عام 1927، وهو أحد ركائز ميكانيكا الكم الأساسية."
+  },
+  {
+    id:79,
+    question:"ما معنى عبارة 'إشعاع الجسم الأسود كدالة للطول الموجي'؟",
+    options:["توزيع طاقة الإشعاع على أطوال موجية مختلفة","شدة إشعاع واحدة لكل الأطوال الموجية","العلاقة الخطية بين الطول الموجي والشدة","الطول الموجي الثابت لكل جسم أسود"],
+    correctAnswer:0,
+    explanation:"الطيف الإشعاعي للجسم الأسود يُظهر توزيع الطاقة المُشعَّة على مختلف الأطوال الموجية، وهو منحنى يتغير شكله وذروته بتغير درجة الحرارة."
+  },
+  {
+    id:80,
+    question:"من هو مكتشف حيود الإلكترونات تجريبياً الذي أثبت فرضية دي برولي؟",
+    options:["تومسون وديفيسون وجيرمر","أينشتاين وبور","رذرفورد وبلانك","هايزنبرغ وشرودنغر"],
+    correctAnswer:0,
+    explanation:"عام 1927، أثبت كلٌّ من ديفيسون وجيرمر (وبشكل مستقل جورج تومسون) حيود الإلكترونات تجريبياً، مما أثبت صحة فرضية دي برولي عن الطبيعة الموجية للجسيمات."
+  },
+
+  /* ── BLOCK 10: FINAL 20 ── */
+  {
+    id:81,
+    question:"إذا انعدمت شدة الضوء الساقط على خلية كهروضوئية، ماذا يحدث للتيار؟",
+    options:["يبلغ تيار الإشباع","يصبح التيار صفراً","يصبح التيار موجباً","يصبح التيار سالباً"],
+    correctAnswer:1,
+    explanation:"في الظلام التام لا يسقط ضوء على اللوح الباعث، فلا تنبعث إلكترونات ضوئية، ويساوي التيار صفراً."
+  },
+  {
+    id:82,
+    question:"ماذا تعني إزاحة وين رياضياً للطيف الإشعاعي للجسم الأسود؟",
+    options:["أن شدة الإشعاع تتضاعف عند مضاعفة درجة الحرارة","أن الطول الموجي للذروة يتضاعف بتضاعف الحرارة","أن λₘ يتناسب عكسياً مع T (λₘT = ثابت = 2.898×10⁻³ mK)","أن الطاقة الكلية لا تتغير"],
+    correctAnswer:2,
+    explanation:"قانون وين: λₘ · T = 2.898×10⁻³ m·K، أي الطول الموجي للذروة يتناسب عكسياً مع الحرارة المطلقة. رفع الحرارة ينقل الذروة نحو طيف الأشعة فوق البنفسجية."
+  },
+  {
+    id:83,
+    question:"عند زيادة جهد اللوح الجامع الموجب في الخلية الكهروضوئية، ماذا يحدث للتيار الكهروضوئي؟",
+    options:["يتناقص","يبقى ثابتاً","يزداد حتى يصل لقيمة ثابتة هي تيار الإشباع","يصبح صفراً"],
+    correctAnswer:2,
+    explanation:"زيادة الجهد الموجب للوح الجامع تجذب المزيد من الإلكترونات حتى يصل جميعها إلى اللوح الجامع؛ عندها يبلغ التيار حده الأقصى (تيار الإشباع) ولا يزداد بعد ذلك."
+  },
+  {
+    id:84,
+    question:"ما المقصود بكمّ الطاقة (Quantum) في نظرية بلانك؟",
+    options:["موجة طاقة مستمرة","كمية صغيرة منفصلة من الطاقة تُبعَث أو تُمتَص في نظام ما، قدرها hf","جسيم مشحون في النواة","قيمة دالة الشغل"],
+    correctAnswer:1,
+    explanation:"الكمّ (Quantum) وحدة منفصلة من الطاقة = hf. بلانك افترض أن الطاقة لا تُبعث بصورة مستمرة بل في كميات (كوانتا) متعددة قدر كلٍّ منها hf."
+  },
+  {
+    id:85,
+    question:"ما الطاقة الحركية للإلكترون المنبعث إذا كانت طاقة الفوتون الساقط مساوية لدالة الشغل؟",
+    options:["(KE)_max = hf","(KE)_max = 2w","(KE)_max = 0","(KE)_max = w"],
+    correctAnswer:2,
+    explanation:"إذا كان hf = w فإن (KE)_max = hf − w = 0. الإلكترون ينبعث بالكاد (بطاقة حركية صفر) وهذا يقابل تردد العتبة بالضبط."
+  },
+  {
+    id:86,
+    question:"ماذا يعني تيار الإشباع الأعظم (saturation current) في الخلية الكهروضوئية؟",
+    options:["لا توجد إلكترونات تصل","جميع الإلكترونات المنبعثة من اللوح الباعث وصلت إلى اللوح الجامع","التيار في حالة توازن صفري","الضوء أوقف الانبعاث"],
+    correctAnswer:1,
+    explanation:"تيار الإشباع يعني أن جميع الإلكترونات الضوئية المنبعثة من اللوح الباعث تصل إلى اللوح الجامع. زيادة الجهد الموجب بعد هذا لا تزيد التيار."
+  },
+  {
+    id:87,
+    question:"ما المعنى الفيزيائي لمبدأ اللادقة من حيث طبيعة الجسيمات الكمومية؟",
+    options:["أن الأجهزة غير دقيقة","أن للجسيم ازدواجية موجة-جسيم لا تسمح بتحديد موضعه وزخمه معاً بدقة مطلقة","أن الجسيم يتوقف عن الحركة عند القياس","أن القياس الدقيق مستحيل تقنياً"],
+    correctAnswer:1,
+    explanation:"مبدأ اللادقة نتيجة طبيعية لازدواجية الموجة والجسيم؛ تحديد الموضع بدقة يتطلب موجة قصيرة (تردد عالٍ، زخم كبير) مما يُفقد المعلومة عن الزخم والعكس صحيح."
+  },
+  {
+    id:88,
+    question:"ماذا تعني القيمة الكبيرة لـ |ψ|² في نقطة ما؟",
+    options:["الجسيم غائب عن تلك النقطة","احتمالية وجود الجسيم في تلك النقطة مرتفعة","طاقة الجسيم كبيرة","سرعة الجسيم كبيرة"],
+    correctAnswer:1,
+    explanation:"|ψ|² = كثافة احتمالية الوجود. القيمة الكبيرة في نقطة معينة تعني ارتفاع احتمالية رصد الجسيم في تلك النقطة عند القياس."
+  },
+  {
+    id:89,
+    question:"إذا أشعّ جسم أسود عند درجة حرارة T وطول موجة الذروة λₘ = 1μm، ما طول موجة الذروة عند 2T؟",
+    options:["2μm","1μm","0.5μm","4μm"],
+    correctAnswer:2,
+    explanation:"قانون وين: λₘ ∝ 1/T. عند مضاعفة T تتنصف λₘ. إذا كانت λₘ = 1μm عند T فهي تصبح 0.5μm عند 2T."
+  },
+  {
+    id:90,
+    question:"ما الذي يميّز الإلكترون-فولت (eV) كوحدة طاقة؟",
+    options:["وحدة قياس الشحنة الكهربائية","طاقة يكتسبها إلكترون عند تسارعه عبر فرق جهد قدره 1 فولت؛ قيمته: 1eV = 1.6×10⁻¹⁹ J","وحدة قياس التردد","وحدة قياس الزخم"],
+    correctAnswer:1,
+    explanation:"الإلكترون-فولت (eV) هو الطاقة التي يكتسبها إلكترون عند تسارعه عبر فرق جهد مقداره 1 فولت. قيمته: 1 eV = 1.6×10⁻¹⁹ J. يستخدم كثيراً في فيزياء الجسيمات."
+  },
+  {
+    id:91,
+    question:"ما نوع العلاقة بين طول موجة الذروة λₘ ودرجة الحرارة المطلقة T للجسم الأسود؟",
+    options:["طردي خطي","طردي تربيعي","عكسي","لا توجد علاقة"],
+    correctAnswer:2,
+    explanation:"وفق قانون وين: λₘ·T = ثابت، أي λₘ ∝ 1/T (تناسب عكسي). ارتفاع الحرارة ينقل الذروة نحو الأطوال الموجية القصيرة (بنفسجي، أشعة X)."
+  },
+  {
+    id:92,
+    question:"ما الشرط الأساسي لانبعاث إلكترونات ضوئية في الظاهرة الكهروضوئية؟",
+    options:["أن تكون شدة الضوء عالية","أن يكون تردد الضوء ≥ تردد العتبة للمعدن","أن يكون الضوء مستقطباً","أن يكون الضوء ساقطاً بزاوية معينة"],
+    correctAnswer:1,
+    explanation:"الشرط الأساسي: f ≥ f₀ (تردد الضوء يساوي أو يزيد عن تردد العتبة). إذا f < f₀ لا تنبعث إلكترونات أياً كانت شدة الضوء."
+  },
+  {
+    id:93,
+    question:"أيٌّ من التالي يمثّل الطاقة الحركية للإلكترون المنبعث بالطاقة الحركية العظمى؟",
+    options:["½mv_max² = hf - w","½mv_max² = hf + w","½mv_max² = w - hf","½mv_max² = hf / w"],
+    correctAnswer:0,
+    explanation:"(KE)_max = ½mv²_max = hf − w. هذا تعبير آخر لمعادلة أينشتاين للظاهرة الكهروضوئية يُستخدم لحساب أعظم سرعة للإلكترونات المنبعثة."
+  },
+  {
+    id:94,
+    question:"ماذا يحدث لزخم الفوتون إذا ازداد تردد الضوء؟",
+    options:["يتناقص","يبقى ثابتاً","يزداد","لا يتأثر الزخم بالتردد"],
+    correctAnswer:2,
+    explanation:"p = h/λ = hf/c. بزيادة التردد f يزداد زخم الفوتون p (تناسب طردي). الضوء الأشد تردداً (أقصر موجة) له زخم أعلى."
+  },
+  {
+    id:95,
+    question:"من ذكر أن كل جسيم متحرك تصاحبه موجة بطول موجي يتناسب عكسياً مع زخمه؟",
+    options:["هايزنبرغ","بلانك","دي برولي","أينشتاين"],
+    correctAnswer:2,
+    explanation:"الفيزيائي الفرنسي لويس دي برولي في عام 1924 اقترح أن كل جسيم متحرك يصاحبه طول موجي λ = h/p، وهو ما يُعرف بموجات دي برولي."
+  },
+  {
+    id:96,
+    question:"ما القيمة التقريبية لـ h/(4π) (الطرف الأيمن من مبدأ اللادقة)؟",
+    options:["6.63×10⁻³⁴ J·s","5.27×10⁻³⁵ J·s","1.6×10⁻¹⁹ J·s","9.11×10⁻³¹ J·s"],
+    correctAnswer:1,
+    explanation:"h/(4π) = 6.63×10⁻³⁴ / (4×3.14) ≈ 5.27×10⁻³⁵ J·s. هذه القيمة الصغيرة جداً توضح لماذا لا نلاحظ مبدأ اللادقة في العالم اليومي."
+  },
+  {
+    id:97,
+    question:"في معادلة أينشتاين E = mc²، ما المقصود بـ m للفوتون؟",
+    options:["الكتلة السكونية للفوتون","كتلة حركية مكافئة للفوتون (m = hf/c²) رغم أن كتلة السكون صفر","كتلة الإلكترون المنبعث","ليس للفوتون أي كتلة أو طاقة"],
+    correctAnswer:1,
+    explanation:"الفوتون كتلة سكون صفر، لكن له كتلة حركية مكافئة: m = E/c² = hf/c². يستخدم هذا المفهوم لاشتقاق علاقة الازدواجية: λ = h/mc = h·c/(hf·c) = c/f... إلخ."
+  },
+  {
+    id:98,
+    question:"ما هي الأشعة التي يُمرّرها الكوارتز بخلاف الزجاج العادي في الخلية الكهروضوئية؟",
+    options:["أشعة تحت الحمراء","أشعة فوق البنفسجية","أشعة X","الموجات الراديوية"],
+    correctAnswer:1,
+    explanation:"يُمرّر الكوارتز الأشعة فوق البنفسجية (UV) إضافة إلى الضوء المرئي، مما يوسّع نطاق الترددات المستخدمة في تجربة الظاهرة الكهروضوئية. الزجاج يمتص معظم الأشعة UV."
+  },
+  {
+    id:99,
+    question:"ما الأمر الصحيح الذي يجمع بين فرضية دي برولي والازدواجية الموجية الجسيمية للمادة؟",
+    options:["الجسيمات فقط موجات","الموجات فقط جسيمات","كل جسيم متحرك له خصائص موجية وكل موجة لها خصائص جسيمية","الازدواجية مقتصرة على الضوء فقط"],
+    correctAnswer:2,
+    explanation:"مبدأ الازدواجية الكمومية: كل جسيم متحرك له خصائص موجية (λ = h/p) وكل موجة (ضوء) لها خصائص جسيمية (فوتونات). هذا أحد ركائز ميكانيكا الكم."
+  },
+  {
+    id:100,
+    question:"ما الإسهام الرئيسي لماكس بلانك في الفيزياء الحديثة؟",
+    options:["اكتشاف الإلكترون","اقتراح تكميم الطاقة (E = hf) لتفسير إشعاع الجسم الأسود","صياغة معادلات الحركة الكلاسيكية","اكتشاف النسبية الخاصة"],
+    correctAnswer:1,
+    explanation:"أسهم ماكس بلانك عام 1900 باقتراح أن الطاقة مكمَّمة: E = hf، مما أرسى أساس الفيزياء الكمية وأنقذ التفسير النظري لإشعاع الجسم الأسود. حصل على جائزة نوبل عام 1918."
+  }
+];
+
+/* ═══════════════════════════════════════════════════════════
+   QUIZ STATE
+═══════════════════════════════════════════════════════════ */
+let selectedQuestions = [];
+let currentIndex = 0;
+let correctCount = 0;
+let wrongCount = 0;
+const QUIZ_SIZE = 20;
+
+/* ═══════════════════════════════════════════════════════════
+   UTILITY
+═══════════════════════════════════════════════════════════ */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SCREEN MANAGEMENT
+═══════════════════════════════════════════════════════════ */
+function showScreen(id) {
+  ['startScreen','quizScreen','resultScreen'].forEach(s => {
+    document.getElementById(s).classList.add('hidden');
+  });
+  const el = document.getElementById(id);
+  el.classList.remove('hidden');
+  el.style.animation = 'none';
+  el.offsetHeight; // reflow
+  el.style.animation = '';
+}
+
+/* ═══════════════════════════════════════════════════════════
+   START QUIZ
+═══════════════════════════════════════════════════════════ */
+function startQuiz() {
+  selectedQuestions = shuffle(questionBank).slice(0, QUIZ_SIZE);
+  // Also shuffle options within each question
+  selectedQuestions = selectedQuestions.map(q => {
+    const opts = q.options.map((o, i) => ({ text: o, origIndex: i }));
+    const shuffled = shuffle(opts);
+    const newCorrect = shuffled.findIndex(o => o.origIndex === q.correctAnswer);
+    return {
+      ...q,
+      options: shuffled.map(o => o.text),
+      correctAnswer: newCorrect
+    };
+  });
+  currentIndex = 0;
+  correctCount = 0;
+  wrongCount = 0;
+  showScreen('quizScreen');
+  renderQuestion();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RENDER QUESTION
+═══════════════════════════════════════════════════════════ */
+function renderQuestion() {
+  const q = selectedQuestions[currentIndex];
+  const qNum = currentIndex + 1;
+  const total = QUIZ_SIZE;
+
+  // Progress bar
+  document.getElementById('progressFill').style.width = ((qNum - 1) / total * 100) + '%';
+
+  // Meta
+  document.getElementById('qCurrent').textContent = qNum;
+  document.getElementById('liveCorrect').textContent = correctCount;
+  document.getElementById('liveWrong').textContent = wrongCount;
+
+  // Question content
+  document.getElementById('qNumLabel').textContent = `السؤال ${qNum} / ${total}`;
+  document.getElementById('qText').textContent = q.question;
+
+  // Options
+  const labels = ['أ', 'ب', 'ج', 'د'];
+  const list = document.getElementById('optionsList');
+  list.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `
+      <div class="option-label">${labels[i]}</div>
+      <div class="option-text">${opt}</div>
+    `;
+    btn.onclick = () => handleAnswer(i);
+    list.appendChild(btn);
+  });
+
+  // Explanation & next
+  const expBox = document.getElementById('explanationBox');
+  expBox.classList.remove('show');
+  document.getElementById('explanationText').textContent = '';
+
+  const btnNext = document.getElementById('btnNext');
+  btnNext.classList.remove('visible');
+  btnNext.textContent = currentIndex === QUIZ_SIZE - 1 ? 'عرض النتائج 🏆' : 'السؤال التالي ←';
+
+  // Animate card
+  const card = document.getElementById('questionCard');
+  card.style.animation = 'none';
+  card.offsetHeight;
+  card.style.animation = 'fadeUp .4s ease both';
+}
+
+/* ═══════════════════════════════════════════════════════════
+   HANDLE ANSWER
+═══════════════════════════════════════════════════════════ */
+function handleAnswer(selectedIndex) {
+  const q = selectedQuestions[currentIndex];
+  const buttons = document.querySelectorAll('.option-btn');
+
+  // Disable all buttons
+  buttons.forEach(b => b.disabled = true);
+
+  if (selectedIndex === q.correctAnswer) {
+    buttons[selectedIndex].classList.add('correct');
+    correctCount++;
+  } else {
+    buttons[selectedIndex].classList.add('wrong');
+    buttons[q.correctAnswer].classList.add('correct');
+    wrongCount++;
+  }
+
+  // Live score update
+  document.getElementById('liveCorrect').textContent = correctCount;
+  document.getElementById('liveWrong').textContent = wrongCount;
+
+  // Show explanation
+  document.getElementById('explanationText').textContent = q.explanation;
+  document.getElementById('explanationBox').classList.add('show');
+
+  // Show next button
+  document.getElementById('btnNext').classList.add('visible');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   NEXT QUESTION
+═══════════════════════════════════════════════════════════ */
+function nextQuestion() {
+  currentIndex++;
+  if (currentIndex >= QUIZ_SIZE) {
+    showResult();
+  } else {
+    renderQuestion();
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SHOW RESULT
+═══════════════════════════════════════════════════════════ */
+function showResult() {
+  showScreen('resultScreen');
+
+  const pct = Math.round((correctCount / QUIZ_SIZE) * 100);
+  let grade, emoji, title, subtitle, cls;
+
+  if (pct >= 90) {
+    grade = 'ممتاز 🌟'; emoji = '🏆'; title = 'أداء رائع!'; cls = 'excellent';
+    subtitle = 'تفوقت في اختبار الفيزياء الحديثة. استمر بهذا المستوى الرفيع.';
+  } else if (pct >= 70) {
+    grade = 'جيد جداً'; emoji = '⭐'; title = 'نتيجة جيدة جداً!'; cls = 'good';
+    subtitle = 'أداء متميز مع بعض النقاط القابلة للتطوير. راجع الإجابات الخاطئة.';
+  } else if (pct >= 50) {
+    grade = 'مقبول'; emoji = '📚'; title = 'هناك مجال للتحسين!'; cls = 'fair';
+    subtitle = 'مررت بالاختبار لكن ثمة مواضيع تحتاج مراجعة دقيقة. حاول مجدداً.';
+  } else {
+    grade = 'يحتاج مراجعة'; emoji = '💪'; title = 'لا تستسلم!'; cls = 'poor';
+    subtitle = 'راجع منهج الفيزياء الحديثة جيداً ثم أعد الاختبار. التكرار مفتاح النجاح.';
+  }
+
+  // Trophy
+  const trophy = document.getElementById('resultTrophy');
+  trophy.textContent = emoji;
+  trophy.className = `result-trophy ${cls}`;
+
+  document.getElementById('resultGrade').textContent = grade;
+  document.getElementById('resultGrade').className = `result-grade ${cls}`;
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultSubtitle').textContent = subtitle;
+
+  // Stats
+  document.getElementById('resCorrect').textContent = correctCount;
+  document.getElementById('resWrong').textContent = wrongCount;
+  document.getElementById('resPercent').textContent = pct + '%';
+  document.getElementById('resTotal').textContent = QUIZ_SIZE;
+  document.getElementById('scoreNum').textContent = correctCount;
+
+  // Ring animation
+  const ring = document.getElementById('scoreRingFg');
+  ring.className = `score-ring-fg ${cls}`;
+  const circumference = 440;
+  const offset = circumference - (pct / 100) * circumference;
+  requestAnimationFrame(() => {
+    ring.style.strokeDashoffset = offset;
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RESTART
+═══════════════════════════════════════════════════════════ */
+function restartQuiz() {
+  showScreen('startScreen');
+  // Reset ring
+  document.getElementById('scoreRingFg').style.strokeDashoffset = 440;
+}
+</script>
+<footer style="text-align: center; padding: 40px;">
+    <a href="dashboard.html" style="color: #ffab00; font-size: 16px; text-decoration: none; border: 1px solid #ffab00; padding: 10px 20px; border-radius: 8px;">
+        ⬅ العودة لمركز الاختبارات
+    </a>
+</footer>
+</body>
+</html>
