@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<header style="text-align: center; padding: 20px;">
+    <h1>الاختبار الأول</h1>
+    <a href="dashboard.html" style="color: #ffab00; font-size: 16px; text-decoration: none;">
+        ⬅ العودة لمركز الاختبارات
+    </a>
+</header>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اختبار الفيزياء الذكي | الفصل الثالث - التيار المتناوب</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0d1b4b;
+    --secondary: #1a3a8f;
+    --accent: #00c2ff;
+    --accent2: #7b2fff;
+    --gold: #f5c842;
+    --success: #00d97e;
+    --danger: #ff4b6e;
+    --bg: #06101f;
+    --card: #0e1e3d;
+    --card2: #112247;
+    --text: #e8f0ff;
+    --muted: #7a9ac5;
+    --border: #1e3a6b;
+    --glow: 0 0 30px rgba(0,194,255,0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Cairo', 'Tajawal', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(0,194,255,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 90%, rgba(123,47,255,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(13,27,75,0.5) 0%, transparent 70%);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .grid-bg {
+    position: fixed;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(0,194,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,194,255,0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px 16px 60px;
+  }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    padding: 40px 20px 32px;
+    position: relative;
+  }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,194,255,0.1);
+    border: 1px solid rgba(0,194,255,0.3);
+    border-radius: 50px;
+    padding: 6px 18px;
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+
+  .header-badge span { font-size: 16px; }
+
+  .header h1 {
+    font-size: clamp(22px, 5vw, 34px);
+    font-weight: 900;
+    line-height: 1.3;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #ffffff 0%, var(--accent) 50%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .header h2 {
+    font-size: clamp(13px, 2.5vw, 16px);
+    font-weight: 400;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .header .teacher {
+    font-size: 14px;
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  .header-line {
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    margin: 20px auto 0;
+    border-radius: 2px;
+  }
+
+  /* PROGRESS BAR */
+  .progress-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px 22px;
+    margin-bottom: 24px;
+    box-shadow: var(--glow);
+  }
+
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .q-counter {
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .q-counter strong {
+    color: var(--accent);
+    font-size: 20px;
+    font-weight: 900;
+  }
+
+  .score-live {
+    background: rgba(0,194,255,0.1);
+    border: 1px solid rgba(0,194,255,0.25);
+    border-radius: 8px;
+    padding: 4px 14px;
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .progress-bar-track {
+    height: 8px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 10px;
+    transition: width 0.5s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* QUESTION CARD */
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 30px 28px;
+    margin-bottom: 20px;
+    box-shadow: var(--glow);
+    animation: slideIn 0.4s ease;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-number-tag {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    letter-spacing: 0.5px;
+  }
+
+  .question-text {
+    font-size: clamp(16px, 3vw, 19px);
+    font-weight: 700;
+    line-height: 1.7;
+    color: #fff;
+    margin-bottom: 24px;
+  }
+
+  /* OPTIONS */
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  @media (max-width: 540px) {
+    .options-grid { grid-template-columns: 1fr; }
+  }
+
+  .option-btn {
+    background: rgba(255,255,255,0.04);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    text-align: right;
+    transition: all 0.22s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    line-height: 1.5;
+  }
+
+  .option-btn:hover:not(:disabled) {
+    background: rgba(0,194,255,0.08);
+    border-color: rgba(0,194,255,0.4);
+    transform: translateX(-3px);
+    box-shadow: 0 4px 20px rgba(0,194,255,0.1);
+  }
+
+  .option-btn .opt-letter {
+    min-width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    flex-shrink: 0;
+    transition: all 0.22s;
+  }
+
+  .option-btn.correct {
+    background: rgba(0,217,126,0.12);
+    border-color: var(--success);
+    color: #fff;
+    animation: correctPulse 0.4s ease;
+  }
+
+  .option-btn.correct .opt-letter {
+    background: var(--success);
+    border-color: var(--success);
+    color: #fff;
+  }
+
+  .option-btn.wrong {
+    background: rgba(255,75,110,0.12);
+    border-color: var(--danger);
+    color: #fff;
+    animation: wrongShake 0.4s ease;
+  }
+
+  .option-btn.wrong .opt-letter {
+    background: var(--danger);
+    border-color: var(--danger);
+    color: #fff;
+  }
+
+  .option-btn:disabled { cursor: not-allowed; }
+
+  @keyframes correctPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes wrongShake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+
+  /* EXPLANATION BOX */
+  .explanation-box {
+    display: none;
+    background: rgba(0,194,255,0.06);
+    border: 1px solid rgba(0,194,255,0.25);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-top: 18px;
+    animation: fadeIn 0.35s ease;
+  }
+
+  .explanation-box.show { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .explanation-box .exp-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .explanation-box .exp-text {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #c5d8f0;
+  }
+
+  /* NEXT BUTTON */
+  .next-btn {
+    display: none;
+    width: 100%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none;
+    border-radius: 14px;
+    padding: 16px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    cursor: pointer;
+    transition: all 0.22s;
+    margin-top: 16px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 20px rgba(0,194,255,0.25);
+  }
+
+  .next-btn.show { display: block; }
+  .next-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,194,255,0.4); }
+  .next-btn:active { transform: translateY(0); }
+
+  /* START SCREEN */
+  .start-screen {
+    text-align: center;
+    padding: 10px 0 30px;
+  }
+
+  .start-screen .info-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 28px 0;
+  }
+
+  @media (max-width: 480px) {
+    .start-screen .info-cards { grid-template-columns: 1fr; }
+  }
+
+  .info-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 12px;
+    text-align: center;
+  }
+
+  .info-card .ic-icon { font-size: 28px; margin-bottom: 8px; }
+  .info-card .ic-val { font-size: 22px; font-weight: 900; color: var(--accent); }
+  .info-card .ic-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  .instructions {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px 24px;
+    text-align: right;
+    margin-bottom: 28px;
+  }
+
+  .instructions h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .instructions ul { list-style: none; padding: 0; }
+  .instructions li {
+    font-size: 14px;
+    color: var(--muted);
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.6;
+  }
+
+  .instructions li:last-child { border-bottom: none; }
+  .instructions li::before { content: '◆'; color: var(--accent); font-size: 8px; margin-top: 5px; flex-shrink: 0; }
+
+  .start-btn {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none;
+    border-radius: 16px;
+    padding: 18px 50px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    cursor: pointer;
+    transition: all 0.25s;
+    box-shadow: 0 6px 30px rgba(0,194,255,0.3);
+    letter-spacing: 0.5px;
+  }
+
+  .start-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 40px rgba(0,194,255,0.45); }
+
+  /* RESULT SCREEN */
+  .result-screen {
+    text-align: center;
+    padding: 20px 0 40px;
+  }
+
+  .score-circle {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: var(--card2);
+    border: 4px solid transparent;
+    background-clip: padding-box;
+    margin: 0 auto 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 0 50px rgba(0,194,255,0.2);
+  }
+
+  .score-circle::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    z-index: -1;
+  }
+
+  .score-circle .sc-num {
+    font-size: 44px;
+    font-weight: 900;
+    color: white;
+    line-height: 1;
+  }
+
+  .score-circle .sc-total {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .level-badge {
+    display: inline-block;
+    padding: 10px 28px;
+    border-radius: 50px;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+
+  .level-badge.excellent { background: rgba(0,217,126,0.15); color: var(--success); border: 1px solid var(--success); }
+  .level-badge.good { background: rgba(0,194,255,0.15); color: var(--accent); border: 1px solid var(--accent); }
+  .level-badge.average { background: rgba(245,200,66,0.15); color: var(--gold); border: 1px solid var(--gold); }
+  .level-badge.weak { background: rgba(255,75,110,0.15); color: var(--danger); border: 1px solid var(--danger); }
+
+  .result-msg {
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 400px;
+    margin: 0 auto 30px;
+    line-height: 1.8;
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 30px;
+  }
+
+  @media (max-width: 440px) {
+    .stats-row { grid-template-columns: 1fr; }
+  }
+
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+  }
+
+  .stat-card .st-val { font-size: 26px; font-weight: 900; }
+  .stat-card .st-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .stat-card.correct-c .st-val { color: var(--success); }
+  .stat-card.wrong-c .st-val { color: var(--danger); }
+  .stat-card.pct-c .st-val { color: var(--accent); }
+
+  .restart-btn {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none;
+    border-radius: 14px;
+    padding: 16px 44px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    cursor: pointer;
+    transition: all 0.22s;
+    box-shadow: 0 4px 20px rgba(0,194,255,0.25);
+    margin: 0 8px;
+  }
+
+  .restart-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,194,255,0.4); }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 24px 16px;
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+
+  .footer p { font-size: 12px; color: var(--muted); line-height: 1.8; }
+  .footer strong { color: var(--accent); }
+
+  /* HIDDEN */
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-badge"><span>⚡</span> الفصل الثالث | التيار المتناوب</div>
+    <h1>اختبار الفيزياء الذكي<br>مراجعة الفصل الثالث التيار المتناوب</h1>
+    <h2>منصة التقييم الذاتي لطلبة السادس العلمي — رؤيا الاهلية </h2>
+    <p class="teacher">إعداد الأستاذ القدير: وليد خالد الفتلاوي</p>
+    <div class="header-line"></div>
+  </div>
+
+  <!-- START SCREEN -->
+  <div id="startScreen" class="start-screen">
+    <div class="info-cards">
+      <div class="info-card">
+        <div class="ic-icon">📝</div>
+        <div class="ic-val">20</div>
+        <div class="ic-label">سؤالاً متعدد الخيارات</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-icon">💡</div>
+        <div class="ic-val">4</div>
+        <div class="ic-label">خيارات لكل سؤال</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-icon">🎯</div>
+        <div class="ic-val">100%</div>
+        <div class="ic-label">تغذية راجعة فورية</div>
+      </div>
+    </div>
+    <div class="instructions">
+      <h3>📋 تعليمات الاختبار</h3>
+      <ul>
+        <li>اقرأ كل سؤال بعناية قبل اختيار الإجابة.</li>
+        <li>انقر على الخيار الذي تراه صحيحاً، ستظهر لك الإجابة الصحيحة فوراً.</li>
+        <li>يُعرض شرح علمي مبسّط بعد كل إجابة لتعزيز الفهم.</li>
+        <li>لا يمكن تغيير الإجابة بعد الاختيار، فكّر جيداً!</li>
+        <li>في نهاية الاختبار ستظهر نتيجتك وتقييمك التفصيلي.</li>
+        <li>يمكنك إعادة الاختبار بالضغط على زر "إعادة الاختبار".</li>
+      </ul>
+    </div>
+    <button class="start-btn" onclick="startQuiz()">🚀 ابدأ الاختبار الآن</button>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="quizScreen" class="hidden">
+    <div class="progress-wrap">
+      <div class="progress-info">
+        <div class="q-counter">السؤال <strong id="currentQ">1</strong> من <strong>20</strong></div>
+        <div class="score-live">✅ <span id="liveScore">0</span> / <span id="liveTotal">0</span></div>
+      </div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div class="question-card" id="questionCard">
+      <div class="q-number-tag" id="qTag">السؤال 1</div>
+      <div class="question-text" id="questionText"></div>
+      <div class="options-grid" id="optionsGrid"></div>
+      <div class="explanation-box" id="explanationBox">
+        <div class="exp-title">💡 الشرح العلمي</div>
+        <div class="exp-text" id="explanationText"></div>
+      </div>
+      <button class="next-btn" id="nextBtn" onclick="nextQuestion()">السؤال التالي ←</button>
+    </div>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div id="resultScreen" class="hidden result-screen">
+    <div class="score-circle">
+      <div class="sc-num" id="finalScore">0</div>
+      <div class="sc-total">من 20</div>
+    </div>
+    <div class="level-badge" id="levelBadge"></div>
+    <p class="result-msg" id="resultMsg"></p>
+    <div class="stats-row">
+      <div class="stat-card correct-c">
+        <div class="st-val" id="correctCount">0</div>
+        <div class="st-label">إجابات صحيحة ✅</div>
+      </div>
+      <div class="stat-card wrong-c">
+        <div class="st-val" id="wrongCount">0</div>
+        <div class="st-label">إجابات خاطئة ❌</div>
+      </div>
+      <div class="stat-card pct-c">
+        <div class="st-val" id="pctScore">0%</div>
+        <div class="st-label">النسبة المئوية 📊</div>
+      </div>
+    </div>
+    <button class="restart-btn" onclick="restartQuiz()">🔄 إعادة الاختبار</button>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p>
+    <strong>رؤيا الاهلية </strong> | إعداد: <strong>الأستاذ وليد خالد الفتلاوي</strong><br>
+    فيزياء السادس العلمي — الفصل الثالث: التيار المتناوب | المنهج العراقي 2024<br>
+    هذا الاختبار للأغراض التعليمية فقط — جميع الحقوق محفوظة للأستاذ المُعِد
+  </p>
+</div>
+
+<script>
+const questions = [
+  {
+    q: "ما التعريف الصحيح للتيار المتناوب (AC)؟",
+    opts: [
+      "تيار يتدفق في اتجاه واحد فقط وبمقدار ثابت",
+      "تيار يعكس اتجاهه دورياً ويغير مقداره باستمرار مع الزمن",
+      "تيار يتدفق من البطارية ولا يتغير مطلقاً",
+      "تيار ثابت الاتجاه ومتغير المقدار فقط"
+    ],
+    ans: 1,
+    exp: "التيار المتناوب (AC) هو تيار كهربائي يعكس اتجاهه بشكل دوري ويغير مقداره باستمرار مع الزمن — على عكس التيار المستمر (DC) الذي يسري في اتجاه واحد ثابت فقط."
+  },
+  {
+    q: "في دائرة تيار متناوب تحتوي مقاومة صرف فقط، ما العلاقة بين الفولطية والتيار؟",
+    opts: [
+      "التيار يسبق الفولطية بزاوية 90°",
+      "الفولطية تسبق التيار بزاوية 90°",
+      "الفولطية والتيار يتغيران بطور واحد (φ = 0°)",
+      "الفولطية والتيار لا علاقة بينهما"
+    ],
+    ans: 2,
+    exp: "في دائرة المقاومة الصرف، تكون زاوية فرق الطور φ = 0°، أي أن الفولطية والتيار يتغيران معاً في الطور نفسه، ويصلان إلى قيمهما العظمى والصغرى في اللحظات ذاتها."
+  },
+  {
+    q: "ما قيمة عامل القدرة (Power Factor) في دائرة التيار المتناوب التي تحتوي على مقاومة صرف فقط؟",
+    opts: [
+      "صفر (0)",
+      "0.5",
+      "0.707",
+      "واحد صحيح (1)"
+    ],
+    ans: 3,
+    exp: "في دائرة المقاومة الصرف، φ = 0° لذا: Pf = cos(0°) = 1. وهذا يعني أن جميع القدرة الكهربائية تُستهلك في المقاومة على شكل حرارة."
+  },
+  {
+    q: "ما العلاقة الصحيحة التي تربط التيار المؤثر (Ieff) بالتيار الأعظم (Im)؟",
+    opts: [
+      "Ieff = Im",
+      "Ieff = Im / 2",
+      "Ieff = Im / √2 ≈ 0.707 Im",
+      "Ieff = Im × √2"
+    ],
+    ans: 2,
+    exp: "يُشتق التيار المؤثر (Irms) من شرط تساوي التأثير الحراري للتيار المتناوب مع التيار المستمر المكافئ، وينتج: Ieff = Im/√2 = 0.707 × Im. وينطبق الأمر ذاته على الفولطية المؤثرة."
+  },
+  {
+    q: "ما تعريف التيار المؤثر (Ieff)؟",
+    opts: [
+      "المقدار الأعظم للتيار المتناوب",
+      "مقدار التيار المتناوب المساوي للتيار المستمر الذي يولد التأثير الحراري ذاته في المقاومة ذاتها والفترة ذاتها",
+      "المتوسط الحسابي لقيم التيار المتناوب",
+      "مجموع التيار الأعظم والتيار الأدنى مقسوماً على 2"
+    ],
+    ans: 1,
+    exp: "التيار المؤثر هو مقدار التيار المتناوب المكافئ للتيار المستمر الذي يُولّد نفس التأثير الحراري في المقاومة نفسها وللمدة الزمنية نفسها. ويُسمى أيضاً جذر معدل المربع (RMS)."
+  },
+  {
+    q: "في دائرة تيار متناوب تحتوي محثاً صرفاً، ما العلاقة الصحيحة بين الفولطية والتيار؟",
+    opts: [
+      "الفولطية والتيار بطور واحد (φ = 0°)",
+      "التيار يسبق الفولطية بـ 90°",
+      "الفولطية تسبق التيار بـ 90°",
+      "الفولطية تسبق التيار بـ 45°"
+    ],
+    ans: 2,
+    exp: "في دائرة المحث الصرف، تسبق الفولطية التيار بزاوية فرق طور φ = 90° (π/2). أي VL = Vm sin(ωt + π/2) بينما IL = Im sin(ωt)."
+  },
+  {
+    q: "ما العلاقة الصحيحة لحساب رادة الحث (XL)؟",
+    opts: [
+      "XL = L / (2πf)",
+      "XL = 2πfL = ωL",
+      "XL = 1 / (2πfL)",
+      "XL = R × L"
+    ],
+    ans: 1,
+    exp: "رادة الحث هي: XL = ωL = 2πfL، حيث ω التردد الزاوي وL معامل الحث الذاتي. وتُقاس بوحدة الأوم (Ω). تتناسب طردياً مع كل من التردد ومعامل الحث الذاتي."
+  },
+  {
+    q: "ما القدرة المتوسطة المستهلكة في دائرة تيار متناوب تحتوي محثاً صرفاً فقط؟",
+    opts: [
+      "تساوي Im × Vm",
+      "تساوي Im × Vm / 2",
+      "تساوي Im² × XL",
+      "تساوي صفراً"
+    ],
+    ans: 3,
+    exp: "في دائرة المحث الصرف، φ = 90°، لذا: Pav = Ieff × Veff × cos(90°) = 0. المحث يختزن الطاقة في المجال المغناطيسي ثم يعيدها للمصدر دون أن يستهلك أي قدرة حقيقية."
+  },
+  {
+    q: "في دائرة التيار المتناوب ذات المحث الصرف، ما الذي يحدث عند الترددات العالية جداً؟",
+    opts: [
+      "يعمل الملف كمقاومة صرف",
+      "يقل تيار الدائرة إلى الحد الأدنى ويعمل الملف كمفتاح مفتوح",
+      "يزداد تيار الدائرة إلى أقصى حد ممكن",
+      "لا يتأثر تيار الدائرة بتغير التردد"
+    ],
+    ans: 1,
+    exp: "عند التردد العالي جداً، تزداد رادة الحث XL = 2πfL إلى مقدار كبير جداً قد يؤدي إلى قطع التيار، فيعمل الملف عمل مفتاح مفتوح. أما عند التردد الواطئ، فتقل رادة الحث وقد تصل إلى الصفر، فيعمل الملف عمل مقاومة صرف."
+  },
+  {
+    q: "في دائرة تيار متناوب تحتوي متسعة صرفاً فقط، ما العلاقة بين التيار والفولطية؟",
+    opts: [
+      "التيار يتأخر عن الفولطية بـ 90°",
+      "الفولطية والتيار بطور واحد",
+      "التيار يسبق الفولطية بـ 90°",
+      "الفولطية تسبق التيار بـ 45°"
+    ],
+    ans: 2,
+    exp: "في دائرة المتسعة الصرف، يسبق التيار الفولطية بزاوية 90° (π/2). أي أن التيار يصل قيمته العظمى قبل الفولطية بربع دورة. IC = Im sin(ωt + π/2) بينما VC = Vm sin(ωt)."
+  },
+  {
+    q: "ما العلاقة الصحيحة لحساب رادة السعة (XC)؟",
+    opts: [
+      "XC = 2πfC",
+      "XC = C / (2πf)",
+      "XC = 1 / (2πfC) = 1 / (ωC)",
+      "XC = ωC"
+    ],
+    ans: 2,
+    exp: "رادة السعة: XC = 1/(ωC) = 1/(2πfC)، وتُقاس بالأوم. تتناسب عكسياً مع التردد والسعة. عند زيادة التردد تقل رادة السعة، وعند الترددات العالية جداً تعمل المتسعة كسلك موصل."
+  },
+  {
+    q: "ما علاقة القدرة المتوسطة في دائرة التيار المتناوب التسلسلية بشكل عام؟",
+    opts: [
+      "Pav = Im × Vm",
+      "Pav = Ieff × Veff × cos(φ)",
+      "Pav = Ieff² × XL",
+      "Pav = Ieff × Veff / sin(φ)"
+    ],
+    ans: 1,
+    exp: "القدرة الحقيقية المتوسطة في دائرة التيار المتناوب تُحسب بالعلاقة: Pav = Ieff × Veff × cos(φ)، حيث cos(φ) هو عامل القدرة (Power Factor). تُستهلك القدرة الحقيقية في المقاومة فقط دون المحث والمتسعة."
+  },
+  {
+    q: "في دائرة RLC التسلسلية، ما العلاقة الصحيحة للممانعة الكلية (Z)؟",
+    opts: [
+      "Z = R + XL + XC",
+      "Z = R + (XL - XC)",
+      "Z = √(R² + (XL - XC)²)",
+      "Z = √(R² + XL² + XC²)"
+    ],
+    ans: 2,
+    exp: "الممانعة الكلية في الدائرة التسلسلية RLC هي: Z = √[R² + (XL - XC)²]. لا يمكن جمع المقاومة والرادات جبرياً مباشرة لوجود فرق طور بينها، لذا نستخدم المجموع الهندسي."
+  },
+  {
+    q: "ما شرط حدوث الرنين (Resonance) في دائرة RLC التسلسلية؟",
+    opts: [
+      "R = XL = XC",
+      "XL = XC (وتساوي الرادتين)",
+      "Z = 0",
+      "Pf = 0"
+    ],
+    ans: 1,
+    exp: "يحدث الرنين عندما تتساوى رادة الحث مع رادة السعة: XL = XC. عندئذ تصبح الرادة المحصلة صفراً، والممانعة الكلية Z = R (أدنى قيمة)، والتيار يبلغ أعظم قيمة له، وφ = 0° وPf = 1."
+  },
+  {
+    q: "ما التردد الرنيني (fr) في دائرة LC؟",
+    opts: [
+      "fr = 2π√(LC)",
+      "fr = 1 / (2π√(LC))",
+      "fr = √(LC) / (2π)",
+      "fr = 2πLC"
+    ],
+    ans: 1,
+    exp: "التردد الطبيعي (الرنيني) للدائرة: fr = 1/(2π√(LC)). يُشتق من شرط الرنين XL = XC: ωL = 1/(ωC)، أي ω² = 1/(LC)، ومنه ω = 1/√(LC)، وبما أن f = ω/(2π) نحصل على العلاقة أعلاه."
+  },
+  {
+    q: "في حالة الرنين لدائرة RLC التسلسلية، أي من التالي صحيح؟",
+    opts: [
+      "عامل القدرة يساوي صفراً",
+      "الممانعة الكلية Z = R وعامل القدرة = 1",
+      "التيار يبلغ أدنى قيمة له",
+      "الفولطية الكلية تساوي مجموع الفولطيات على كل عنصر"
+    ],
+    ans: 1,
+    exp: "عند الرنين: XL = XC، فتصبح الرادة المحصلة X = 0، والممانعة Z = R (أدنى قيمة). التيار يبلغ أعظم قيمة: I = V/R. زاوية فرق الطور φ = 0°، وعامل القدرة Pf = cos(0°) = 1."
+  },
+  {
+    q: "في دائرة RLC متوازية الربط، ما الصحيح دائماً؟",
+    opts: [
+      "التيار في كل فرع يساوي التيار الكلي",
+      "فرق الجهد على كل عنصر متساوٍ ويساوي فولطية المصدر",
+      "المقاومة والمحث والمتسعة لها رادات متساوية",
+      "التيار الكلي يساوي مجموع تيارات الفروع جبرياً"
+    ],
+    ans: 1,
+    exp: "في الدائرة المتوازية، فرق الجهد على كل عنصر (R، L، C) متساوٍ ومساوٍ لفولطية المصدر: VR = VL = VC = VT. أما التيار الكلي فيُحسب هندسياً: IT = √(IR² + (IC - IL)²)."
+  },
+  {
+    q: "ما القدرة الظاهرية (Apparent Power) في دائرة التيار المتناوب؟",
+    opts: [
+      "Papp = Ieff² × R",
+      "Papp = Ieff × Veff (بوحدة Volt-Ampere VA)",
+      "Papp = Ieff × Veff × cos(φ)",
+      "Papp = Ieff × Veff × sin(φ)"
+    ],
+    ans: 1,
+    exp: "القدرة الظاهرية (المجهزة للدائرة) هي: Papp = Ieff × Veff، وتُقاس بالـ (VA) فولت-أمبير. أما القدرة الحقيقية (المستهلكة): Preal = Ieff × Veff × cos(φ) وتُقاس بالواط (W)."
+  },
+  {
+    q: "في دائرة RLC تسلسلية، إذا كانت XL > XC فإن الدائرة:",
+    opts: [
+      "لها خصائص سعوية والتيار يسبق الفولطية",
+      "في حالة رنين وφ = 0°",
+      "لها خصائص حثية والفولطية تسبق التيار",
+      "عامل القدرة يساوي صفراً"
+    ],
+    ans: 2,
+    exp: "إذا كانت XL > XC، تكون الرادة المحصلة X = XL - XC موجبة، وللدائرة خصائص حثية، أي أن الفولطية تسبق التيار بزاوية φ موجبة. أما إذا كانت XC > XL فللدائرة خصائص سعوية."
+  },
+  {
+    q: "مصدر فولطية متناوبة Veff = 300V مرتبط بمقاومة صرف R = 100Ω. ما مقدار التيار المؤثر والقدرة المتوسطة؟",
+    opts: [
+      "Ieff = 3A و Pav = 900W",
+      "Ieff = 3A و Pav = 300W",
+      "Ieff = 30A و Pav = 9000W",
+      "Ieff = 0.3A و Pav = 90W"
+    ],
+    ans: 0,
+    exp: "الحل: Ieff = Veff / R = 300 / 100 = 3A. ثم القدرة المتوسطة: Pav = Ieff × Veff = 3 × 300 = 900W. (أو Pav = Ieff² × R = 9 × 100 = 900W). هذا يُثبت أن القدرة تُستهلك كلياً في المقاومة."
+  }
+];
+
+let current = 0;
+let score = 0;
+let answered = 0;
+let answered_q = new Array(20).fill(false);
+
+const letters = ['أ', 'ب', 'ج', 'د'];
+
+function startQuiz() {
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('quizScreen').classList.remove('hidden');
+  loadQuestion();
+}
+
+function loadQuestion() {
+  const q = questions[current];
+  document.getElementById('qTag').textContent = `السؤال ${current + 1}`;
+  document.getElementById('questionText').textContent = q.q;
+  document.getElementById('currentQ').textContent = current + 1;
+  document.getElementById('progressFill').style.width = `${(current / 20) * 100}%`;
+  document.getElementById('explanationBox').classList.remove('show');
+  document.getElementById('nextBtn').classList.remove('show');
+
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="opt-letter">${letters[i]}</span>${opt}`;
+    btn.onclick = () => selectAnswer(i, btn);
+    grid.appendChild(btn);
+  });
+
+  // Animate
+  const card = document.getElementById('questionCard');
+  card.style.animation = 'none';
+  card.offsetHeight;
+  card.style.animation = 'slideIn 0.4s ease';
+}
+
+function selectAnswer(idx, clickedBtn) {
+  if (answered_q[current]) return;
+  answered_q[current] = true;
+  answered++;
+
+  const q = questions[current];
+  const btns = document.querySelectorAll('.option-btn');
+
+  btns.forEach(b => b.disabled = true);
+
+  if (idx === q.ans) {
+    clickedBtn.classList.add('correct');
+    score++;
+  } else {
+    clickedBtn.classList.add('wrong');
+    btns[q.ans].classList.add('correct');
+  }
+
+  document.getElementById('liveScore').textContent = score;
+  document.getElementById('liveTotal').textContent = answered;
+
+  document.getElementById('explanationText').textContent = q.exp;
+  document.getElementById('explanationBox').classList.add('show');
+
+  if (current < 19) {
+    document.getElementById('nextBtn').classList.add('show');
+    document.getElementById('nextBtn').textContent = 'السؤال التالي ←';
+  } else {
+    document.getElementById('nextBtn').classList.add('show');
+    document.getElementById('nextBtn').textContent = '🏁 عرض النتيجة النهائية';
+    document.getElementById('nextBtn').onclick = showResult;
+  }
+}
+
+function nextQuestion() {
+  current++;
+  loadQuestion();
+}
+
+function showResult() {
+  document.getElementById('quizScreen').classList.add('hidden');
+  document.getElementById('resultScreen').classList.remove('hidden');
+
+  const pct = Math.round((score / 20) * 100);
+  document.getElementById('finalScore').textContent = score;
+  document.getElementById('correctCount').textContent = score;
+  document.getElementById('wrongCount').textContent = 20 - score;
+  document.getElementById('pctScore').textContent = pct + '%';
+
+  const badge = document.getElementById('levelBadge');
+  const msg = document.getElementById('resultMsg');
+
+  if (pct >= 90) {
+    badge.className = 'level-badge excellent';
+    badge.textContent = '🏆 طالب متميز';
+    msg.textContent = 'أداء رائع! أنت تمتلك فهماً عميقاً لمادة التيار المتناوب. استمر في هذا المستوى الاستثنائي واجتهد في حل المسائل التطبيقية.';
+  } else if (pct >= 75) {
+    badge.className = 'level-badge good';
+    badge.textContent = '⭐ مستوى جيد جداً';
+    msg.textContent = 'أداء جيد جداً! لديك قاعدة معرفية قوية. راجع النقاط التي أخطأت فيها وركز على العلاقات الرياضية بين المتغيرات.';
+  } else if (pct >= 55) {
+    badge.className = 'level-badge average';
+    badge.textContent = '📚 مستوى متوسط';
+    msg.textContent = 'مستوى لا بأس به، لكنك تحتاج إلى مراجعة أكثر عمقاً. اعد قراءة مفاهيم رادة الحث والسعة والرنين وحل المسائل التدريبية.';
+  } else {
+    badge.className = 'level-badge weak';
+    badge.textContent = '📖 يحتاج مراجعة';
+    msg.textContent = 'لا تيأس! راجع الفصل الثالث من البداية مع تركيز على المفاهيم الأساسية للتيار المتناوب. تواصل مع أستاذك للحصول على مساعدة إضافية.';
+  }
+}
+
+function restartQuiz() {
+  current = 0;
+  score = 0;
+  answered = 0;
+  answered_q = new Array(20).fill(false);
+  document.getElementById('liveScore').textContent = '0';
+  document.getElementById('liveTotal').textContent = '0';
+  document.getElementById('resultScreen').classList.add('hidden');
+  document.getElementById('nextBtn').onclick = nextQuestion;
+  document.getElementById('quizScreen').classList.remove('hidden');
+  loadQuestion();
+}
+</script>
+<footer style="text-align: center; padding: 40px;">
+    <a href="dashboard.html" style="color: #ffab00; font-size: 16px; text-decoration: none; border: 1px solid #ffab00; padding: 10px 20px; border-radius: 8px;">
+        ⬅ العودة لمركز الاختبارات
+    </a>
+</footer>
+</body>
+</html>
