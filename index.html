@@ -509,7 +509,7 @@
     ];
 
     /* الموقع النهائي بعد الدخول الناجح */
-    const REDIRECT_URL = 'https://sites.google.com/view/waloosky/';
+    const REDIRECT_URL = 'dashboard.html';
 
     /* ── Flow functions ── */
     function showStep(id) {
@@ -536,7 +536,7 @@
         /* ✅ كود صحيح */
         document.getElementById('errorMsg').classList.remove('visible');
         document.getElementById('successOverlay').classList.add('visible');
-        setTimeout(() => { window.open(REDIRECT_URL, '_blank'); }, 1800);
+        setTimeout(() => { window.location.href = REDIRECT_URL; }, 1800);
       } else {
         /* ❌ كود خاطئ */
         const err = document.getElementById('errorMsg');
