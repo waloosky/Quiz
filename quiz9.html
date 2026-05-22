@@ -1,4 +1,210 @@
-<script>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قريباً | بوابة الفيزياء الحديثة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #0d1117;
+            --cyan: #00e5ff;
+            --amber: #ffab00;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(0, 229, 255, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-deep);
+            font-family: 'Cairo', sans-serif;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ── Orbital Rings Background ── */
+        .universe {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ring {
+            position: absolute;
+            border: 1px solid rgba(0, 229, 255, 0.1);
+            border-radius: 50%;
+            animation: rotate 20s linear infinite;
+        }
+        .ring-1 { width: 300px; height: 300px; animation-duration: 10s; }
+        .ring-2 { width: 500px; height: 500px; border-color: rgba(255, 171, 0, 0.15); animation-duration: 15s; animation-direction: reverse; }
+        .ring-3 { width: 700px; height: 700px; animation-duration: 25s; }
+
+        .planet {
+            position: absolute;
+            width: 10px; height: 10px;
+            background: var(--cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 15px var(--cyan);
+            top: -5px; left: 50%;
+        }
+
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* ── Content ── */
+        .content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .soon-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(80px, 15vw, 160px);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--cyan), var(--amber));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 30px rgba(0, 229, 255, 0.4));
+            letter-spacing: 10px;
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+
+        .subtitle {
+            font-size: 24px;
+            color: #80cbc4;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+        }
+
+        /* ── Countdown ── */
+        .countdown {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 50px;
+            direction: ltr; /* لضمان ترتيب الأرقام من اليسار لليمين */
+        }
+
+        .time-unit {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            min-width: 100px;
+        }
+
+        .time-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--cyan);
+            display: block;
+        }
+
+        .time-label {
+            font-size: 14px;
+            color: #aaa;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        /* ── Tags ── */
+        .features-tags {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .tag {
+            background: rgba(0, 229, 255, 0.1);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            color: var(--cyan);
+        }
+
+        /* ── Back Button ── */
+        .btn-back {
+            display: inline-block;
+            padding: 15px 40px;
+            background: transparent;
+            border: 1px solid var(--amber);
+            color: var(--amber);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: 0.3s;
+            font-size: 18px;
+        }
+
+        .btn-back:hover {
+            background: var(--amber);
+            color: var(--bg-deep);
+            box-shadow: 0 0 30px var(--amber);
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="universe">
+        <div class="ring ring-1"><div class="planet"></div></div>
+        <div class="ring ring-2"><div class="planet" style="background:var(--amber); box-shadow:0 0 15px var(--amber)"></div></div>
+        <div class="ring ring-3"><div class="planet"></div></div>
+    </div>
+
+    <div class="content">
+        <h1 class="soon-title">SOON</h1>
+        <p class="subtitle">انتظروا المفاجأة الكبرى في عالم الفيزياء</p>
+
+        <div class="countdown" id="timer">
+            <div class="time-unit">
+                <span class="time-value" id="days">00</span>
+                <span class="time-label">أيام</span>
+            </div>
+            <div class="time-unit">
+                <span class="time-value" id="hours">00</span>
+                <span class="time-label">ساعات</span>
+            </div>
+            <div class="time-unit">
+                <span class="time-value" id="minutes">00</span>
+                <span class="time-label">دقائق</span>
+            </div>
+            <div class="time-unit">
+                <span class="time-value" id="seconds">00</span>
+                <span class="time-label">ثوانٍ</span>
+            </div>
+        </div>
+
+        <div class="features-tags">
+            <span class="tag">🤖 شرح بالذكاء الاصطناعي</span>
+            <span class="tag">🧪 تجارب افتراضية</span>
+            <span class="tag">📉 تحليل مستوى الطالب</span>
+            <span class="tag">🏆 لوحة شرف للمتميزين</span>
+        </div>
+
+        <a href="dashboard.html" class="btn-back">⬅ العودة للوحة التحكم</a>
+    </div>
+
+    <script>
         // التاريخ المحدد من قبلك
         const target = new Date('2026-07-03T00:00:00').getTime();
 
@@ -25,3 +231,6 @@
             }
         }, 1000);
     </script>
+
+</body>
+</html>
