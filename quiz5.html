@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<header style="text-align: center; padding: 20px;">
+    <h1>الاختبار الأول</h1>
+    <a href="dashboard.html" style="color: #ffab00; font-size: 16px; text-decoration: none;">
+        ⬅ العودة لمركز الاختبارات
+    </a>
+</header>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اختبار الفيزياء – الفصل الخامس: البصريات الفيزيائية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #0a0f1e;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --surface3: #1e2d45;
+    --accent: #00d4ff;
+    --accent2: #7b5cfa;
+    --gold: #f5c842;
+    --green: #22c55e;
+    --red: #ef4444;
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --border: rgba(255,255,255,0.08);
+    --glow: 0 0 30px rgba(0,212,255,0.15);
+    --radius: 16px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Tajawal', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 50% -20%, rgba(123,92,250,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 90% 80%, rgba(0,212,255,0.07) 0%, transparent 50%);
+  }
+
+  /* ── Background grid ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .app { position: relative; z-index: 1; max-width: 820px; margin: 0 auto; padding: 20px; }
+
+  /* ── HEADER ── */
+  .header {
+    text-align: center;
+    padding: 48px 24px 32px;
+    position: relative;
+  }
+  .header-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(123,92,250,0.15));
+    border: 1px solid rgba(0,212,255,0.3);
+    border-radius: 50px;
+    padding: 6px 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+  .header h1 {
+    font-family: 'Cairo', sans-serif;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 900;
+    line-height: 1.2;
+    background: linear-gradient(135deg, #fff 0%, var(--accent) 60%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+  .header p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 400;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 6px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .progress-bar {
+    height: 8px;
+    border-radius: 50px;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 0 16px rgba(0,212,255,0.4);
+    min-width: 8px;
+  }
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+  .progress-num { color: var(--accent); font-weight: 700; font-size: 0.9rem; }
+
+  /* ── SCORE TRACKER ── */
+  .score-track {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .score-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 8px 18px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+  .score-chip .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .score-chip.correct .dot { background: var(--green); box-shadow: 0 0 8px var(--green); }
+  .score-chip.wrong .dot { background: var(--red); box-shadow: 0 0 8px var(--red); }
+  .score-chip.remain .dot { background: var(--text-muted); }
+  .score-chip span { color: var(--text); }
+  .score-chip strong { color: var(--text); }
+
+  /* ── QUESTION CARD ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    margin-bottom: 20px;
+    animation: slideUp 0.4s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 4px 32px rgba(0,0,0,0.3);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(123,92,250,0.06), transparent 70%);
+    pointer-events: none;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-number {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent2);
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .q-number::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent2), transparent);
+    opacity: 0.3;
+  }
+
+  .q-text {
+    font-family: 'Cairo', sans-serif;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    font-weight: 700;
+    line-height: 1.7;
+    color: #f1f5f9;
+    margin-bottom: 28px;
+  }
+
+  /* ── OPTIONS ── */
+  .options { display: flex; flex-direction: column; gap: 12px; }
+
+  .option-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--surface2);
+    border: 2px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text);
+    text-align: right;
+    width: 100%;
+    overflow: hidden;
+  }
+  .option-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,212,255,0.04), transparent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: rgba(0,212,255,0.4);
+    background: var(--surface3);
+    transform: translateX(-3px);
+    box-shadow: 0 4px 20px rgba(0,212,255,0.1);
+  }
+  .option-btn:hover:not(:disabled)::before { opacity: 1; }
+
+  .option-letter {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    background: var(--surface3);
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: var(--accent);
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+
+  .option-btn.correct-ans {
+    background: rgba(34,197,94,0.12);
+    border-color: var(--green);
+    box-shadow: 0 0 20px rgba(34,197,94,0.2);
+    animation: correctPulse 0.4s ease;
+  }
+  .option-btn.correct-ans .option-letter {
+    background: var(--green);
+    border-color: var(--green);
+    color: #fff;
+  }
+  .option-btn.wrong-ans {
+    background: rgba(239,68,68,0.12);
+    border-color: var(--red);
+    animation: wrongShake 0.4s ease;
+  }
+  .option-btn.wrong-ans .option-letter {
+    background: var(--red);
+    border-color: var(--red);
+    color: #fff;
+  }
+  .option-btn.show-correct {
+    background: rgba(34,197,94,0.08);
+    border-color: rgba(34,197,94,0.4);
+  }
+  .option-btn:disabled { cursor: default; transform: none !important; }
+
+  @keyframes correctPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.01); }
+    100% { transform: scale(1); }
+  }
+  @keyframes wrongShake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+
+  /* ── EXPLANATION ── */
+  .explanation {
+    margin-top: 20px;
+    background: linear-gradient(135deg, rgba(0,212,255,0.06), rgba(123,92,250,0.06));
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 12px;
+    padding: 18px 20px;
+    animation: fadeIn 0.4s ease;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .explanation-icon {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .explanation-body {}
+  .explanation-label {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--accent);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  .explanation p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #cbd5e1;
+    font-weight: 400;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── NEXT BUTTON ── */
+  .btn-next {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    border: none;
+    border-radius: 12px;
+    padding: 16px 32px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.2s;
+    box-shadow: 0 4px 24px rgba(123,92,250,0.3);
+  }
+  .btn-next:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(123,92,250,0.4); }
+  .btn-next:active { transform: translateY(0); }
+  .btn-next:disabled { opacity: 0.4; cursor: default; transform: none; }
+
+  /* ── RESULT SCREEN ── */
+  .result-screen {
+    text-align: center;
+    padding: 48px 32px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    animation: slideUp 0.5s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 8px 64px rgba(0,0,0,0.4);
+  }
+  .result-emoji {
+    font-size: 5rem;
+    margin-bottom: 20px;
+    display: block;
+    animation: bounceIn 0.6s cubic-bezier(0.4,0,0.2,1);
+  }
+  @keyframes bounceIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    70% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .result-title {
+    font-family: 'Cairo', sans-serif;
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    font-weight: 900;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #fff, var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .result-sub {
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin-bottom: 36px;
+  }
+
+  .score-big {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 32px;
+  }
+  .score-circle {
+    width: 150px; height: 150px;
+    border-radius: 50%;
+    background: conic-gradient(var(--accent) var(--pct), var(--surface3) 0);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    box-shadow: 0 0 40px rgba(0,212,255,0.2);
+  }
+  .score-circle-inner {
+    width: 112px; height: 112px;
+    border-radius: 50%;
+    background: var(--surface);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .score-number {
+    font-family: 'Cairo', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1;
+  }
+  .score-total { font-size: 0.8rem; color: var(--text-muted); }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .stat-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 12px;
+  }
+  .stat-val {
+    font-family: 'Cairo', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .stat-box.correct .stat-val { color: var(--green); }
+  .stat-box.wrong .stat-val { color: var(--red); }
+  .stat-box.pct .stat-val { color: var(--gold); }
+  .stat-label { font-size: 0.78rem; color: var(--text-muted); font-weight: 500; }
+
+  .grade-badge {
+    display: inline-block;
+    padding: 10px 28px;
+    border-radius: 50px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    margin-bottom: 28px;
+    letter-spacing: 1px;
+  }
+  .grade-A { background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.5); color: var(--green); }
+  .grade-B { background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.4); color: var(--accent); }
+  .grade-C { background: rgba(245,200,66,0.1); border: 1px solid rgba(245,200,66,0.4); color: var(--gold); }
+  .grade-D { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.4); color: var(--red); }
+
+  .btn-restart {
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    border: none;
+    border-radius: 12px;
+    padding: 16px 40px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 24px rgba(123,92,250,0.3);
+  }
+  .btn-restart:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(123,92,250,0.4); }
+
+  /* ── START SCREEN ── */
+  .start-screen {
+    text-align: center;
+    padding: 48px 32px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    animation: slideUp 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+  .start-icon { font-size: 4rem; margin-bottom: 20px; display: block; }
+  .start-title {
+    font-family: 'Cairo', sans-serif;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 900;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .start-desc {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.8;
+    margin-bottom: 32px;
+    max-width: 500px;
+    margin-inline: auto;
+  }
+  .info-pills {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+  .pill {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 7px 16px;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .pill-icon { color: var(--accent); }
+
+  .btn-start {
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    border: none;
+    border-radius: 14px;
+    padding: 18px 52px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.25s;
+    box-shadow: 0 4px 32px rgba(123,92,250,0.35);
+    letter-spacing: 0.5px;
+  }
+  .btn-start:hover { transform: translateY(-3px); box-shadow: 0 10px 40px rgba(123,92,250,0.45); }
+
+  /* ── Result message ── */
+  .result-msg {
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 24px;
+    font-weight: 500;
+  }
+
+  @media (max-width: 600px) {
+    .card { padding: 22px 16px; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .stats-grid .stat-box:last-child { grid-column: 1 / -1; }
+    .header { padding: 32px 16px 24px; }
+    .result-screen, .start-screen { padding: 32px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="header">
+    <div class="header-badge">المنهج العراقي · الصف السادس</div>
+    <h1>البصريات الفيزيائية</h1>
+    <p>الفصل الخامس – تداخل الضوء، تجربة يونك، الأغشية الرقيقة، الحيود، الاستقطاب</p>
+  </div>
+
+  <div id="app-root"></div>
+</div>
+
+<script>
+const questions = [
+  {
+    q: "ما تعريف التداخل البنّاء (الإيجابي) للضوء؟",
+    options: [
+      "تراكب موجتين متعاكستي الطور تُلغي إحداهما الأخرى",
+      "تراكب موجتين بالطور نفسه والسعة نفسها فتتضاعف السعة",
+      "انعراج الضوء عن مساره عند المرور بفتحة ضيقة",
+      "انتشار الضوء في وسطين مختلفين بسرعتين مختلفتين"
+    ],
+    correct: 1,
+    explanation: "يحدث التداخل البنّاء عندما تكون للموجتين الطورُ نفسه والسعةُ نفسها عند نقطة معينة، فتتحدان لتقوي كل منهما الأخرى وتكون سعة الموجة الناتجة مساوية لضعف سعة أي منهما. وهو ناتج عن تراكب قمّتين أو قعرَين من موجتين."
+  },
+  {
+    q: "ما شرط التداخل الإتلافي (التدميري) من حيث فرق المسار البصري (Δℓ)؟",
+    options: [
+      "Δℓ = mλ, حيث m = 0, 1, 2, 3, …",
+      "Δℓ = (m + ½)λ, حيث m = 0, 1, 2, 3, …",
+      "Δℓ = (2m)λ, حيث m = 1, 2, 3, …",
+      "Δℓ = صفر في جميع الحالات"
+    ],
+    correct: 1,
+    explanation: "شرط التداخل الإتلافي هو أن يكون فرق المسار البصري مساوياً لأعداد فردية من نصف طول الموجة: Δℓ = (m + ½)λ، وفي هذه الحالة تكون زاوية فرق الطور أعداداً فردية من π rad، أي π، 3π، 5π، ... فتلغي إحدى الموجتين الأخرى وتساوي السعة الناتجة صفراً."
+  },
+  {
+    q: "ما الغرض الرئيسي من تجربة يونك بالشقّين المزدوجين؟",
+    options: [
+      "قياس سرعة الضوء في الفراغ",
+      "إثبات الطبيعة الجسيمية للضوء",
+      "إثبات الطبيعة الموجية للضوء وحساب طوله الموجي",
+      "قياس شدة الضوء عند زوايا مختلفة"
+    ],
+    correct: 2,
+    explanation: "تمكّن العالم يونك من إثبات الطبيعة الموجية للضوء من خلال تجربته التي أظهرت ظاهرتي الحيود والتداخل معاً، كما تمكّن من حساب الطول الموجي للضوء المستخدم في التجربة باستخدام العلاقة: λ = yₘd / mL."
+  },
+  {
+    q: "في تجربة يونك، لماذا يكون الهدب المركزي مضيئاً دائماً؟",
+    options: [
+      "لأن شدة الضوء أعلى في وسط الشاشة",
+      "لأن فرق المسار البصري عند النقطة المركزية يساوي صفراً",
+      "لأن الشقّين يصدران موجات بسعة أكبر في الاتجاه المركزي",
+      "لأن زاوية الحيود في المركز تساوي 90 درجة"
+    ],
+    correct: 1,
+    explanation: "يكون الهدب المركزي مضيئاً دائماً لأن فرق المسار البصري بين الموجتين القادمتين من الشقّين (S1, S2) إلى النقطة المركزية يساوي صفراً (Δℓ = 0)، وهذا يحقق شرط التداخل البنّاء (Δℓ = mλ عند m = 0)، فيُعزَّز الضوء وتظهر هدبة مضيئة."
+  },
+  {
+    q: "إذا كان البُعد بين الشقّين d = 0.2 mm، وبُعد الشاشة L = 1 m، وكانت المسافة بين الهدبة الثالثة المضيئة والهدبة المركزية 9.49 mm، فما طول الموجة المستخدمة؟",
+    options: [
+      "500 nm",
+      "589 nm",
+      "633 nm",
+      "700 nm"
+    ],
+    correct: 2,
+    explanation: "باستخدام العلاقة λ = yₘ × d / (m × L)، وبتعويض القيم: λ = (9.49×10⁻³ × 0.2×10⁻³) / (3 × 1) = 633×10⁻⁹ m = 633 nm، وهو طول موجة الضوء الأحمر الشهير (ليزر الهيليوم-نيون)."
+  },
+  {
+    q: "كيف تتغير فاصلة الهدب (Δy) في تجربة يونك عند تقليل البُعد بين الشقّين (d)؟",
+    options: [
+      "تنقص فاصلة الهدب",
+      "تزداد فاصلة الهدب",
+      "تبقى فاصلة الهدب ثابتة",
+      "تختفي الهدب كلياً"
+    ],
+    correct: 1,
+    explanation: "وفق العلاقة Δy = λL/d، تكون فاصلة الهدب عكسياً متناسبة مع البُعد بين الشقّين d. فكلما قلّ d ازدادت فاصلة الهدب Δy، وعلى العكس كلما زاد d نقصت فاصلة الهدب."
+  },
+  {
+    q: "ما الذي يحدث لفاصلة الهدب في تجربة يونك عند إجراء التجربة تحت سطح الماء بدلاً من الهواء؟",
+    options: [
+      "تزداد فاصلة الهدب لأن الضوء يتباطأ في الماء",
+      "تبقى فاصلة الهدب ثابتة لأن التداخل لا يتأثر بالوسط",
+      "تقلّ فاصلة الهدب لأن طول موجة الضوء في الماء أقصر",
+      "تختفي الهدب لأن الماء يمتص الضوء"
+    ],
+    correct: 2,
+    explanation: "طول موجة الضوء في الماء يحسب بالعلاقة λₙ = λ/n، حيث n معامل انكسار الماء (≈ 1.33). إذ يكون طول الموجة في الماء أقصر من الهواء، وبما أن Δy = λL/d فإن فاصلة الهدب ستنقص أيضاً."
+  },
+  {
+    q: "ما سبب تلوّن فقاعة الصابون وبقع الزيت على سطح الماء بألوان الطيف الشمسي؟",
+    options: [
+      "انعكاس الضوء الأبيض كلياً على السطح الخارجي للغشاء",
+      "تداخل موجات الضوء الأبيض المنعكسة من السطح الأمامي والخلفي للغشاء الرقيق",
+      "امتصاص الغشاء لبعض ألوان الضوء الأبيض وانعكاس الباقي",
+      "انكسار الضوء الأبيض عند دخوله الغشاء وتحلّله إلى أطيافه"
+    ],
+    correct: 1,
+    explanation: "يتلوّن الغشاء الرقيق (كفقاعة الصابون) بسبب ظاهرة تداخل الضوء: موجات الضوء الساقطة تنعكس جزئياً من السطح الأمامي للغشاء (مع انقلاب الطور بمقدار π rad)، والجزء المتبقي ينفذ ويُنعكَس من السطح الخلفي (دون انقلاب طور) قاطعاً مسافة إضافية تساوي 2nt. يتداخل الشعاعان فيظهر لون الضوء الذي تحقق له التداخل البنّاء."
+  },
+  {
+    q: "ما شرط التداخل البنّاء (ظهور هدبة مضيئة) في الأغشية الرقيقة؟",
+    options: [
+      "أن يكون السمك البصري nt مساوياً لأعداد زوجية من ربع طول الموجة",
+      "أن يكون السمك البصري nt مساوياً لأعداد فردية من ربع طول الموجة",
+      "أن يساوي السمك البصري nt لطول الموجة الكاملة",
+      "أن يكون السمك البصري nt = صفر"
+    ],
+    correct: 1,
+    explanation: "في الأغشية الرقيقة يحدث انقلاب الطور بمقدار π عند الانعكاس من السطح الأمامي فقط. وشرط التداخل البنّاء هو أن يكون السمك البصري nt مساوياً لأعداد فردية من ربع طول الموجة: nt = (1/4)λ, (3/4)λ, (5/4)λ, ... أي: 2nt = λ, 2λ, 3λ, ... فيحقق شرط التداخل البنّاء ويظهر الغشاء بلون الضوء الساقط."
+  },
+  {
+    q: "ما تعريف حيود الضوء (Diffraction)؟",
+    options: [
+      "انعكاس الضوء عند سطح مرآة مستوية",
+      "انحراف الضوء عن مساره المستقيم عند مروره بفتحة ضيقة أو حول حواف عائق",
+      "تحلّل الضوء الأبيض إلى ألوانه عند مروره بمنشور زجاجي",
+      "تغيّر سرعة الضوء عند انتقاله من وسط إلى آخر"
+    ],
+    correct: 1,
+    explanation: "الحيود هو ظاهرة انحراف الضوء عن مساره المستقيم عند مروره بفتحة ضيقة أو عند حواف عائق. ويُلاحظ ذلك بوضوح عند النظر إلى مصدر ضوئي من خلال شق ضيق، حيث تظهر هدب مضيئة ومعتمة بالتعاقب على جانبي الفتحة، والهدبة المركزية عريضة وشديدة الإضاءة."
+  },
+  {
+    q: "ما شرط ظهور هدبة معتمة (مظلمة) في ظاهرة حيود الضوء من خلال شق واحد عرضه (ℓ)؟",
+    options: [
+      "ℓ·sinθ = (m + ½)λ",
+      "ℓ·sinθ = mλ, حيث m = 1, 2, 3, …",
+      "ℓ·sinθ = 0",
+      "ℓ·sinθ = mλ/2, حيث m = 0, 1, 2, …"
+    ],
+    correct: 1,
+    explanation: "شرط الحصول على هدبة معتمة في حيود الشق الواحد هو: ℓ·sinθ = mλ، حيث m = 1، 2، 3، ... وعرض الشق ℓ. أما شرط الهدبة المضيئة فهو: ℓ·sinθ = (m + ½)λ. والهدبة المركزية المضيئة هي الأعرض والأشد إضاءةً وتقع عند θ = 0."
+  },
+  {
+    q: "ما المقصود بالموجات المتشاكهة (Coherent Waves)؟",
+    options: [
+      "موجات متساوية في الطول الموجي فقط",
+      "موجات ذات تردد متساوٍ وسعة متساوية أو متقاربة وفرق طور ثابت بينها",
+      "موجات تنتشر في الوسط نفسه فقط",
+      "موجات تنبعث من مصدر ضوئي واحد في اتجاه واحد"
+    ],
+    correct: 1,
+    explanation: "الموجات المتشاكهة هي التي تستوفي الشروط الثلاثة: (1) متساوية في التردد، (2) متساوية أو متقاربة في السعة، (3) فرق الطور بينها ثابت في جميع الأزمنة. وهذه الشروط ضرورية للحصول على طراز تداخل مستقر ومرئي."
+  },
+  {
+    q: "لماذا لا يُلاحظ طراز تداخل مستقر عند استخدام مصدرين ضوئيين غير متشاكهين؟",
+    options: [
+      "لأن المصدرين يبعثان موجات بتردد مختلف تماماً",
+      "لأن التداخل البنّاء والإتلافي يتعاقبان بسرعة عالية جداً لا يستطيع العين متابعتها",
+      "لأن الأمواج غير المتشاكهة لا تتداخل أبداً",
+      "لأن الأمواج غير المتشاكهة تُلغي بعضها دائماً"
+    ],
+    correct: 1,
+    explanation: "عند استخدام مصدرين غير متشاكهين، يحدث التداخل البنّاء والإتلافي بشكل متعاقب بسرعة عالية جداً (بسبب التغيّر العشوائي لفرق الطور)، وهذا التعاقب السريع أسرع مما يستطيع عين الإنسان رصده، فيُدرك العين إضاءة مستدامة (بسبب استمرارية الرؤية) دون رؤية طراز التداخل."
+  },
+  {
+    q: "ما المسار البصري (Optical Path)؟",
+    options: [
+      "المسافة الفعلية التي يقطعها الضوء في الوسط الشفاف",
+      "الإزاحة التي يقطعها الضوء في الفراغ بالزمن نفسه الذي يقطعه في الوسط المادي",
+      "الزاوية التي يُشكّلها الشعاع الضوئي مع عمود السطح عند الانعكاس",
+      "المسافة بين مصدر الضوء والشاشة مضروبة في معامل الانكسار"
+    ],
+    correct: 1,
+    explanation: "المسار البصري هو الإزاحة التي يقطعها الضوء في الفراغ بالزمن نفسه الذي يقطعه في الوسط المادي الشفاف. وهو يساوي (n × d)، حيث n معامل الانكسار و d الثخانة الفعلية. يُستخدم هذا المفهوم لحساب فرق المسار البصري بين الموجتين المتداخلتين."
+  },
+  {
+    q: "في تجربة يونك بالضوء الأحمر والأزرق، أيّ منهما يُنتج فاصلة هدب أكبر؟",
+    options: [
+      "الضوء الأزرق لأنه يحمل طاقة أعلى",
+      "الضوء الأحمر لأن طوله الموجي أطول",
+      "كلاهما متساويان في فاصلة الهدب",
+      "يعتمد الأمر فقط على البُعد بين الشقّين"
+    ],
+    correct: 1,
+    explanation: "وفق العلاقة Δy = λL/d، تكون فاصلة الهدب متناسبة طردياً مع طول الموجة λ. بما أن الضوء الأحمر له طول موجي أكبر من الضوء الأزرق (≈ 700nm مقابل ≈ 450nm)، فإن فاصلة الهدب للضوء الأحمر ستكون أكبر. ولهذا تُشاهد في تجربة يونك بالضوء الأبيض أن اللون الأزرق أقرب إلى المركز والأحمر أبعد."
+  },
+  {
+    q: "ما الشرط اللازم لاستقطاب الضوء بالانعكاس (زاوية بروستر)؟",
+    options: [
+      "أن تكون زاوية السقوط مساوية لزاوية الانكسار",
+      "أن تكون زاوية السقوط مساوية للزاوية الحرجة",
+      "أن تكون زاوية السقوط مساوية لزاوية الاستقطاب بحيث يكون الشعاع المنعكس عمودياً على المنكسر",
+      "أن تكون زاوية السقوط مساوية لصفر"
+    ],
+    correct: 2,
+    explanation: "يحدث الاستقطاب الكامل بالانعكاس (استقطاب بروستر) عند زاوية سقوط معينة تسمى زاوية بروستر θₚ، وعندها يكون الشعاع المنعكس مستقطباً استقطاباً كاملاً وعمودياً على الشعاع المنكسر. وتحسب بالعلاقة: tan θₚ = n، حيث n معامل انكسار الوسط."
+  },
+  {
+    q: "لماذا تبدو السماء زرقاء اللون خلال النهار من سطح الأرض؟",
+    options: [
+      "لأن الهواء يمتص جميع الألوان ما عدا الأزرق",
+      "لأن الضوء الأزرق يُشتَّت أكثر من غيره إذ شدة التشتت تتناسب عكسياً مع λ⁴",
+      "لأن السماء تعكس لون المحيطات والبحار الزرقاء",
+      "لأن الشمس تُصدر ضوءاً أزرق بشكل أساسي"
+    ],
+    correct: 1,
+    explanation: "ظاهرة تشتت الضوء هي السبب: شدة الضوء المتشتت تتناسب عكسياً مع الأس الرابع لطول الموجة (I ∝ 1/λ⁴). الضوء الأزرق ذو الطول الموجي القصير يُشتَّت بمقدار أكبر بكثير من الضوء الأحمر عند اصطدامه بجزيئات الهواء والغبار، فيملأ السماء باللون الأزرق."
+  },
+  {
+    q: "ما سبب ظهور قرص الشمس بلون أحمر أثناء الشروق والغروب؟",
+    options: [
+      "لأن الشمس تُصدر الضوء الأحمر فقط في تلك الأوقات",
+      "لأن الضوء الأزرق يُشتَّت أكثر في المسار الطويل عبر الغلاف الجوي وتصلنا بقية الألوان الحمراء",
+      "لأن الغبار والرطوبة يمتصّان الضوء الأزرق تماماً",
+      "لأن زاوية انكسار الضوء تتغير عند الأفق"
+    ],
+    correct: 1,
+    explanation: "عند الشروق والغروب، يقطع الضوء الشمسي مسافة أطول داخل الغلاف الجوي مقارنة بوقت الظهيرة. ونظراً لأن شدة التشتت تتناسب عكسياً مع λ⁴، فإن الألوان قصيرة الموجة (الأزرق والبنفسجي) تُشتَّت بشدة ولا تصلنا، بينما تنفذ الألوان طويلة الموجة (الأحمر والبرتقالي) فيبدو قرص الشمس أحمر."
+  },
+  {
+    q: "ما طول موجة الضوء في وسط معامل انكساره n إذا كان طوله الموجي في الفراغ λ؟",
+    options: [
+      "λₙ = n·λ",
+      "λₙ = λ/n",
+      "λₙ = λ·n²",
+      "λₙ = λ/n²"
+    ],
+    correct: 1,
+    explanation: "عند انتقال الضوء من الفراغ إلى وسط شفاف معامل انكساره n، تنقص سرعة الضوء إلى v = c/n وينقص طول الموجة وفق العلاقة: λₙ = λ/n. ويظل التردد ثابتاً لأنه لا يعتمد على الوسط. وهذا يفسّر لماذا تنقص فاصلة الهدب في تجربة يونك عند إجرائها في الماء."
+  },
+  {
+    q: "إذا كانت طول موجة الضوء الأخضر المستخدم في تجربة يونك 5×10⁻⁷ m، والبُعد بين الشقّين 1mm، وبُعد الشاشة 2m، فما فاصلة الهدب (Δy)؟",
+    options: [
+      "0.1 mm",
+      "0.25 mm",
+      "0.4 mm",
+      "1 mm"
+    ],
+    correct: 3,
+    explanation: "بتطبيق العلاقة: Δy = λL/d = (5×10⁻⁷ × 2) / (1×10⁻³) = 10⁻⁶ / 10⁻³ = 10⁻³ m = 1 mm. إذن الإجابة الصحيحة هي 1mm. هذه النتيجة تدل على أن فاصلة الهدب تزداد كلما زاد الطول الموجي أو بُعد الشاشة، أو قلّ البُعد بين الشقّين."
+  }
+];
+
+let currentQ = 0;
+let score = 0;
+let wrong = 0;
+let answered = false;
+let phase = 'start'; // 'start' | 'quiz' | 'result'
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+let shuffledQuestions = [];
+
+function getGrade(pct) {
+  if (pct >= 90) return { letter: 'A', label: 'ممتاز', cls: 'grade-A', emoji: '🏆', msg: 'أداء استثنائي! أنت تمتلك فهماً عميقاً لمبادئ البصريات الفيزيائية. واصل التفوق!' };
+  if (pct >= 75) return { letter: 'B', label: 'جيد جداً', cls: 'grade-B', emoji: '🌟', msg: 'أداء جيد جداً! فهمك للمادة قوي. مراجعة بعض المفاهيم ستجعلك متفوقاً.' };
+  if (pct >= 60) return { letter: 'C', label: 'جيد', cls: 'grade-C', emoji: '👍', msg: 'أداء جيد! لكن هناك مجال للتحسين. راجع مواضيع التداخل والحيود بشكل أعمق.' };
+  return { letter: 'D', label: 'بحاجة للمراجعة', cls: 'grade-D', emoji: '📚', msg: 'لا تيأس! راجع الفصل الخامس من الكتاب المدرسي وأعد المحاولة. الممارسة تصنع الفارق.' };
+}
+
+function letters(i) { return ['أ', 'ب', 'ج', 'د'][i]; }
+
+function render() {
+  const root = document.getElementById('app-root');
+  if (phase === 'start') { root.innerHTML = renderStart(); return; }
+  if (phase === 'result') { root.innerHTML = renderResult(); return; }
+  root.innerHTML = renderQuiz();
+  attachEvents();
+}
+
+function renderStart() {
+  return `
+    <div class="start-screen">
+      <span class="start-icon">⚗️</span>
+      <div class="start-title">اختبار البصريات الفيزيائية</div>
+      <p class="start-desc">
+        اختبار تفاعلي شامل للفصل الخامس يغطّي مواضيع: تداخل الضوء، تجربة يونك بالشقّين المزدوجين، التداخل في الأغشية الرقيقة، حيود الضوء، الاستقطاب وتشتت الضوء.
+      </p>
+      <div class="info-pills">
+        <div class="pill"><span class="pill-icon">❓</span> 20 سؤالاً</div>
+        <div class="pill"><span class="pill-icon">💡</span> تغذية راجعة فورية</div>
+        <div class="pill"><span class="pill-icon">📖</span> شرح علمي لكل سؤال</div>
+        <div class="pill"><span class="pill-icon">📊</span> تقييم النتيجة النهائية</div>
+      </div>
+      <button class="btn-start" onclick="startQuiz()">ابدأ الاختبار الآن ←</button>
+    </div>
+  `;
+}
+
+function renderQuiz() {
+  const q = shuffledQuestions[currentQ];
+  const total = shuffledQuestions.length;
+  const pct = ((currentQ) / total) * 100;
+
+  return `
+    <div class="progress-info">
+      <span>السؤال <strong class="progress-num">${currentQ + 1}</strong> من ${total}</span>
+      <span>الإجابات الصحيحة: <strong style="color:var(--green)">${score}</strong></span>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-bar" style="width:${Math.max(pct,1)}%"></div>
+    </div>
+    <div class="score-track">
+      <div class="score-chip correct"><span class="dot"></span><span>صحيح: <strong>${score}</strong></span></div>
+      <div class="score-chip wrong"><span class="dot"></span><span>خطأ: <strong>${wrong}</strong></span></div>
+      <div class="score-chip remain"><span class="dot"></span><span>متبقي: <strong>${total - currentQ}</strong></span></div>
+    </div>
+    <div class="card" id="qcard">
+      <div class="q-number">سؤال ${currentQ + 1}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="options" id="options">
+        ${q.options.map((opt, i) => `
+          <button class="option-btn" id="opt-${i}" onclick="answer(${i})">
+            <span class="option-letter">${letters(i)}</span>
+            <span>${opt}</span>
+          </button>
+        `).join('')}
+      </div>
+      <div id="explanation-area"></div>
+      <button class="btn-next" id="btn-next" onclick="next()" disabled>
+        ${currentQ + 1 === total ? 'عرض النتيجة النهائية 🏁' : 'السؤال التالي ←'}
+      </button>
+    </div>
+  `;
+}
+
+function renderResult() {
+  const total = shuffledQuestions.length;
+  const pct = Math.round((score / total) * 100);
+  const grade = getGrade(pct);
+  const deg = (pct / 100) * 360;
+
+  return `
+    <div class="result-screen">
+      <span class="result-emoji">${grade.emoji}</span>
+      <div class="result-title">انتهى الاختبار!</div>
+      <p class="result-sub">الفصل الخامس – البصريات الفيزيائية</p>
+
+      <div class="score-big">
+        <div class="score-circle" style="--pct:${pct}%">
+          <div class="score-circle-inner">
+            <span class="score-number">${score}</span>
+            <span class="score-total">من ${total}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grade-badge ${grade.cls}">${grade.letter} – ${grade.label}</div>
+
+      <div class="stats-grid">
+        <div class="stat-box correct">
+          <span class="stat-val">${score}</span>
+          <span class="stat-label">إجابات صحيحة</span>
+        </div>
+        <div class="stat-box wrong">
+          <span class="stat-val">${wrong}</span>
+          <span class="stat-label">إجابات خاطئة</span>
+        </div>
+        <div class="stat-box pct">
+          <span class="stat-val">${pct}%</span>
+          <span class="stat-label">نسبة النجاح</span>
+        </div>
+      </div>
+
+      <p class="result-msg">${grade.msg}</p>
+      <button class="btn-restart" onclick="restart()">🔄 إعادة الاختبار</button>
+    </div>
+  `;
+}
+
+function startQuiz() {
+  shuffledQuestions = shuffle(questions);
+  currentQ = 0; score = 0; wrong = 0; answered = false;
+  phase = 'quiz';
+  render();
+}
+
+function attachEvents() { /* events already inline */ }
+
+function answer(chosen) {
+  if (answered) return;
+  answered = true;
+  const q = shuffledQuestions[currentQ];
+  const correct = q.correct;
+
+  for (let i = 0; i < q.options.length; i++) {
+    const btn = document.getElementById('opt-' + i);
+    btn.disabled = true;
+    if (i === correct) {
+      btn.classList.add(chosen !== correct ? 'show-correct' : 'correct-ans');
+    }
+  }
+
+  const chosen_btn = document.getElementById('opt-' + chosen);
+  if (chosen === correct) {
+    chosen_btn.classList.add('correct-ans');
+    score++;
+  } else {
+    chosen_btn.classList.add('wrong-ans');
+    wrong++;
+    document.getElementById('opt-' + correct).classList.add('show-correct');
+  }
+
+  const expArea = document.getElementById('explanation-area');
+  expArea.innerHTML = `
+    <div class="explanation">
+      <span class="explanation-icon">${chosen === correct ? '✅' : '💡'}</span>
+      <div class="explanation-body">
+        <div class="explanation-label">${chosen === correct ? 'إجابة صحيحة – الشرح العلمي' : 'الإجابة الصحيحة – الشرح العلمي'}</div>
+        <p>${q.explanation}</p>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('btn-next').disabled = false;
+}
+
+function next() {
+  currentQ++;
+  answered = false;
+  if (currentQ >= shuffledQuestions.length) {
+    phase = 'result';
+  }
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function restart() {
+  phase = 'start';
+  render();
+}
+
+// init
+render();
+</script>
+<footer style="text-align: center; padding: 40px;">
+    <a href="dashboard.html" style="color: #ffab00; font-size: 16px; text-decoration: none; border: 1px solid #ffab00; padding: 10px 20px; border-radius: 8px;">
+        ⬅ العودة لمركز الاختبارات
+    </a>
+</footer>
+</body>
+</html>
