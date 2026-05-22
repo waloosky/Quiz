@@ -1,0 +1,27 @@
+<script>
+        // التاريخ المحدد من قبلك
+        const target = new Date('2026-07-03T00:00:00').getTime();
+
+        const timer = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = target - now;
+
+            // حساب الأيام والساعات والدقائق والثواني
+            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // تحديث العناصر في الصفحة
+            document.getElementById("days").innerHTML = d < 10 ? "0"+d : d;
+            document.getElementById("hours").innerHTML = h < 10 ? "0"+h : h;
+            document.getElementById("minutes").innerHTML = m < 10 ? "0"+m : m;
+            document.getElementById("seconds").innerHTML = s < 10 ? "0"+s : s;
+
+            // في حال انتهاء الوقت
+            if (distance < 0) {
+                clearInterval(timer);
+                document.getElementById("timer").innerHTML = "انطلقنا!";
+            }
+        }, 1000);
+    </script>
