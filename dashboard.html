@@ -1,41 +1,602 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>مركز الاختبارات - بوابة الفيزياء الحديثة</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        :root { --cyan: #00e5ff; --bg-deep: #0d1117; }
-        body { background: var(--bg-deep); font-family: 'Cairo', sans-serif; color: white; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; width: 100%; max-width: 900px; margin-top: 30px; }
-        .card-link { background: rgba(255,255,255,0.05); border: 1px solid rgba(0,229,255,0.2); padding: 20px; border-radius: 15px; text-align: center; text-decoration: none; color: #e0f7fa; transition: 0.3s; }
-        .card-link:hover { border-color: var(--cyan); box-shadow: 0 0 15px rgba(0,229,255,0.3); transform: translateY(-5px); }
-        .nav-links { margin-top: 40px; display: flex; gap: 20px; }
-        .nav-links a { color: var(--cyan); text-decoration: none; font-weight: bold; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>لوحة التحكم — بوابة الفيزياء الحديثة</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-deep:    #0d1117;
+      --bg-mid:     #0f1923;
+      --bg-card:    rgba(255,255,255,0.04);
+      --cyan:       #00e5ff;
+      --cyan-dim:   #00b8d4;
+      --amber:      #ffab00;
+      --amber-dim:  #ff8f00;
+      --green:      #00e676;
+      --purple:     #b388ff;
+      --pink:       #ff80ab;
+      --glass:      rgba(255,255,255,0.04);
+      --glass-b:    rgba(0,229,255,0.15);
+      --text:       #e0f7fa;
+      --text-dim:   #80cbc4;
+      --red:        #ff1744;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg-deep);
+      font-family: 'Cairo', sans-serif;
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── Background ── */
+    .bg-layer { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    .blob {
+      position: absolute; border-radius: 50%;
+      filter: blur(130px); opacity: 0.14;
+      animation: drift 20s ease-in-out infinite alternate;
+    }
+    .b1 { width: 800px; height: 800px; background: radial-gradient(circle,var(--cyan),transparent 70%); top:-300px; right:-200px; animation-duration:24s; }
+    .b2 { width: 600px; height: 600px; background: radial-gradient(circle,var(--amber),transparent 70%); bottom:-200px; left:-150px; animation-duration:18s; animation-delay:-9s; }
+    .b3 { width: 400px; height: 400px; background: radial-gradient(circle,var(--purple),transparent 70%); top:50%; left:40%; opacity:.08; animation-duration:30s; animation-delay:-5s; }
+    @keyframes drift {
+      0%   { transform: translate(0,0) scale(1); }
+      50%  { transform: translate(50px,35px) scale(1.06); }
+      100% { transform: translate(-30px,60px) scale(0.94); }
+    }
+    .grid-overlay {
+      position: fixed; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(rgba(0,229,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,0.025) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    /* ── Navbar ── */
+    .navbar {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(13,17,23,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0,229,255,0.1);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .nav-brand-icon { font-size: 22px; }
+    .nav-brand-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 13px; font-weight: 700;
+      color: var(--cyan);
+      text-shadow: 0 0 12px rgba(0,229,255,0.4);
+      letter-spacing: 0.5px;
+    }
+    .nav-links {
+      display: flex; align-items: center; gap: 4px;
+      list-style: none;
+    }
+    .nav-links li { position: relative; }
+    .nav-links a {
+      display: block;
+      padding: 8px 14px;
+      font-size: 13px; font-weight: 600;
+      color: var(--text-dim);
+      text-decoration: none;
+      border-radius: 8px;
+      transition: color 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+    .nav-links a:hover { color: var(--cyan); background: rgba(0,229,255,0.06); }
+    .nav-links .active-link { color: var(--cyan); }
+
+    /* Dropdown */
+    .dropdown > a::after { content: ' ▾'; font-size: 10px; }
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: rgba(13,17,23,0.97);
+      border: 1px solid rgba(0,229,255,0.12);
+      border-radius: 12px;
+      backdrop-filter: blur(20px);
+      min-width: 160px;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.5), 0 0 30px rgba(0,229,255,0.05);
+      z-index: 200;
+      animation: dropIn 0.2s ease both;
+    }
+    @keyframes dropIn {
+      from { opacity:0; transform: translateY(-8px); }
+      to   { opacity:1; transform: none; }
+    }
+    .dropdown:hover .dropdown-menu { display: block; }
+    .dropdown-menu li a {
+      border-radius: 0; font-size: 13px;
+      border-bottom: 1px solid rgba(0,229,255,0.05);
+      padding: 10px 16px;
+    }
+    .dropdown-menu li:last-child a { border-bottom: none; }
+    .dropdown-menu a:hover { background: rgba(0,229,255,0.07); color: var(--cyan); }
+
+    /* Mobile nav toggle */
+    .nav-toggle {
+      display: none;
+      background: none; border: none;
+      color: var(--cyan); font-size: 22px;
+      cursor: pointer; padding: 4px 8px;
+    }
+
+    /* ── Page content ── */
+    .page { position: relative; z-index: 10; }
+
+    /* ── Hero section ── */
+    .hero {
+      text-align: center;
+      padding: 64px 24px 48px;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 16px;
+      background: rgba(0,229,255,0.07);
+      border: 1px solid rgba(0,229,255,0.2);
+      border-radius: 50px;
+      font-size: 12px; color: var(--cyan);
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+      animation: fadeUp 0.6s ease both;
+    }
+    .hero-title {
+      font-family: 'Orbitron', 'Cairo', sans-serif;
+      font-size: clamp(24px, 5vw, 42px);
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--cyan) 0%, #fff 50%, var(--amber) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+    .hero-sub {
+      font-size: 15px; color: var(--text-dim);
+      max-width: 480px; margin: 0 auto 32px;
+      line-height: 1.8;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+    .hero-stats {
+      display: flex; align-items: center; justify-content: center; gap: 32px;
+      flex-wrap: wrap;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat-num {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 28px; font-weight: 900;
+      color: var(--cyan);
+      text-shadow: 0 0 16px rgba(0,229,255,0.35);
+      line-height: 1;
+    }
+    .stat-label { font-size: 11px; color: var(--text-dim); margin-top: 4px; letter-spacing: 0.5px; }
+    .stat-divider { width: 1px; height: 36px; background: rgba(0,229,255,0.15); }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform: translateY(18px); }
+      to   { opacity:1; transform: none; }
+    }
+
+    /* ── Section ── */
+    .section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px 64px;
+    }
+    .section-header {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 28px;
+    }
+    .section-line {
+      flex: 1; height: 1px;
+      background: linear-gradient(90deg, rgba(0,229,255,0.2), transparent);
+    }
+    .section-title {
+      font-size: 13px; font-weight: 700;
+      color: var(--text-dim);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* ── Quiz grid ── */
+    .quiz-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .quiz-card {
+      position: relative;
+      background: var(--glass);
+      border: 1px solid rgba(0,229,255,0.1);
+      border-radius: 16px;
+      padding: 24px 20px;
+      text-decoration: none;
+      color: var(--text);
+      display: flex; flex-direction: column; gap: 12px;
+      transition: transform 0.25s ease, border-color 0.25s, box-shadow 0.25s, background 0.25s;
+      overflow: hidden;
+      animation: cardIn 0.5s ease both;
+    }
+    .quiz-card:nth-child(1)  { animation-delay: 0.05s; }
+    .quiz-card:nth-child(2)  { animation-delay: 0.10s; }
+    .quiz-card:nth-child(3)  { animation-delay: 0.15s; }
+    .quiz-card:nth-child(4)  { animation-delay: 0.20s; }
+    .quiz-card:nth-child(5)  { animation-delay: 0.25s; }
+    .quiz-card:nth-child(6)  { animation-delay: 0.30s; }
+    .quiz-card:nth-child(7)  { animation-delay: 0.35s; }
+    .quiz-card:nth-child(8)  { animation-delay: 0.40s; }
+    .quiz-card:nth-child(9)  { animation-delay: 0.45s; }
+    @keyframes cardIn {
+      from { opacity:0; transform: translateY(20px) scale(0.97); }
+      to   { opacity:1; transform: none; }
+    }
+
+    .quiz-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: var(--card-glow, rgba(0,229,255,0.04));
+      opacity: 0;
+      transition: opacity 0.3s;
+      border-radius: inherit;
+    }
+    .quiz-card:hover { transform: translateY(-4px); border-color: var(--card-color, var(--cyan)); box-shadow: 0 0 28px var(--card-shadow, rgba(0,229,255,0.12)); background: rgba(255,255,255,0.06); }
+    .quiz-card:hover::before { opacity: 1; }
+
+    .card-top { display: flex; align-items: center; justify-content: space-between; }
+    .card-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      background: var(--card-icon-bg, rgba(0,229,255,0.1));
+      border: 1px solid var(--card-color, rgba(0,229,255,0.25));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 0 14px var(--card-shadow, rgba(0,229,255,0.1));
+    }
+    .card-num {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      color: var(--card-color, var(--cyan));
+      letter-spacing: 1px;
+      opacity: 0.7;
+    }
+    .card-title { font-size: 15px; font-weight: 700; line-height: 1.4; }
+    .card-desc { font-size: 12px; color: var(--text-dim); line-height: 1.6; }
+    .card-arrow {
+      font-size: 18px;
+      color: var(--card-color, var(--cyan));
+      opacity: 0;
+      transform: translateX(6px);
+      transition: opacity 0.25s, transform 0.25s;
+      align-self: flex-end;
+    }
+    .quiz-card:hover .card-arrow { opacity: 1; transform: none; }
+
+    /* Color themes per card */
+    .c-cyan  { --card-color: #00e5ff; --card-shadow: rgba(0,229,255,0.15); --card-icon-bg: rgba(0,229,255,0.08); --card-glow: rgba(0,229,255,0.05); }
+    .c-amber { --card-color: #ffab00; --card-shadow: rgba(255,171,0,0.15);  --card-icon-bg: rgba(255,171,0,0.08); --card-glow: rgba(255,171,0,0.05); }
+    .c-green { --card-color: #00e676; --card-shadow: rgba(0,230,118,0.15);  --card-icon-bg: rgba(0,230,118,0.08); --card-glow: rgba(0,230,118,0.05); }
+    .c-purple{ --card-color: #b388ff; --card-shadow: rgba(179,136,255,0.15);--card-icon-bg: rgba(179,136,255,0.08);--card-glow: rgba(179,136,255,0.05); }
+    .c-pink  { --card-color: #ff80ab; --card-shadow: rgba(255,128,171,0.15);--card-icon-bg: rgba(255,128,171,0.08);--card-glow: rgba(255,128,171,0.05); }
+    .c-sky   { --card-color: #40c4ff; --card-shadow: rgba(64,196,255,0.15); --card-icon-bg: rgba(64,196,255,0.08); --card-glow: rgba(64,196,255,0.05); }
+    .c-lime  { --card-color: #ccff90; --card-shadow: rgba(204,255,144,0.15);--card-icon-bg: rgba(204,255,144,0.08);--card-glow: rgba(204,255,144,0.05); }
+    .c-red   { --card-color: #ff6e40; --card-shadow: rgba(255,110,64,0.15); --card-icon-bg: rgba(255,110,64,0.08); --card-glow: rgba(255,110,64,0.05); }
+
+    /* ── Other pages grid ── */
+    .pages-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .page-card {
+      background: var(--glass);
+      border: 1px solid rgba(0,229,255,0.08);
+      border-radius: 12px;
+      padding: 18px 16px;
+      text-decoration: none;
+      color: var(--text);
+      display: flex; align-items: center; gap: 12px;
+      transition: all 0.25s ease;
+      animation: cardIn 0.5s ease both;
+    }
+    .page-card:hover { border-color: rgba(0,229,255,0.25); background: rgba(0,229,255,0.04); transform: translateX(-4px); }
+    .page-icon { font-size: 22px; }
+    .page-text { flex: 1; }
+    .page-text strong { font-size: 13px; font-weight: 700; display: block; }
+    .page-text span { font-size: 11px; color: var(--text-dim); }
+    .page-arrow { font-size: 14px; color: var(--cyan); opacity: 0.5; transition: opacity 0.2s, transform 0.2s; }
+    .page-card:hover .page-arrow { opacity: 1; transform: translateX(-4px); }
+
+    /* ── Footer ── */
+    .footer {
+      border-top: 1px solid rgba(0,229,255,0.07);
+      padding: 28px 24px;
+      text-align: center;
+      position: relative; z-index: 10;
+    }
+    .footer-text { font-size: 12px; color: rgba(128,203,196,0.4); }
+    .footer-name { color: var(--amber); font-weight: 700; }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .navbar { padding: 0 16px; }
+      .nav-links { display: none; flex-direction: column; position: absolute; top: 64px; right: 0; left: 0; background: rgba(13,17,23,0.98); border-bottom: 1px solid rgba(0,229,255,0.1); padding: 12px 0; }
+      .nav-links.open { display: flex; }
+      .nav-links li { width: 100%; }
+      .nav-links a { padding: 12px 24px; border-radius: 0; }
+      .dropdown-menu { position: static; border: none; border-radius: 0; background: rgba(0,229,255,0.04); box-shadow: none; animation: none; }
+      .dropdown > a::after { float: left; }
+      .nav-toggle { display: block; }
+      .hero-stats { gap: 20px; }
+      .stat-divider { display: none; }
+    }
+  </style>
 </head>
 <body>
 
-    <h1>مركز اختبارات الفيزياء</h1>
-    <p>أهلاً بك أستاذ وليد، اختر الاختبار الذي تود البدء به:</p>
+  <!-- Background -->
+  <div class="bg-layer">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+  </div>
+  <div class="grid-overlay"></div>
 
-    <div class="grid-container">
-        <a href="quiz1.html" class="card-link">الاختبار الأول</a>
-        <a href="quiz2.html" class="card-link">الاختبار الثاني</a>
-        <a href="quiz3.html" class="card-link">الاختبار الثالث</a>
-        <a href="quiz4.html" class="card-link">الاختبار الرابع</a>
-        <a href="quiz5.html" class="card-link">الاختبار الخامس</a>
-        <a href="quiz6.html" class="card-link">الاختبار السادس</a>
-        <a href="quiz7.html" class="card-link">الاختبار السابع</a>
-        <a href="quiz8.html" class="card-link">الاختبار الثامن</a>
-        <a href="quiz9.html" class="card-link">الاختبار التاسع</a>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a class="nav-brand" href="dashboard.html">
+      <span class="nav-brand-icon">⚛️</span>
+      <span class="nav-brand-text">الفيزياء الحديثة</span>
+    </a>
+
+    <button class="nav-toggle" onclick="toggleNav()" aria-label="القائمة">☰</button>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">🏠 الرئيسية</a></li>
+
+      <li class="dropdown">
+        <a href="#">📝 الاختبارات</a>
+        <ul class="dropdown-menu">
+          <li><a href="quiz1.html">⚡ الاختبار الأول</a></li>
+          <li><a href="quiz2.html">🔬 الاختبار الثاني</a></li>
+          <li><a href="quiz3.html">🌊 الاختبار الثالث</a></li>
+          <li><a href="quiz4.html">💡 الاختبار الرابع</a></li>
+          <li><a href="quiz5.html">🧲 الاختبار الخامس</a></li>
+          <li><a href="quiz6.html">☢️ الاختبار السادس</a></li>
+          <li><a href="quiz7.html">🌌 الاختبار السابع</a></li>
+          <li><a href="quiz8.html">⚛️ الاختبار الثامن</a></li>
+          <li><a href="quiz9.html">🔭 الاختبار التاسع</a></li>
+        </ul>
+      </li>
+
+      <li><a href="about.html">👨‍🏫 عن الأستاذ</a></li>
+      <li><a href="contact.html">📞 تواصل معنا</a></li>
+    </ul>
+  </nav>
+
+  <!-- Page -->
+  <div class="page">
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero-badge">⚛️ &nbsp; منصة اختبارات الفيزياء التفاعلية</div>
+      <h1 class="hero-title">مرحباً بك في المنصة</h1>
+      <p class="hero-sub">
+        اختر الاختبار الذي تريد وابدأ رحلتك في عالم الفيزياء الحديثة<br/>
+        مع أ. وليد خالد الفتلاوي
+      </p>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-num">9</div>
+          <div class="stat-label">اختبار متاح</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <div class="stat-num">⚛️</div>
+          <div class="stat-label">فيزياء حديثة</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">تفاعلي</div>
+        </div>
+      </div>
     </div>
 
-    <div class="nav-links">
-        <a href="about.html">عن الأستاذ</a>
-        <a href="contact.html">تواصل معنا</a>
-        <a href="index.html">تسجيل الخروج</a>
+    <!-- Quizzes -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">📝 الاختبارات</span>
+        <div class="section-line"></div>
+      </div>
+
+      <div class="quiz-grid">
+
+        <a href="quiz1.html" class="quiz-card c-cyan">
+          <div class="card-top">
+            <div class="card-icon">⚡</div>
+            <span class="card-num">01</span>
+          </div>
+          <div class="card-title">الاختبار الأول</div>
+          <div class="card-desc">الفصل الاول المتسعات</div>
+          <span class="card-arrow">←</span>
+        </a>
+
+        <a href="quiz2.html" class="quiz-card c-amber">
+          <div class="card-top">
+            <div class="card-icon">🔬</div>
+            <span class="card-num">02</span>
+          </div>
+          <div class="card-title">الاختبار الثاني</div>
+          <div class="card-desc">الفصل الثاني الحث الكهرومغناطيسي</div>
+          <span class="card-arrow">←</span>
+        </a>
+
+        <a href="quiz3.html" class="quiz-card c-green">
+          <div class="card-top">
+            <div class="card-icon">🌊</div>
+            <span class="card-num">03</span>
+          </div>
+          <div class="card-title">الاختبار الثالث</div>
+          <div class="card-desc">الفصل الثالث التبار المتناوب</div>
+          <span class="card-arrow">←</span>
+        </a>
+
+        <a href="quiz4.html" class="quiz-card c-purple">
+          <div class="card-top">
+            <div class="card-icon">💡</div>
+            <span class="card-num">04</span>
+          </div>
+          <div class="card-title">الاختبار الرابع</div>
+          <div class="card-desc">االفصل الرابع الموجات الكهرومغناطيسية</div>
+          <span class="card-arrow">←</span>
+        </a>
+
+        <a href="quiz5.html" class="quiz-card c-pink">
+          <div class="card-top">
+            <div class="card-icon">🧲</div>
+            <span class="card-num">05</span>
+          </div>
+          <div class="card-title">الاختبار الخامس</div>
+          <div class="card-desc">الفصل الخامس البصريات الفيزيائية </div>
+          <span class="card-arrow">←</span>
+        </a>
+
+        <a href="quiz6.html" class="quiz-card c-red">
+          <div class="card-top">
+            <div class="card-icon">☢️</div>
+            <span class="card-num">06</span>
+          </div>
+          <div class="card-title">الاختبار السادس</div>
+          <div class="card-desc">االفصل السادس الفيزياء الحديقة</div>
+          <span class="card-arrow">←</span>
+        </a>
+
+        <a href="quiz7.html" class="quiz-card c-sky">
+          <div class="card-top">
+            <div class="card-icon">🌌</div>
+            <span class="card-num">07</span>
+          </div>
+          <div class="card-title">الاختبار السابع</div>
+          <div class="card-desc">االفصل السابع الكترونبات الحالة الصلبة</div>
+          <span class="card-arrow">←</span>
+        </a>
+
+        <a href="quiz8.html" class="quiz-card c-lime">
+          <div class="card-top">
+            <div class="card-icon">⚛️</div>
+            <span class="card-num">08</span>
+          </div>
+          <div class="card-title">الاختبار الثامن</div>
+          <div class="card-desc">الفصل الثامن الاطياف الذرية والليزر </div>
+          <span class="card-arrow">←</span>
+        </a>
+
+        <a href="quiz9.html" class="quiz-card c-amber">
+          <div class="card-top">
+            <div class="card-icon">🔭</div>
+            <span class="card-num">09</span>
+          </div>
+          <div class="card-title">الاختبار التاسع</div>
+          <div class="card-desc">الفصل التاسع الفيزياء النووية</div>
+          <span class="card-arrow">←</span>
+        </a>
+
+      </div>
     </div>
 
+    <!-- Other pages -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">🔗 صفحات المنصة</span>
+        <div class="section-line"></div>
+      </div>
+
+      <div class="pages-grid">
+        <a href="about.html" class="page-card">
+          <span class="page-icon">👨‍🏫</span>
+          <div class="page-text">
+            <strong>عن الأستاذ</strong>
+            <span>نبذة عن أ. وليد خالد الفتلاوي</span>
+          </div>
+          <span class="page-arrow">←</span>
+        </a>
+
+        <a href="contact.html" class="page-card">
+          <span class="page-icon">📞</span>
+          <div class="page-text">
+            <strong>تواصل معنا</strong>
+            <span>للاستفسارات والتواصل المباشر</span>
+          </div>
+          <span class="page-arrow">←</span>
+        </a>
+
+        <a href="index.html" class="page-card">
+          <span class="page-icon">🚪</span>
+          <div class="page-text">
+            <strong>تسجيل الخروج</strong>
+            <span>العودة إلى بوابة الدخول</span>
+          </div>
+          <span class="page-arrow">←</span>
+        </a>
+      </div>
+    </div>
+
+  </div><!-- /page -->
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p class="footer-text">
+      بوابة الفيزياء الحديثة &nbsp;·&nbsp;
+      <span class="footer-name">أ. وليد خالد الفتلاوي</span>
+      &nbsp;·&nbsp; 07718597632
+    </p>
+  </footer>
+
+  <script>
+    function toggleNav() {
+      document.getElementById('navLinks').classList.toggle('open');
+    }
+    // Close nav on link click (mobile)
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      a.addEventListener('click', () => {
+        if (window.innerWidth <= 640) {
+          document.getElementById('navLinks').classList.remove('open');
+        }
+      });
+    });
+    // Handle dropdown on mobile (tap to expand)
+    document.querySelectorAll('.dropdown > a').forEach(a => {
+      a.addEventListener('click', e => {
+        if (window.innerWidth <= 640) {
+          e.preventDefault();
+          a.parentElement.querySelector('.dropdown-menu').style.display =
+            a.parentElement.querySelector('.dropdown-menu').style.display === 'block' ? 'none' : 'block';
+        }
+      });
+    });
+  </script>
 </body>
 </html>
