@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<header style="text-align: center; padding: 20px;">
+    <h1>الاختبار الأول</h1>
+    <a href="dashboard.html" style="color: #ffab00; font-size: 16px; text-decoration: none;">
+        ⬅ العودة لمركز الاختبارات
+    </a>
+</header>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اختبار الفيزياء – الفصل الثامن: الأطياف الذرية والليزر</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Estedad:wght@100..900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #0d6e6e;
+    --teal-dark: #094f4f;
+    --teal-light: #17a9a9;
+    --teal-xlight: #e0f5f5;
+    --coral: #e05c5c;
+    --gold: #f4c04a;
+    --white: #ffffff;
+    --offwhite: #f7fafa;
+    --text-dark: #1a2e2e;
+    --text-mid: #3d5f5f;
+    --text-light: #6fa0a0;
+    --correct: #22c55e;
+    --wrong: #ef4444;
+    --correct-bg: #dcfce7;
+    --wrong-bg: #fee2e2;
+    --shadow: 0 8px 40px rgba(13,110,110,0.13);
+    --radius: 18px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Estedad', 'Segoe UI', Tahoma, sans-serif;
+    background: var(--offwhite);
+    color: var(--text-dark);
+    min-height: 100vh;
+    direction: rtl;
+  }
+
+  /* ─── LAYOUT ─── */
+  .app {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    min-height: 100vh;
+  }
+
+  /* ─── LEFT PANEL ─── */
+  .left-panel {
+    background: linear-gradient(160deg, var(--teal-dark) 0%, var(--teal) 55%, var(--teal-light) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 40px 24px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .left-panel::before {
+    content: '';
+    position: absolute;
+    top: -80px; left: -80px;
+    width: 280px; height: 280px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 50%;
+  }
+  .left-panel::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; right: -60px;
+    width: 200px; height: 200px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+  }
+
+  .brand-icon {
+    font-size: 3rem;
+    animation: pulse 3s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.12);}
+  }
+
+  .vertical-title {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-size: 2.4rem;
+    font-weight: 900;
+    color: rgba(255,255,255,0.18);
+    letter-spacing: 0.18em;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+  }
+
+  .left-info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .info-card {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 14px;
+    padding: 14px 18px;
+    color: #fff;
+    backdrop-filter: blur(6px);
+  }
+  .info-card .ic-label {
+    font-size: 0.72rem;
+    font-weight: 400;
+    opacity: 0.7;
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+  }
+  .info-card .ic-value {
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+
+  .tip-box {
+    background: rgba(244,192,74,0.18);
+    border: 1px solid rgba(244,192,74,0.35);
+    border-radius: 14px;
+    padding: 14px 18px;
+    color: var(--gold);
+    font-size: 0.82rem;
+    font-weight: 500;
+    line-height: 1.6;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  /* ─── RIGHT PANEL ─── */
+  .right-panel {
+    padding: 40px 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    background: var(--white);
+    min-height: 100vh;
+  }
+
+  /* ─── HEADER ─── */
+  .quiz-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .chapter-badge {
+    background: var(--teal-xlight);
+    color: var(--teal);
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 999px;
+    letter-spacing: 0.03em;
+  }
+  .score-display {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .score-bubble {
+    background: var(--teal);
+    color: #fff;
+    font-weight: 800;
+    font-size: 0.95rem;
+    padding: 7px 18px;
+    border-radius: 999px;
+    min-width: 80px;
+    text-align: center;
+    transition: transform 0.2s;
+  }
+  .score-bubble.bump { animation: bump 0.35s ease; }
+  @keyframes bump {
+    0%{transform:scale(1);}
+    50%{transform:scale(1.18);}
+    100%{transform:scale(1);}
+  }
+
+  /* ─── PROGRESS ─── */
+  .progress-section { display: flex; flex-direction: column; gap: 8px; }
+  .progress-labels {
+    display: flex; justify-content: space-between;
+    font-size: 0.8rem; color: var(--text-mid);
+    font-weight: 500;
+  }
+  .progress-bar-wrap {
+    background: #e5eded;
+    border-radius: 999px;
+    height: 8px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--teal-light), var(--teal));
+    border-radius: 999px;
+    transition: width 0.5s cubic-bezier(.4,0,.2,1);
+  }
+  .progress-dots {
+    display: flex; gap: 5px; flex-wrap: wrap; margin-top: 4px;
+  }
+  .dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: #dde8e8;
+    transition: background 0.3s;
+  }
+  .dot.done-correct { background: var(--correct); }
+  .dot.done-wrong   { background: var(--wrong); }
+  .dot.active       { background: var(--teal); transform: scale(1.3); }
+
+  /* ─── QUESTION CARD ─── */
+  .question-card {
+    background: var(--offwhite);
+    border-radius: var(--radius);
+    padding: 32px 36px;
+    border: 1.5px solid #dde8e8;
+    box-shadow: var(--shadow);
+    animation: slideIn 0.38s cubic-bezier(.4,0,.2,1);
+  }
+  @keyframes slideIn {
+    from { opacity:0; transform: translateY(18px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+
+  .q-meta {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 20px;
+  }
+  .q-number {
+    width: 38px; height: 38px;
+    background: var(--teal);
+    color: #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 1rem;
+    flex-shrink: 0;
+  }
+  .q-category {
+    font-size: 0.72rem; font-weight: 600;
+    color: var(--teal-light);
+    background: var(--teal-xlight);
+    padding: 3px 10px; border-radius: 999px;
+  }
+
+  .q-text {
+    font-size: 1.12rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    line-height: 1.75;
+    margin-bottom: 24px;
+  }
+
+  /* ─── OPTIONS ─── */
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .option-btn {
+    background: #fff;
+    border: 2px solid #cddede;
+    border-radius: 13px;
+    padding: 14px 20px;
+    font-family: 'Estedad', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-dark);
+    cursor: pointer;
+    text-align: right;
+    direction: rtl;
+    transition: all 0.22s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    line-height: 1.5;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--teal);
+    background: var(--teal-xlight);
+    transform: translateX(-3px);
+  }
+  .option-btn .opt-letter {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: #e9f0f0;
+    color: var(--teal);
+    font-weight: 800;
+    font-size: 0.82rem;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) .opt-letter {
+    background: var(--teal);
+    color: #fff;
+  }
+  .option-btn.correct {
+    background: var(--correct-bg);
+    border-color: var(--correct);
+    color: #14532d;
+  }
+  .option-btn.correct .opt-letter { background: var(--correct); color: #fff; }
+  .option-btn.wrong {
+    background: var(--wrong-bg);
+    border-color: var(--wrong);
+    color: #7f1d1d;
+  }
+  .option-btn.wrong .opt-letter { background: var(--wrong); color: #fff; }
+  .option-btn:disabled { cursor: default; }
+
+  /* ─── EXPLANATION ─── */
+  .explanation-box {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.5s cubic-bezier(.4,0,.2,1), opacity 0.4s;
+    opacity: 0;
+  }
+  .explanation-box.open {
+    max-height: 300px;
+    opacity: 1;
+  }
+  .explanation-inner {
+    background: linear-gradient(135deg, #f0fdf4 0%, #e0f5f5 100%);
+    border: 1.5px solid #86efac;
+    border-radius: 13px;
+    padding: 18px 22px;
+    margin-top: 18px;
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: var(--text-dark);
+  }
+  .explanation-inner.wrong-expl {
+    background: linear-gradient(135deg, #fff5f5 0%, #ffe9e9 100%);
+    border-color: #fca5a5;
+  }
+  .expl-title {
+    font-weight: 700;
+    font-size: 0.82rem;
+    margin-bottom: 6px;
+    display: flex; align-items: center; gap: 6px;
+  }
+
+  /* ─── NEXT BUTTON ─── */
+  .next-btn {
+    margin-top: 6px;
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    border-radius: 13px;
+    padding: 14px 32px;
+    font-family: 'Estedad', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    align-self: flex-start;
+    transition: all 0.22s;
+    display: none;
+    box-shadow: 0 4px 16px rgba(13,110,110,0.25);
+  }
+  .next-btn:hover { background: var(--teal-dark); transform: translateY(-2px); }
+  .next-btn.visible { display: flex; align-items: center; gap: 8px; }
+  .next-btn.last { background: var(--gold); color: var(--text-dark); }
+  .next-btn.last:hover { background: #e8b030; }
+
+  /* ─── FINAL SCREEN ─── */
+  .final-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    gap: 28px;
+    text-align: center;
+    animation: slideIn 0.5s ease;
+  }
+  .final-screen.visible { display: flex; }
+
+  .final-icon {
+    font-size: 5rem;
+    animation: bounce 1s ease infinite alternate;
+  }
+  @keyframes bounce {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-12px); }
+  }
+
+  .final-title {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--teal-dark);
+  }
+
+  .final-subtitle {
+    font-size: 1rem;
+    color: var(--text-mid);
+    max-width: 420px;
+    line-height: 1.7;
+  }
+
+  .score-ring-wrap { position: relative; width: 160px; height: 160px; }
+  .score-ring-wrap svg { transform: rotate(-90deg); }
+  .score-ring-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .score-ring-center .big-score {
+    font-size: 2.2rem; font-weight: 900; color: var(--teal);
+    line-height: 1;
+  }
+  .score-ring-center .big-total {
+    font-size: 0.85rem; color: var(--text-light); font-weight: 500;
+  }
+
+  .stats-row {
+    display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;
+  }
+  .stat-box {
+    background: var(--offwhite);
+    border: 1.5px solid #dde8e8;
+    border-radius: 14px;
+    padding: 18px 28px;
+    min-width: 110px;
+  }
+  .stat-box .sb-val { font-size: 1.6rem; font-weight: 900; }
+  .stat-box .sb-label { font-size: 0.78rem; color: var(--text-light); font-weight: 500; margin-top: 2px; }
+  .stat-box.green .sb-val { color: var(--correct); }
+  .stat-box.red .sb-val   { color: var(--wrong); }
+  .stat-box.blue .sb-val  { color: var(--teal); }
+
+  .grade-badge {
+    padding: 10px 30px;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: 0.02em;
+  }
+  .grade-A { background: #dcfce7; color: #14532d; }
+  .grade-B { background: #dbeafe; color: #1e3a8a; }
+  .grade-C { background: #fef9c3; color: #713f12; }
+  .grade-D { background: #fee2e2; color: #7f1d1d; }
+
+  .retry-btn {
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 16px 44px;
+    font-family: 'Estedad', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.22s;
+    box-shadow: 0 6px 20px rgba(13,110,110,0.3);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .retry-btn:hover { background: var(--teal-dark); transform: translateY(-3px); }
+
+  /* ─── LOADING ─── */
+  .loading-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    gap: 20px;
+    color: var(--teal);
+  }
+  .spinner {
+    width: 52px; height: 52px;
+    border: 5px solid var(--teal-xlight);
+    border-top-color: var(--teal);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 820px) {
+    .app { grid-template-columns: 1fr; }
+    .left-panel {
+      position: relative;
+      height: auto;
+      flex-direction: row;
+      padding: 20px 24px;
+      gap: 16px;
+    }
+    .vertical-title { writing-mode: horizontal-tb; font-size: 1.2rem; flex: none; }
+    .left-info { display: none; }
+    .right-panel { padding: 24px 20px; }
+    .options-grid { grid-template-columns: 1fr; }
+    .stats-row { flex-direction: column; align-items: center; }
+    .q-text { font-size: 1rem; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ═══ LEFT PANEL ═══ -->
+  <div class="left-panel">
+    <div class="brand-icon">⚛️</div>
+    <div class="vertical-title">الفيزياء التفاعلية</div>
+    <div class="left-info">
+      <div class="info-card">
+        <div class="ic-label">المادة</div>
+        <div class="ic-value">الفيزياء – الصف السادس</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-label">الفصل</div>
+        <div class="ic-value">الثامن: الأطياف الذرية والليزر</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-label">المنهج</div>
+        <div class="ic-value">المنهج العراقي 2024</div>
+      </div>
+      <div class="tip-box">
+        💡 <span>اقرأ كل سؤال بعناية قبل الإجابة. الإجابة الصحيحة ستظهر مباشرةً بعد اختيارك.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ RIGHT PANEL ═══ -->
+  <div class="right-panel">
+
+    <!-- HEADER -->
+    <div class="quiz-header">
+      <span class="chapter-badge">الفصل الثامن – الأطياف الذرية والليزر</span>
+      <div class="score-display">
+        <span style="font-size:0.82rem;color:var(--text-light);font-weight:500;">النتيجة</span>
+        <div class="score-bubble" id="scoreDisplay">0 / 20</div>
+      </div>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="progress-section" id="progressSection">
+      <div class="progress-labels">
+        <span id="progressLabel">السؤال 1 من 20</span>
+        <span id="progressPct">0%</span>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+      </div>
+      <div class="progress-dots" id="progressDots"></div>
+    </div>
+
+    <!-- QUESTION AREA -->
+    <div id="quizArea">
+      <div class="loading-screen" id="loadingScreen">
+        <div class="spinner"></div>
+        <div style="font-weight:600;font-size:1rem;">جاري تحضير الأسئلة...</div>
+      </div>
+    </div>
+
+    <!-- FINAL SCREEN -->
+    <div class="final-screen" id="finalScreen">
+      <div class="final-icon" id="finalIcon">🏆</div>
+      <div class="final-title" id="finalTitle">أحسنت! اكتملت الأسئلة</div>
+      <div class="score-ring-wrap">
+        <svg width="160" height="160" viewBox="0 0 160 160">
+          <circle cx="80" cy="80" r="65" fill="none" stroke="#e0f5f5" stroke-width="14"/>
+          <circle cx="80" cy="80" r="65" fill="none" stroke="var(--teal)" stroke-width="14"
+            stroke-linecap="round" stroke-dasharray="408" stroke-dashoffset="408" id="ringCircle"
+            style="transition: stroke-dashoffset 1.5s cubic-bezier(.4,0,.2,1)"/>
+        </svg>
+        <div class="score-ring-center">
+          <div class="big-score" id="finalScoreNum">0</div>
+          <div class="big-total">من 20</div>
+        </div>
+      </div>
+      <div class="grade-badge" id="gradeBadge">—</div>
+      <div class="stats-row">
+        <div class="stat-box green"><div class="sb-val" id="finalCorrect">0</div><div class="sb-label">إجابات صحيحة</div></div>
+        <div class="stat-box red">  <div class="sb-val" id="finalWrong">0</div><div class="sb-label">إجابات خاطئة</div></div>
+        <div class="stat-box blue"> <div class="sb-val" id="finalPct">0%</div><div class="sb-label">نسبة النجاح</div></div>
+      </div>
+      <div class="final-subtitle" id="finalMsg">واصل المراجعة والتحضير لتحقيق أفضل النتائج!</div>
+      <button class="retry-btn" onclick="initQuiz()">
+        <span>🔄</span> إعادة الاختبار
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════
+   QUESTION BANK – 100 Questions
+══════════════════════════════════════════════ */
+const QUESTION_BANK = [
+  // ── BOHR MODEL ──
+  {
+    q: "اقترح العالم بور نموذجه للذرة في عام:",
+    opts: ["1895", "1911", "1913", "1920"],
+    ans: 2,
+    cat: "نموذج بور",
+    expl: "اقترح العالم نيلز بور نموذجه للتركيب الذري عام 1913، متجاوزاً نموذج رذرفورد وموضحاً مستويات الطاقة المسموح بها للإلكترون."
+  },
+  {
+    q: "وفقاً لنموذج بور، ما الذي يحدث عندما يكتسب الإلكترون طاقة كافية؟",
+    opts: ["يفقد طاقة ويبقى في مداره", "يقفز إلى مستوى طاقة أعلى", "ينهار نحو النواة", "يبقى ثابتاً"],
+    ans: 1,
+    cat: "نموذج بور",
+    expl: "عند اكتساب الإلكترون طاقة كافية يقفز من مستوى استقراره (Ei) إلى مستوى طاقة أعلى (Ef)، وعند العودة يبعث فوتوناً طاقته = hf = Ef - Ei."
+  },
+  {
+    q: "يساوي الزخم الزاوي للإلكترون في مداره المحدد:",
+    opts: ["أعداداً صحيحة من (h/π)", "أعداداً صحيحة من (h/2π)", "أعداداً صحيحة من (2h/π)", "ثابتاً لا يتغير"],
+    ans: 1,
+    cat: "نموذج بور",
+    expl: "حسب فرضيات بور: Ln = n(h/2π) حيث n = 1,2,3,... ويمثل العدد الكمي الرئيس."
+  },
+  {
+    q: "ما المستوى الأرضي للذرة؟",
+    opts: ["أعلى مستوى طاقة", "أوطأ مستوى طاقة (E1)", "مستوى التهيج الأول", "مستوى شبه مستقر"],
+    ans: 1,
+    cat: "نموذج بور",
+    expl: "المستوى الأرضي هو أوطأ مستوى طاقة (E1) للذرة وهو أكثر المستويات استقراراً."
+  },
+  {
+    q: "لماذا تركز العلماء في الدراسات الطيفية على ذرة الهيدروجين؟",
+    opts: ["لأنها أكثر انتشاراً", "لأنها أبسط الذرات وتحتوي إلكتروناً واحداً", "لأن طيفها مستمر", "لأنها تبعث أشعة X"],
+    ans: 1,
+    cat: "طيف الهيدروجين",
+    expl: "ذرة الهيدروجين أبسط الذرات تركيباً إذ تحتوي على إلكترون واحد فقط، مما يجعل دراسة طيفها أسهل وأكثر دقة."
+  },
+  {
+    q: "جميع طاقات مستويات الهيدروجين تكون:",
+    opts: ["موجبة دائماً", "صفراً", "سالبة دائماً", "متساوية"],
+    ans: 2,
+    cat: "طيف الهيدروجين",
+    expl: "جميع طاقات مستويات ذرة الهيدروجين سالبة القيمة، لذلك لا يمتلك الإلكترون طاقة كافية للهروب من الذرة."
+  },
+  {
+    q: "ما العدد الكمي الرئيس n في نموذج بور؟",
+    opts: ["عدد كسري فقط", "عدد صحيح موجب (1,2,3...)", "عدد سالب", "صفر فقط"],
+    ans: 1,
+    cat: "نموذج بور",
+    expl: "العدد الكمي الرئيس n أعداد صحيحة موجبة (1,2,3,4,...) ويحدد مستوى الطاقة الذي يشغله الإلكترون."
+  },
+  {
+    q: "تردد الفوتون المنبعث عند انتقال الإلكترون بين مستويين يعطى بالعلاقة:",
+    opts: ["hf = Ef + Ei", "hf = Ef - Ei", "hf = Ei / Ef", "hf = Ei × Ef"],
+    ans: 1,
+    cat: "نموذج بور",
+    expl: "العلاقة الأساسية: hf = Ef - Ei، حيث h ثابت بلانك = 6.63 × 10⁻³⁴ J.s و f تردد الفوتون المنبعث."
+  },
+  // ── ATOMIC MODELS ──
+  {
+    q: "وصف ثومسون الذرة بأنها:",
+    opts: ["كرة مجوفة سالبة الشحنة", "كرة مصمتة موجبة الشحنة تتوزع فيها إلكترونات سالبة", "نواة محاطة بمدارات", "جسيم لا يقبل التقسيم"],
+    ans: 1,
+    cat: "نماذج الذرة",
+    expl: "وصف ثومسون الذرة بأنها كرة مصمتة متناهية الصغر موجبة الشحنة، يتوزع بداخلها الإلكترونات السالبة وهي متعادلة كهربائياً."
+  },
+  {
+    q: "أحد أسباب فشل نموذج رذرفورد للذرة:",
+    opts: ["إنكاره وجود النواة", "توقعه لطيف مستمر بينما الطيف خطي", "وصفه الذرة بشكل غير صحيح", "عدم تطبيقه لقانون كولوم"],
+    ans: 1,
+    cat: "نماذج الذرة",
+    expl: "أحد أسباب فشل نموذج رذرفورد أن تناقص طاقة الإلكترون تدريجياً يجب أن يولّد طيفاً مستمراً، بينما أثبتت التجارب أن طيف الهيدروجين خطي."
+  },
+  {
+    q: "لماذا لا تنهار بنية الذرة؟",
+    opts: ["لأن الإلكترون ثابت لا يتحرك", "لأن الذرة مستقرة في ظروف عادية ولا تشع إلا عند إثارتها", "لأن النواة تطرد الإلكترونات", "لا أحد من الأسباب صحيح"],
+    ans: 1,
+    cat: "نماذج الذرة",
+    expl: "الذرة مستقرة في الظروف الطبيعية ولا تبعث إشعاعاً إلا عند تسخينها أو تعريضها لجهد كهربائي، وهذا ما عجز نموذج رذرفورد عن تفسيره."
+  },
+  // ── SPECTRA SERIES ──
+  {
+    q: "سلسلة لايمان في طيف الهيدروجين تقع في:",
+    opts: ["المنطقة المرئية", "المنطقة تحت الحمراء", "المنطقة فوق البنفسجية", "منطقة الأشعة X"],
+    ans: 2,
+    cat: "سلاسل الطيف",
+    expl: "سلسلة لايمان تنتج عند انتقال الإلكترون من المستويات العليا إلى المستوى الأول (n=1) وتردداتها في المنطقة فوق البنفسجية وهي غير مرئية."
+  },
+  {
+    q: "سلسلة بالمر في طيف الهيدروجين تنتج عند الانتقال إلى:",
+    opts: ["المستوى الأول E1", "المستوى الثاني E2", "المستوى الثالث E3", "المستوى الرابع E4"],
+    ans: 1,
+    cat: "سلاسل الطيف",
+    expl: "سلسلة بالمر تنتج عند انتقال الإلكترون من المستويات العليا إلى المستوى الثاني E2 وتردداتها في المنطقة المرئية."
+  },
+  {
+    q: "سلسلة باشن تقع في المنطقة:",
+    opts: ["المرئية", "فوق البنفسجية", "تحت الحمراء", "أشعة جاما"],
+    ans: 2,
+    cat: "سلاسل الطيف",
+    expl: "سلسلة باشن تنتج عند الانتقال إلى المستوى الثالث E3 وتردداتها في المنطقة تحت الحمراء وهي غير مرئية."
+  },
+  {
+    q: "السلسلة الوحيدة المرئية في طيف الهيدروجين هي:",
+    opts: ["سلسلة لايمان", "سلسلة بالمر", "سلسلة باشن", "سلسلة براكت"],
+    ans: 1,
+    cat: "سلاسل الطيف",
+    expl: "سلسلة بالمر هي السلسلة الوحيدة التي تقع ترددات بعضها في المنطقة المرئية."
+  },
+  {
+    q: "يتكون الطيف الخطي للهيدروجين المرئي من:",
+    opts: ["خطين (أحمر وأزرق)", "ثلاثة خطوط", "أربعة خطوط (أحمر وأخضر ونيلي وبنفسجي)", "طيف مستمر"],
+    ans: 2,
+    cat: "سلاسل الطيف",
+    expl: "يتكون الطيف الخطي البراق للهيدروجين من أربعة خطوط بالألوان: أحمر، أخضر، نيلي، بنفسجي."
+  },
+  // ── TYPES OF SPECTRA ──
+  {
+    q: "الطيف المستمر يُحصل عليه من:",
+    opts: ["الغازات عند ضغط منخفض", "الأجسام الصلبة والسائلة المتوهجة أو الغازات عند ضغط عالٍ", "بخار الصوديوم فقط", "المواد الجزيئية"],
+    ans: 1,
+    cat: "أنواع الأطياف",
+    expl: "الطيف المستمر يُحصل عليه من الأجسام الصلبة والسائلة المتوهجة أو الغازات تحت ضغط عالٍ جداً، ويحتوي على مدى واسع من الأطوال الموجية."
+  },
+  {
+    q: "الطيف الخطي البراق صفة مميزة لـ:",
+    opts: ["المواد جزيئية التركيب", "المواد ذرية التركيب (الغازات عند ضغط منخفض)", "المواد الصلبة فقط", "الأشعة X"],
+    ans: 1,
+    cat: "أنواع الأطياف",
+    expl: "الطيف الخطي البراق صفة مميزة للمواد ذرية التركيب، ويُحصل عليه من توهج الغازات والأبخرة عند الضغط الاعتيادي أو الواطئ."
+  },
+  {
+    q: "الطيف الحزمي البراق صفة مميزة لـ:",
+    opts: ["الذرات", "الجزيئات", "الأيونات فقط", "الفوتونات"],
+    ans: 1,
+    cat: "أنواع الأطياف",
+    expl: "الطيف الحزمي البراق صفة مميزة للمواد جزيئية التركيب، ويتكون من حزمة أو عدة حزم ملونة على أرضية سوداء."
+  },
+  {
+    q: "طيف الصوديوم الخطي البراق يتكون من:",
+    opts: ["أربعة خطوط ملونة", "خط واحد أخضر", "خطين أصفرين متقاربين جداً", "طيف مستمر أصفر"],
+    ans: 2,
+    cat: "أنواع الأطياف",
+    expl: "يتكون الطيف الخطي البراق للصوديوم من خطين أصفرين براقين قريبين جداً من بعضهما في المنطقة الصفراء من الطيف المرئي."
+  },
+  {
+    q: "طيف الامتصاص هو:",
+    opts: ["طيف خطي براق على أرضية سوداء", "طيف مستمر تتخلله خطوط أو حزم معتمة", "طيف خطي يحتوي أشعة تحت الحمراء فقط", "طيف حزمي براق"],
+    ans: 1,
+    cat: "أنواع الأطياف",
+    expl: "طيف الامتصاص هو طيف مستمر تتخلله خطوط أو حزم معتمة، تنتج عندما يمر الضوء خلال بخار غير متوهج فيمتص أطوال موجية معينة."
+  },
+  // ── FRAUNHOFER & SUN ──
+  {
+    q: "خطوط فرانهوفر هي:",
+    opts: ["خطوط بيضاء في الطيف الشمسي", "خطوط سوداء في الطيف الشمسي", "خطوط ملونة في طيف الهيدروجين", "حزم في طيف البخار"],
+    ans: 1,
+    cat: "الطيف الشمسي",
+    expl: "خطوط فرانهوفر هي خطوط سوداء تظهر في الطيف الشمسي عند الفحص الدقيق، اكتشفها فرانهوفر وبلغ عددها نحو 600 خط."
+  },
+  {
+    q: "الطيف الشمسي هو في الحقيقة:",
+    opts: ["طيف مستمر صرف", "طيف خطي براق", "طيف امتصاص خطي", "طيف حزمي"],
+    ans: 2,
+    cat: "الطيف الشمسي",
+    expl: "كان يُعتقد أن الطيف الشمسي مستمر، لكن بعد اكتشاف خطوط فرانهوفر تبين أنه طيف امتصاص خطي."
+  },
+  {
+    q: "سبب الخطوط السوداء في الطيف الشمسي:",
+    opts: ["نقص طاقة الشمس", "امتصاص غازات الشمس وغلاف الأرض لأطوال موجية محددة", "انعكاس الضوء من الكواكب", "تأثير جاذبية الأرض"],
+    ans: 1,
+    cat: "الطيف الشمسي",
+    expl: "الغازات حول الشمس وفي جو الأرض الأقل توهجاً تمتص من الطيف المستمر للشمس الأطوال الموجية التي تبعثها هذه الغازات عند توهجها."
+  },
+  {
+    q: "عُرف عنصر الهيليوم قبل اكتشافه على الأرض من خلال:",
+    opts: ["أشعة X الشمسية", "طيف الامتصاص الخطي لضوء الشمس", "الطيف الراديوي للشمس", "التلسكوبات البصرية"],
+    ans: 1,
+    cat: "الطيف الشمسي",
+    expl: "اكتُشف عنصر الهيليوم من طيف الامتصاص الخطي لضوء الشمس قبل اكتشافه على سطح الأرض، وهذا مثال على قوة التحليل الطيفي."
+  },
+  // ── X-RAYS ──
+  {
+    q: "اكتشف الأشعة السينية عام 1895 العالم:",
+    opts: ["نيوتن", "بور", "رونتجن", "كومبتن"],
+    ans: 2,
+    cat: "الأشعة السينية",
+    expl: "اكتشف الأشعة السينية مصادفةً العالم رونتجن عام 1895 عندما كان يدرس كهربائية الغازات والتوصيل الكهربائي للإلكترونات."
+  },
+  {
+    q: "الأشعة السينية هي:",
+    opts: ["موجات صوتية قصيرة", "موجات كهرومغناطيسية غير مرئية قصيرة جداً", "جسيمات مشحونة سريعة", "أشعة جاما مُعدَّلة"],
+    ans: 1,
+    cat: "الأشعة السينية",
+    expl: "الأشعة السينية موجات كهرومغناطيسية غير مرئية أطوالها الموجية قصيرة جداً (0.001-10) nm، لا تتأثر بالمجالات الكهربائية والمغناطيسية."
+  },
+  {
+    q: "لماذا لا تتأثر الأشعة السينية بالمجالات الكهربائية والمغناطيسية؟",
+    opts: ["لأنها تتحرك بسرعة الضوء", "لأنها ليست جسيمات مشحونة بل فوتونات عديمة الشحنة", "لأن طاقتها عالية جداً", "لأنها تنتقل في الفراغ"],
+    ans: 1,
+    cat: "الأشعة السينية",
+    expl: "الأشعة السينية فوتونات عديمة الشحنة، لذا لا تستجيب للمجالات الكهربائية والمغناطيسية التي تؤثر فقط على الجسيمات المشحونة."
+  },
+  {
+    q: "يصنع هدف أنبوبة الأشعة السينية من مواد ذات:",
+    opts: ["درجة انصهار منخفضة", "درجة انصهار عالية كالتنكستن والموليبدينوم", "كثافة منخفضة", "عدد ذري صغير"],
+    ans: 1,
+    cat: "الأشعة السينية",
+    expl: "يصنع الهدف من مواد ذات درجة انصهار عالية جداً كالتنكستن (3410°C) والموليبدينوم (2550°C) لتحمل الحرارة الشديدة الناتجة عن اصطدام الإلكترونات."
+  },
+  {
+    q: "يُختار الهدف في أنبوبة الأشعة السينية من مادة ذات عدد ذري كبير لأن:",
+    opts: ["درجة انصهارها عالية", "شدة الأشعة السينية تتناسب طردياً مع العدد الذري للهدف", "تكون أرخص ثمناً", "تبرد بسرعة أكبر"],
+    ans: 1,
+    cat: "الأشعة السينية",
+    expl: "شدة الأشعة السينية تتناسب طردياً مع العدد الذري لمادة الهدف، لذا تُستخدم مواد ذات أعداد ذرية كبيرة لزيادة كفاءة التوليد."
+  },
+  {
+    q: "ظاهرة توليد الأشعة السينية تُعتبر ظاهرة كهروضوئية معكوسة لأن:",
+    opts: ["الإلكترونات تنبعث من الهدف بفعل الضوء", "طاقة الإلكترونات المعجلة تتحول إلى فوتونات أشعة X عوضاً عن العكس", "فوتونات تولّد إلكترونات", "لا علاقة بين الظاهرتين"],
+    ans: 1,
+    cat: "الأشعة السينية",
+    expl: "في الظاهرة الكهروضوئية فوتونات → إلكترونات. وفي توليد الأشعة السينية إلكترونات → فوتونات X. لذا تُعد الظاهرة الكهروضوئية المعكوسة."
+  },
+  {
+    q: "الكاثود في أنبوبة الأشعة السينية هو:",
+    opts: ["الهدف الفلزي الموجب", "الفتيل السالب الذي يبعث إلكترونات عند تسخينه", "مصدر الفولطية العالية", "مصدر التبريد"],
+    ans: 1,
+    cat: "الأشعة السينية",
+    expl: "الكاثود هو القطب السالب (فتيل) الذي تنبعث منه الإلكترونات عند تسخينه. أما الأنود فهو الهدف الفلزي الموجب الذي تصطدم به الإلكترونات."
+  },
+  {
+    q: "أعظم تردد للأشعة السينية المتولدة يعطى بالعلاقة:",
+    opts: ["fmax = eV/h", "fmax = hV/e", "fmax = Ve²/h", "fmax = h/eV"],
+    ans: 0,
+    cat: "الأشعة السينية",
+    expl: "من العلاقة: hfmax = eV، إذن fmax = eV/h، حيث e شحنة الإلكترون وV فرق الجهد وh ثابت بلانك."
+  },
+  // ── COMPTON EFFECT ──
+  {
+    q: "في تأثير كومبتن، يزيد الطول الموجي للفوتون المستطار بمقدار يعتمد على:",
+    opts: ["الطول الموجي للفوتون الساقط", "نوع معدن الهدف", "زاوية الاستطارة فقط", "سرعة الضوء وكتلة الفوتون"],
+    ans: 2,
+    cat: "تأثير كومبتن",
+    expl: "Δλ = (h/mₑc)(1 - cosθ)، يتضح أن الزيادة في الطول الموجي تعتمد فقط على زاوية الاستطارة θ."
+  },
+  {
+    q: "تأثير كومبتن يُثبت أن الموجات الكهرومغناطيسية تسلك سلوك:",
+    opts: ["الموجات فقط", "الجسيمات (الفوتونات تتصادم كجسيمات)", "لا موجات ولا جسيمات", "بلازما"],
+    ans: 1,
+    cat: "تأثير كومبتن",
+    expl: "كومبتن فسّر الظاهرة بأن الفوتون يتصادم مع الإلكترون كجسيم، مما يُثبت السلوك الجسيمي للموجات الكهرومغناطيسية."
+  },
+  {
+    q: "في تأثير كومبتن، الفوتون الساقط على الكرافيت يصطدم بـ:",
+    opts: ["النواة فقط", "إلكترون حر من ذرات مادة الهدف", "فوتون آخر", "بروتون"],
+    ans: 1,
+    cat: "تأثير كومبتن",
+    expl: "الفوتون الساقط على هدف الكرافيت يتصادم مع إلكترون حر من إلكترونات ذرات مادة الهدف، فيفقد جزءاً من طاقته ويكتسبها الإلكترون كطاقة حركية."
+  },
+  // ── LASER BASICS ──
+  {
+    q: "LASER اختصار لـ:",
+    opts: ["Light Amplification by Stimulated Emission of Radiation", "Large Atomic Spectral Emission Radiation", "Light Absorption by Stimulated Energy Release", "Linear Amplified Signal of Electron Radiation"],
+    ans: 0,
+    cat: "الليزر",
+    expl: "LASER اختصار لـ Light Amplification by Stimulated Emission of Radiation أي تضخيم الضوء بالانبعاث المُحَفَّز للإشعاع."
+  },
+  {
+    q: "أساس عمل الليزر هو:",
+    opts: ["الانبعاث التلقائي فقط", "الامتصاص المحتث فقط", "الانبعاث المُحَفَّز", "التشعيع الحراري"],
+    ans: 2,
+    cat: "الليزر",
+    expl: "أساس توليد الليزر هو الانبعاث المُحَفَّز (Stimulated Emission)، حيث فوتون يحفّز ذرة متهيجة لتبعث فوتوناً آخر مماثلاً له في الطاقة والطور والاتجاه."
+  },
+  {
+    q: "الانبعاث المُحَفَّز ينتج:",
+    opts: ["فوتوناً واحداً مختلفاً عن المحفّز", "فوتونَين متطابقَين في الطاقة والطور والاتجاه", "إلكتروناً حراً", "انهياراً للذرة"],
+    ans: 1,
+    cat: "الليزر",
+    expl: "في الانبعاث المُحَفَّز، الفوتون المُحَفَّز يجعل الذرة المتهيجة تبعث فوتوناً مماثلاً له تماماً في الطاقة والطور والاتجاه، ينتج فوتونان متشاكهان."
+  },
+  {
+    q: "التوزيع المعكوس يعني:",
+    opts: ["عدد الذرات في المستوى الأرضي أكبر من المستويات العليا", "عدد الذرات في المستويات العليا أكبر من المستويات الواطئة", "توزيع متساوٍ للذرات", "وجود ذرات في مستوى واحد فقط"],
+    ans: 1,
+    cat: "الليزر",
+    expl: "التوزيع المعكوس (Population Inversion) يعني أن عدد الذرات في المستويات العليا للطاقة أكبر مما في المستويات الواطئة، وهو شرط ضروري لعمل الليزر."
+  },
+  {
+    q: "توزيع بولتزمان الطبيعي يعني:",
+    opts: ["معظم الذرات في المستويات العليا", "معظم الذرات في المستويات الواطئة للطاقة", "توزيع عشوائي", "جميع الذرات في مستوى التهيج"],
+    ans: 1,
+    cat: "الليزر",
+    expl: "وفقاً لتوزيع بولتزمان في الحالة الطبيعية: معظم الذرات في المستويات الواطئة للطاقة ونسبة قليلة فقط في المستويات المتهيجة."
+  },
+  {
+    q: "المستوى شبه المستقر (Metastable Level) مميز بأن:",
+    opts: ["عمره أقصر من مستويات التهيج الأخرى", "عمره أطول نسبياً مما يسمح بتراكم الذرات فيه", "لا يمكن للإلكترون البقاء فيه", "طاقته أقل من المستوى الأرضي"],
+    ans: 1,
+    cat: "الليزر",
+    expl: "المستوى شبه المستقر عمره أطول نسبياً (10⁻² - 10⁻⁶ ثانية) مما يسمح بتراكم عدد كبير من الذرات فيه وتحقيق التوزيع المعكوس."
+  },
+  {
+    q: "عملية الضخ في منظومة الليزر تعني:",
+    opts: ["سحب الإلكترونات من الذرة", "تجهيز الطاقة للذرات لنقلها من مستوى الاستقرار إلى مستوى التهيج", "تبريد الوسط الفعال", "تضخيم شدة الإشعاع مباشرة"],
+    ans: 1,
+    cat: "الليزر",
+    expl: "عملية الضخ هي التقنية التي تجهّز الطاقة الخارجية لذرات الوسط الفعال لنقلها من مستوى الاستقرار إلى مستوى التهيج لتحقيق التوزيع المعكوس."
+  },
+  {
+    q: "الضخ الكهربائي يُستخدم عادة في الليزرات:",
+    opts: ["الصلبة كليزر الياقوت", "الغازية كليزر الهيليوم-نيون", "السائلة فقط", "جميع أنواع الليزر"],
+    ans: 1,
+    cat: "الليزر",
+    expl: "يُستخدم الضخ الكهربائي عادةً في الليزرات الغازية مثل ليزر الهيليوم-نيون وليزر ثاني أكسيد الكربون، ويمكن استخدامه أيضاً في ليزر شبه الموصل."
+  },
+  {
+    q: "الضخ الضوئي يُستخدم في الليزرات:",
+    opts: ["الغازية", "الصلبة كليزر الياقوت وليزر النيوديميوم-ياك", "السائلة فقط", "الغازية والصلبة معاً"],
+    ans: 1,
+    cat: "الليزر",
+    expl: "يُستخدم الضخ الضوئي في ليزرات الحالة الصلبة كليزر الياقوت وليزر النيوديميوم-ياك، باستخدام مصابيح ومضّة أو مستمرة الإضاءة عالية الشدة."
+  },
+  // ── LASER PROPERTIES ──
+  {
+    q: "من خصائص شعاع الليزر الأربع: أحادي الطول الموجي، التشاكه، الاتجاهية، والـ:",
+    opts: ["الانعكاس", "التشعب", "السطوع", "الاستقطاب"],
+    ans: 2,
+    cat: "خصائص الليزر",
+    expl: "خصائص شعاع الليزر الأربع هي: أحادية الطول الموجي، التشاكه، الاتجاهية، والسطوع العالي."
+  },
+  {
+    q: "التشاكه (Coherency) في الليزر يعني:",
+    opts: ["أن لون الليزر أبيض", "أن الفوتونات متزامنة في الطور والتردد والاتجاه", "أن شعاع الليزر ينتشر بزاوية كبيرة", "أن الليزر يعمل بشكل مستمر فقط"],
+    ans: 1,
+    cat: "خصائص الليزر",
+    expl: "التشاكه يعني أن موجات الليزر متزامنة في الطور والتردد والاتجاه، وهو ما يجعله مختلفاً جوهرياً عن الضوء العادي."
+  },
+  {
+    q: "قياس المدى باستخدام الليزر يعتمد على خاصية:",
+    opts: ["التشاكه", "أحادية الطول الموجي", "الاتجاهية", "السطوع"],
+    ans: 2,
+    cat: "خصائص الليزر",
+    expl: "تعتمد عملية قياس المدى على خاصية الاتجاهية، حيث تبقى موجات الليزر متوازية لمسافات بعيدة بانفراجية قليلة جداً."
+  },
+  // ── LASER LEVELS ──
+  {
+    q: "في منظومة ثلاثية المستويات، التوزيع المعكوس يتحقق بين:",
+    opts: ["المستويين E2 و E3", "المستويين E1 و E2", "المستويين E1 و E3", "جميع المستويات"],
+    ans: 1,
+    cat: "منظومات الليزر",
+    expl: "في المنظومة ثلاثية المستويات يُضخ من E1 إلى E3 ثم تنتقل الذرات سريعاً إلى E2 (شبه مستقر)، فيتحقق التوزيع المعكوس بين E1 و E2."
+  },
+  {
+    q: "المنظومة رباعية المستويات أفضل من الثلاثية في توليد الليزر لأنها:",
+    opts: ["تتطلب طاقة ضخ أعلى", "تتطلب طاقة ضخ أقل لتحقيق التوزيع المعكوس", "تنتج ليزراً بطول موجي أقصر", "لا تحتاج لمستوى شبه مستقر"],
+    ans: 1,
+    cat: "منظومات الليزر",
+    expl: "في المنظومة رباعية المستويات، المستوى E2 يكون شبه فارغ مما يجعل تحقيق التوزيع المعكوس بين E2 و E3 أسهل ويتطلب طاقة ضخ أقل."
+  },
+  {
+    q: "في المنظومة ثلاثية المستويات، تكون قدرة الضخ المطلوبة:",
+    opts: ["منخفضة جداً", "عالية", "معتدلة", "لا تحتاج ضخاً"],
+    ans: 1,
+    cat: "منظومات الليزر",
+    expl: "في المنظومة ثلاثية المستويات تكون قدرة الضخ عالية لأن المستوى الأرضي E1 هو نفسه مستوى النهاية للانتقال الليزري مما يجعل تحقيق التوزيع المعكوس أصعب."
+  },
+  // ── RESONATOR & TYPES ──
+  {
+    q: "المرنان (Resonator) في منظومة الليزر يتكون من:",
+    opts: ["مرآة واحدة عاكسة كلياً", "مرآتين: عاكسة كلياً وعاكسة جزئياً مع الوسط الفعال بينهما", "عدسة محدبة وعدسة مقعرة", "أنبوبة تفريغ فقط"],
+    ans: 1,
+    cat: "منظومات الليزر",
+    expl: "المرنان تجويف يتكون من مرآتين متقابلتين: الأولى عاكسة كلياً والثانية عاكسة جزئياً، يُوضع الوسط الفعال بينهما لتعاقب الانعكاسات وتحقيق التضخيم."
+  },
+  {
+    q: "أنواع الليزرات الغازية الذرية تشمل:",
+    opts: ["ليزر الياقوت وليزر النيوديميوم", "ليزر He-Ne وليزر He-Cd", "ليزر ثاني أكسيد الكربون فقط", "ليزرات أيونات الأرغون فقط"],
+    ans: 1,
+    cat: "منظومات الليزر",
+    expl: "الليزرات الغازية الذرية تشمل ليزر الهيليوم-نيون (He-Ne) وليزر الهيليوم-كادميوم (He-Cd)، بينما ليزر الأرغون والكريبتون من الليزرات الأيونية."
+  },
+  // ── HOLOGRAPHY ──
+  {
+    q: "التصوير المجسم (الهولوغرافي) يختلف عن التصوير العادي في أنه:",
+    opts: ["يسجل شدة الضوء فقط", "يسجل سعة الموجات وطورها لإنتاج صور ثلاثية الأبعاد", "يستخدم ضوءاً أبيض عادياً", "يلتقط صوراً ثنائية الأبعاد أوضح"],
+    ans: 1,
+    cat: "الهولوغرافيا",
+    expl: "التصوير المجسم يسجل سعة الموجات الضوئية المنعكسة من الجسم وطورها لتظهر ثلاثية الأبعاد، بينما التصوير العادي يسجل شدة الأشعة فقط."
+  },
+  // ── SPECTROSCOPY ──
+  {
+    q: "الجهاز المستخدم لتحليل الطيف يسمى:",
+    opts: ["المطياف (Spectroscope)", "المجهر", "جهاز الليزر", "المقياس الضوئي"],
+    ans: 0,
+    cat: "أنواع الأطياف",
+    expl: "يُستخدم المطياف (Spectroscope) لتحليل الضوء المنبعث من المواد ودراسة طيفها لمعرفة تركيبها الذري والجزيئي."
+  },
+  {
+    q: "مصادر الضوء الحرارية تشمل:",
+    opts: ["أنابيب التفريغ الكهربائي", "الشمس ومصابيح التنكستن والأقواس الكهربائية", "أنابيب الليزر فقط", "أشعة X"],
+    ans: 1,
+    cat: "أنواع الأطياف",
+    expl: "المصادر الحرارية هي التي تشع ضوءاً نتيجة ارتفاع درجة حرارتها كالشمس ومصابيح التنكستن والأقواس الكهربائية."
+  },
+  {
+    q: "الطيف الخطي يُعدّ صفة مميزة وأساسية للذرات لأن:",
+    opts: ["جميع العناصر لها طيف واحد متشابه", "لكل عنصر طيف خطي خاص به يمكن التعرف عليه من خلاله", "الطيف الخطي متشابه لكل المعادن", "الطيف الخطي يتغير مع الضغط"],
+    ans: 1,
+    cat: "أنواع الأطياف",
+    expl: "الطيف الخطي صفة مميزة وأساسية للذرات لأن لكل عنصر طيفاً خطياً خاصاً به يُمكّن العلماء من التعرف على العناصر والمواد."
+  },
+  // ── NEWTON & PRISM ──
+  {
+    q: "لاحظ نيوتن تحلل الضوء الأبيض إلى ألوانه عند مروره بموشور زجاجي في أواخر القرن:",
+    opts: ["السادس عشر", "السابع عشر", "الثامن عشر", "التاسع عشر"],
+    ans: 1,
+    cat: "الأطياف",
+    expl: "لاحظ نيوتن تحلل ضوء الشمس إلى ألوان الطيف السبعة عند سقوطه على موشور زجاجي في أواخر القرن السابع عشر."
+  },
+  {
+    q: "الطيف هو:",
+    opts: ["شدة الضوء الكلية", "سلسلة من الترددات الضوئية الناتجة من تحليل حزمة ضوء بموشور", "مجموعة إلكترونات متوهجة", "منطقة الأشعة فوق البنفسجية فقط"],
+    ans: 1,
+    cat: "الأطياف",
+    expl: "الطيف هو سلسلة من الترددات الضوئية الناتجة من تحليل حزمة من الضوء بوساطة موشور."
+  },
+  // ── BOLTZMANN ──
+  {
+    q: "وفق توزيع بولتزمان: N2/N1 = exp(-ΔE/kT)، عندما تكون درجة الحرارة T مرتفعة جداً تكون N2:",
+    opts: ["أصغر بكثير من N1", "أكبر من N1", "مساوية لـ N1", "تساوي صفراً"],
+    ans: 1,
+    cat: "الليزر",
+    expl: "عند ارتفاع درجة الحرارة، يزيد عدد الذرات في المستويات العليا N2 ويقترب من N1، مما يساعد على تحقيق التوزيع المعكوس."
+  },
+  {
+    q: "ثابت بولتزمان k يساوي تقريباً:",
+    opts: ["6.63 × 10⁻³⁴ J.s", "1.38 × 10⁻²³ J/K", "1.6 × 10⁻¹⁹ J", "3 × 10⁸ m/s"],
+    ans: 1,
+    cat: "الليزر",
+    expl: "ثابت بولتزمان k = 1.38 × 10⁻²³ J/K، بينما ثابت بلانك h = 6.63 × 10⁻³⁴ J.s وشحنة الإلكترون e = 1.6 × 10⁻¹⁹ C."
+  },
+  // ── SPONTANEOUS EMISSION ──
+  {
+    q: "الانبعاث التلقائي يحدث عندما:",
+    opts: ["تمتص ذرة فوتوناً من الخارج", "تنتقل ذرة متهيجة تلقائياً إلى مستوى أوطأ مع إصدار فوتون", "فوتون يحفز ذرة متهيجة", "الإلكترون يقفز إلى مستوى أعلى"],
+    ans: 1,
+    cat: "الليزر",
+    expl: "الانبعاث التلقائي هو عودة الذرة تلقائياً من مستوى التهيج إلى المستوى الأرضي بعد فترة زمنية قصيرة (زمن العمر) مع انبعاث فوتون."
+  },
+  {
+    q: "الفوتونات المنبعثة تلقائياً تكون:",
+    opts: ["متشاكهة في الطور والاتجاه", "مختلفة في الطور والاتجاه", "متطابقة تماماً في جميع خصائصها", "بترددات منتظمة جداً"],
+    ans: 1,
+    cat: "الليزر",
+    expl: "الفوتونات المنبعثة تلقائياً تكون مختلفة فيما بينها في الطور والاتجاه، على عكس الانبعاث المُحَفَّز."
+  },
+  // ── X-RAY LINE SPECTRUM ──
+  {
+    q: "الأشعة السينية ذات الطيف الخطي الحاد (المميزة) تتولد عندما:",
+    opts: ["تتباطأ الإلكترونات بفعل المجال الكهربائي للنواة", "تصطدم إلكترونات معجلة بإلكترونات المستويات الداخلية للهدف", "تتصادم نواتان", "الضوء المرئي يصطدم بالهدف"],
+    ans: 1,
+    cat: "الأشعة السينية",
+    expl: "الأشعة السينية المميزة تتولد عندما تقتلع الإلكترونات المعجلة إلكتروناً من المستويات الداخلية للهدف، فيعود إلكترون آخر من مستوى أعلى محرراً طاقة على شكل أشعة X."
+  },
+  {
+    q: "الأشعة السينية ذات الطيف المستمر تتولد من:",
+    opts: ["تصادم إلكترونات مع إلكترونات داخلية", "تباطؤ الإلكترونات المعجلة بفعل المجال الكهربائي لنوى الهدف", "التفاعل النووي", "الفوتونات المرئية"],
+    ans: 1,
+    cat: "الأشعة السينية",
+    expl: "الطيف المستمر للأشعة السينية ينتج من تباطؤ الإلكترونات المعجلة فجأة بفعل المجال الكهربائي لنوى مادة الهدف، وفقدان طاقاتها على شكل فوتونات بترددات مختلفة."
+  },
+  // ── ADDITIONAL MIXED ──
+  {
+    q: "زمن بقاء الإلكترون في مستوى التهيج العادي هو نحو:",
+    opts: ["10⁻³ ثانية", "10⁻⁸ ثانية", "10⁻¹⁵ ثانية", "1 ثانية"],
+    ans: 1,
+    cat: "نموذج بور",
+    expl: "لا يبقى الإلكترون في مستوى التهيج العادي إلا لمدة قصيرة نحو 10⁻⁸ ثانية ثم يعود إلى مستوى الاستقرار."
+  },
+  {
+    q: "تحليل عينة مجهولة بالطيف الخطي يتم عبر:",
+    opts: ["تبريد العينة ومراقبة ألوانها", "تبخيرها بقوس كربوني وتسجيل طيفها ومقارنته بالأطياف القياسية", "ذوبانها في الماء", "فحصها بالمجهر الإلكتروني"],
+    ans: 1,
+    cat: "أنواع الأطياف",
+    expl: "يتم تبخير العينة في قوس كربوني لجعلها متوهجة، ثم يُسجَّل طيفها بالمطياف ويُقارَن مع الأطياف القياسية لكل عنصر."
+  },
+  {
+    q: "ثابت بلانك h يساوي:",
+    opts: ["6.63 × 10⁻³⁴ J.s", "6.63 × 10⁻²⁴ J.s", "9.11 × 10⁻³¹ J.s", "1.6 × 10⁻¹⁹ J.s"],
+    ans: 0,
+    cat: "نموذج بور",
+    expl: "ثابت بلانك h = 6.63 × 10⁻³⁴ J.s، وهو ثابت أساسي في ميكانيكا الكم يربط طاقة الفوتون بتردده: E = hf."
+  },
+  {
+    q: "شدة الأشعة السينية تعتمد على:",
+    opts: ["درجة حرارة الكاثود فقط", "عدد الفوتونات المنبعثة عند طول موجي معين والعدد الذري للهدف", "سرعة الإلكترونات فقط", "نوع الغاز داخل الأنبوبة"],
+    ans: 1,
+    cat: "الأشعة السينية",
+    expl: "تتوقف شدة الأشعة السينية على: (1) عدد الفوتونات المنبعثة عند طول موجي معين، و(2) العدد الذري لمادة الهدف (تتناسب طردياً معه)."
+  },
+  {
+    q: "من أنواع الليزرات الأيونية الغازية:",
+    opts: ["ليزر He-Ne", "ليزر الياقوت", "ليزر آيونات الأرغون (Ar⁺)", "ليزر شبه الموصل"],
+    ans: 2,
+    cat: "منظومات الليزر",
+    expl: "الليزرات الأيونية الغازية تشمل ليزر آيونات الأرغون (Ar⁺) وليزر آيونات الكريبتون (Kr⁺)."
+  },
+  {
+    q: "طول الموجة الأدنى للأشعة السينية (λmin) يعطى بالعلاقة:",
+    opts: ["λmin = hc/eV", "λmin = eV/hc", "λmin = hf/eV", "λmin = eV × h"],
+    ans: 0,
+    cat: "الأشعة السينية",
+    expl: "من العلاقة: eV = hfmax = hc/λmin، إذن λmin = hc/eV."
+  },
+  {
+    q: "في تأثير كومبتن، زاوية استطارة 90° تعطي زيادة في الطول الموجي تساوي:",
+    opts: ["صفراً", "h/mₑc (حوالي 0.0024 nm)", "2h/mₑc", "∞"],
+    ans: 1,
+    cat: "تأثير كومبتن",
+    expl: "عند θ=90°: Δλ = (h/mₑc)(1 - cos90°) = h/mₑc ≈ 0.0024 nm = 2.4 × 10⁻¹² m."
+  },
+  {
+    q: "ما الذي يؤكد السلوك الموجي للضوء؟",
+    opts: ["الظاهرة الكهروضوئية", "تأثير كومبتن", "ظاهرة التشعيع الحراري", "التداخل والحيود"],
+    ans: 3,
+    cat: "الأطياف",
+    expl: "ظاهرتا التداخل والحيود تُثبتان السلوك الموجي للضوء، بينما الظاهرة الكهروضوئية وتأثير كومبتن يُثبتان سلوكه الجسيمي (الفوتوني)."
+  },
+  {
+    q: "في نموذج بور، قوة الجذب الكهربائي بين النواة والإلكترون تعمل كـ:",
+    opts: ["قوة طاردة مركزية", "قوة جاذبة مركزية تُبقي الإلكترون في مساره الدائري", "قوة دافعة", "قوة توازن ساكنة"],
+    ans: 1,
+    cat: "نموذج بور",
+    expl: "قوة الجذب الكهربائي (الكولومية) بين النواة والإلكترون هي القوة المركزية التي تُبقي الإلكترون في مساره الدائري وتجعله يدور حول النواة."
+  },
+  {
+    q: "الانبعاث المُحَفَّز يختلف عن الانبعاث التلقائي في أن:",
+    opts: ["يحتاج طاقة أعلى بكثير", "فوتوناته متشاكهة في الطور والاتجاه مع الفوتون المحرض", "يحدث بشكل عشوائي", "لا ينتج إشعاعاً مرئياً"],
+    ans: 1,
+    cat: "الليزر",
+    expl: "في الانبعاث المُحَفَّز الفوتونات المنتجة متشاكهة تماماً مع الفوتون المحرض في الطاقة والطور والاتجاه، بعكس الانبعاث التلقائي العشوائي."
+  },
+  {
+    q: "الوسط الفعال في منظومة الليزر يمكن أن يكون:",
+    opts: ["غازياً فقط", "صلباً أو سائلاً أو غازياً", "سائلاً فقط", "صلباً فقط"],
+    ans: 1,
+    cat: "منظومات الليزر",
+    expl: "الوسط الفعال يمكن أن يكون ذرات أو جزيئات أو أيونات في حالتها الغازية أو السائلة أو الصلبة، شرط إمكانية تحقيق التوزيع المعكوس فيه."
+  },
+  {
+    q: "المرآة العاكسة كلياً في المرنان:",
+    opts: ["تسمح بخروج جزء من الضوء", "لا تسمح بخروج الضوء خارج المرنان وانعكاسيتها 100%", "تعكس 50% فقط", "تمتص الضوء الساقط"],
+    ans: 1,
+    cat: "منظومات الليزر",
+    expl: "المرآة العاكسة كلياً انعكاسيتها 100%، لا تسمح بخروج الضوء خارج المرنان، وتعمل على زيادة عدد الفوتونات بالانبعاث المُحَفَّز."
+  },
+  {
+    q: "الأشعة السينية اكتشفها رونتجن مصادفةً أثناء دراسته لـ:",
+    opts: ["الطيف الشمسي", "كهربائية الغازات والتوصيل الكهربائي للإلكترونات في أنابيب مفرغة", "المواد المشعة", "ظاهرة كومبتن"],
+    ans: 1,
+    cat: "الأشعة السينية",
+    expl: "اكتشف رونتجن الأشعة السينية عام 1895 مصادفةً عندما كان يدرس كهربائية الغازات والتوصيل الكهربائي للإلكترونات داخل أنابيب مفرغة جزئياً."
+  },
+  {
+    q: "سلسلة فوند في طيف الهيدروجين تنتج عند الانتقال إلى:",
+    opts: ["المستوى الأول", "المستوى الثالث", "المستوى الخامس E5", "المستوى الرابع"],
+    ans: 2,
+    cat: "سلاسل الطيف",
+    expl: "سلسلة فوند تنتج عند انتقال إلكترون ذرة الهيدروجين من المستويات العليا إلى المستوى الخامس E5، وتردداتها في المنطقة تحت الحمراء."
+  },
+  {
+    q: "سلسلة براكت تقع في المنطقة:",
+    opts: ["المرئية", "فوق البنفسجية", "تحت الحمراء", "الأشعة X"],
+    ans: 2,
+    cat: "سلاسل الطيف",
+    expl: "سلسلة براكت تنتج عند انتقال الإلكترون إلى المستوى الرابع E4، وتقع ترددداتها في المنطقة تحت الحمراء وهي سلسلة غير مرئية."
+  },
+  {
+    q: "أنواع الأطياف الرئيسية هي:",
+    opts: ["أطياف الانبعاث فقط", "أطياف الامتصاص فقط", "أطياف الانبعاث وأطياف الامتصاص", "الطيف المستمر فقط"],
+    ans: 2,
+    cat: "أنواع الأطياف",
+    expl: "أنواع الأطياف الرئيسية نوعان: (1) أطياف الانبعاث (تشمل المستمر والخطي والحزمي)، و(2) أطياف الامتصاص."
+  },
+  {
+    q: "طيف الحزم البراق يُحصل عليه من:",
+    opts: ["الأبخرة الذرية عند ضغط منخفض", "مواد جزيئية متوهجة كغاز CO₂ في أنبوبة تفريغ", "المعادن الصلبة المتوهجة", "الغازات النبيلة عند ضغط عالٍ"],
+    ans: 1,
+    cat: "أنواع الأطياف",
+    expl: "الطيف الحزمي البراق يُحصل عليه من مواد جزيئية التركيب كغاز ثاني أكسيد الكربون في أنبوبة تفريغ، أو أملاح الباريوم والكالسيوم بقوس كربوني."
+  },
+  {
+    q: "لماذا يُسمى الطيف الخطي للمادة بأنه 'بصمة إصبعها'؟",
+    opts: ["لأنه يشبه شكل الإصبع", "لأن لكل عنصر طيفاً خطياً خاصاً ومميزاً يختلف عن بقية العناصر", "لأن الطيف يتكون من خط واحد فقط", "لأنه يُستخدم في البصمات الجنائية"],
+    ans: 1,
+    cat: "أنواع الأطياف",
+    expl: "يُشبَّه الطيف الخطي ببصمة الإصبع لأن لكل عنصر طيفاً خطياً خاصاً ومميزاً يختلف تماماً عن باقي العناصر، مما يسمح بالتعرف عليه."
+  },
+  {
+    q: "عند استطارة الأشعة السينية بزاوية 0°، الزيادة في الطول الموجي تكون:",
+    opts: ["أعظم قيمة لها", "صفراً", "h/mₑc", "2h/mₑc"],
+    ans: 1,
+    cat: "تأثير كومبتن",
+    expl: "عند θ=0°: Δλ = (h/mₑc)(1 - cos0°) = (h/mₑc)(1-1) = 0. لا تحدث زيادة في الطول الموجي."
+  },
+  {
+    q: "الطاقة الحركية العظمى للإلكترون في أنبوبة الأشعة السينية تُعطى بالعلاقة:",
+    opts: ["KE = eV/h", "KE = eV", "KE = Ve/h", "KE = h/eV"],
+    ans: 1,
+    cat: "الأشعة السينية",
+    expl: "الطاقة الحركية العظمى للإلكترون المتسارع بفرق جهد V هي: KEmax = eV، حيث e شحنة الإلكترون."
+  },
+  {
+    q: "أطوال أعمار مستويات الطاقة شبه المستقرة تتراوح بين:",
+    opts: ["10⁻¹⁵ إلى 10⁻¹² ثانية", "10⁻² إلى 10⁻⁶ ثانية", "1 إلى 10 ثواني", "10⁻⁸ ثانية فقط"],
+    ans: 1,
+    cat: "الليزر",
+    expl: "مدى عمر المستوى شبه المستقر (10⁻² - 10⁻⁶) ثانية، وهو أطول بكثير من مستويات التهيج العادية (10⁻⁸ ثانية)."
+  },
+  {
+    q: "يُحصل على طيف امتصاص عندما:",
+    opts: ["يمر الضوء عبر موشور زجاجي فقط", "يمر الضوء من مصدر مستمر عبر بخار غير متوهج", "تُسخَّن مادة صلبة لدرجة التوهج", "يمر الضوء عبر عدسة محدبة"],
+    ans: 1,
+    cat: "أنواع الأطياف",
+    expl: "يُحصل على طيف الامتصاص عندما يمر الضوء من مصدر مستمر (كالضوء الأبيض) عبر بخار غير متوهج فيمتص البخار الأطوال الموجية المقابلة لانتقالاته الخاصة."
+  },
+  {
+    q: "في الليزر الغازي، تُحقَّق عملية الضخ عبر:",
+    opts: ["مصابيح ومضّة قوية", "التفريغ الكهربائي في الغاز حيث تُعجَّل الإلكترونات فتصطدم بالغاز وتثيره", "تسخين الغاز مباشرة", "شعاع ليزر آخر فقط"],
+    ans: 1,
+    cat: "منظومات الليزر",
+    expl: "في الليزر الغازي يتم الضخ الكهربائي عبر تعجيل الإلكترونات بين قطبين كهربائيين، فتصطدم بجزيئات الغاز وتنقلها إلى مستوى التهيج."
+  },
+  {
+    q: "ما هو نموذج الذرة الذي اقترح أن النواة موجبة في المركز وتدور حولها الإلكترونات؟",
+    opts: ["نموذج ثومسون", "نموذج دالتون", "نموذج رذرفورد", "نموذج بور"],
+    ans: 2,
+    cat: "نماذج الذرة",
+    expl: "اقترح رذرفورد عام 1911 أن الذرة تتكون من نواة موجبة في المركز تدور حولها الإلكترونات، وقوة الجذب الكهربائية هي القوة المركزية للمدارات."
+  }
+];
+
+/* ═══════════════════════════════════════
+   QUIZ STATE
+═══════════════════════════════════════ */
+let questions = [];
+let currentIdx = 0;
+let score = 0;
+let answered = [];
+let results = [];
+
+const QUIZ_SIZE = 20;
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/* ═══════════════════════════════════════
+   INIT
+═══════════════════════════════════════ */
+function initQuiz() {
+  questions = shuffle(QUESTION_BANK).slice(0, QUIZ_SIZE);
+  currentIdx = 0;
+  score = 0;
+  answered = new Array(QUIZ_SIZE).fill(null);
+  results = [];
+
+  document.getElementById('finalScreen').classList.remove('visible');
+  document.getElementById('progressSection').style.display = '';
+  document.getElementById('quizArea').style.display = '';
+  document.getElementById('scoreDisplay').textContent = `0 / ${QUIZ_SIZE}`;
+
+  buildDots();
+  renderQuestion();
+}
+
+/* ── DOTS ── */
+function buildDots() {
+  const dotsEl = document.getElementById('progressDots');
+  dotsEl.innerHTML = '';
+  for (let i = 0; i < QUIZ_SIZE; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.id = `dot-${i}`;
+    dotsEl.appendChild(d);
+  }
+}
+
+function updateDot(idx, result) {
+  const d = document.getElementById(`dot-${idx}`);
+  if (!d) return;
+  d.classList.remove('active');
+  d.classList.add(result ? 'done-correct' : 'done-wrong');
+  const next = document.getElementById(`dot-${idx + 1}`);
+  if (next) next.classList.add('active');
+}
+
+/* ── PROGRESS ── */
+function updateProgress(idx) {
+  const pct = Math.round((idx / QUIZ_SIZE) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = `السؤال ${idx + 1} من ${QUIZ_SIZE}`;
+  document.getElementById('progressPct').textContent = pct + '%';
+}
+
+/* ═══════════════════════════════════════
+   RENDER QUESTION
+═══════════════════════════════════════ */
+function renderQuestion() {
+  const q = questions[currentIdx];
+  updateProgress(currentIdx);
+
+  const letters = ['أ', 'ب', 'ج', 'د'];
+
+  const html = `
+    <div class="question-card" id="qCard">
+      <div class="q-meta">
+        <div class="q-number">${currentIdx + 1}</div>
+        <div class="q-category">${q.cat}</div>
+      </div>
+      <div class="q-text">${q.q}</div>
+      <div class="options-grid" id="optionsGrid">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" onclick="selectAnswer(${i})" id="opt-${i}">
+            <span class="opt-letter">${letters[i]}</span>
+            <span>${opt}</span>
+          </button>
+        `).join('')}
+      </div>
+      <div class="explanation-box" id="explBox">
+        <div class="explanation-inner" id="explInner">
+          <div class="expl-title" id="explTitle"></div>
+          <div id="explText"></div>
+        </div>
+      </div>
+      <button class="next-btn" id="nextBtn" onclick="nextQuestion()">
+        ${currentIdx === QUIZ_SIZE - 1 ? '🏁 عرض النتيجة النهائية' : 'السؤال التالي ←'}
+      </button>
+    </div>
+  `;
+
+  document.getElementById('quizArea').innerHTML = html;
+
+  if (currentIdx === QUIZ_SIZE - 1) {
+    document.getElementById('nextBtn').classList.add('last');
+  }
+}
+
+/* ═══════════════════════════════════════
+   ANSWER
+═══════════════════════════════════════ */
+function selectAnswer(chosen) {
+  const q = questions[currentIdx];
+  const isCorrect = chosen === q.ans;
+
+  // Disable all buttons
+  document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+
+  // Highlight
+  document.getElementById(`opt-${chosen}`).classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) {
+    document.getElementById(`opt-${q.ans}`).classList.add('correct');
+  }
+
+  // Score
+  if (isCorrect) {
+    score++;
+    const sb = document.getElementById('scoreDisplay');
+    sb.textContent = `${score} / ${QUIZ_SIZE}`;
+    sb.classList.add('bump');
+    setTimeout(() => sb.classList.remove('bump'), 400);
+  }
+
+  results.push(isCorrect);
+  updateDot(currentIdx, isCorrect);
+
+  // Explanation
+  const explBox = document.getElementById('explBox');
+  const explInner = document.getElementById('explInner');
+  const explTitle = document.getElementById('explTitle');
+  const explText = document.getElementById('explText');
+
+  explTitle.innerHTML = isCorrect
+    ? '✅ <span style="color:#16a34a">إجابة صحيحة!</span>'
+    : '❌ <span style="color:#dc2626">إجابة خاطئة</span>';
+
+  explText.textContent = q.expl;
+
+  if (!isCorrect) explInner.classList.add('wrong-expl');
+
+  explBox.classList.add('open');
+
+  // Show next btn
+  const nb = document.getElementById('nextBtn');
+  nb.classList.add('visible');
+}
+
+/* ═══════════════════════════════════════
+   NEXT
+═══════════════════════════════════════ */
+function nextQuestion() {
+  currentIdx++;
+  if (currentIdx >= QUIZ_SIZE) {
+    showFinal();
+  } else {
+    renderQuestion();
+  }
+}
+
+/* ═══════════════════════════════════════
+   FINAL SCREEN
+═══════════════════════════════════════ */
+function showFinal() {
+  document.getElementById('quizArea').style.display = 'none';
+  document.getElementById('progressSection').style.display = 'none';
+
+  const pct = Math.round((score / QUIZ_SIZE) * 100);
+  const wrong = QUIZ_SIZE - score;
+
+  document.getElementById('finalCorrect').textContent = score;
+  document.getElementById('finalWrong').textContent = wrong;
+  document.getElementById('finalPct').textContent = pct + '%';
+  document.getElementById('finalScoreNum').textContent = score;
+
+  let grade, gradeClass, icon, msg, title;
+  if (pct >= 90) {
+    grade = 'ممتاز 🌟'; gradeClass = 'grade-A'; icon = '🏆'; title = 'أداء رائع! أنت نجم الفيزياء';
+    msg = 'نتيجة استثنائية! إتقانك للفصل الثامن يُبشّر بمستقبل علمي مشرق.';
+  } else if (pct >= 75) {
+    grade = 'جيد جداً 👍'; gradeClass = 'grade-B'; icon = '🎯'; title = 'أداء جيد جداً!';
+    msg = 'لديك فهم ممتاز للمادة. راجع الأسئلة التي أخطأت فيها لتصل إلى الكمال.';
+  } else if (pct >= 50) {
+    grade = 'مقبول 📚'; gradeClass = 'grade-C'; icon = '📖'; title = 'لا بأس، استمر في المراجعة!';
+    msg = 'تحتاج إلى مزيد من المراجعة. راجع الأطياف الذرية والليزر بتمعّن أكبر.';
+  } else {
+    grade = 'يحتاج مراجعة ⚠️'; gradeClass = 'grade-D'; icon = '💪'; title = 'حدّث معلوماتك!';
+    msg = 'لا تستسلم! راجع الفصل الثامن من الكتاب المدرسي وأعد الاختبار من جديد.';
+  }
+
+  document.getElementById('finalIcon').textContent = icon;
+  document.getElementById('finalTitle').textContent = title;
+  document.getElementById('finalMsg').textContent = msg;
+
+  const badge = document.getElementById('gradeBadge');
+  badge.textContent = grade;
+  badge.className = 'grade-badge ' + gradeClass;
+
+  document.getElementById('finalScreen').classList.add('visible');
+
+  // Animate ring
+  const circumference = 2 * Math.PI * 65; // r=65
+  const offset = circumference - (pct / 100) * circumference;
+  setTimeout(() => {
+    document.getElementById('ringCircle').style.strokeDashoffset = offset;
+  }, 300);
+}
+
+/* ── BOOT ── */
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(initQuiz, 600);
+});
+</script>
+<footer style="text-align: center; padding: 40px;">
+    <a href="dashboard.html" style="color: #ffab00; font-size: 16px; text-decoration: none; border: 1px solid #ffab00; padding: 10px 20px; border-radius: 8px;">
+        ⬅ العودة لمركز الاختبارات
+    </a>
+</footer>
+</body>
+</html>
