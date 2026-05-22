@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<header style="text-align: center; padding: 20px;">
+    <h1>الاختبار الأول</h1>
+    <a href="dashboard.html" style="color: #ffab00; font-size: 16px; text-decoration: none;">
+        ⬅ العودة لمركز الاختبارات
+    </a>
+</header>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اختبار الفيزياء – الحث الكهرومغناطيسي | الصف السادس</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#0f3460;--primary-light:#1a5ba8;--accent:#e94560;--accent2:#f0a500;--success:#0a7a50;--success-bg:#e4f9f0;--error:#b8291e;--error-bg:#fdecea;--bg:#eef2fb;--card:#fff;--text:#16213e;--muted:#5a6a8a;--border:#d0d9ee;--shadow:0 8px 40px rgba(15,52,96,0.13);}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Cairo','Tajawal',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;direction:rtl}
+.hdr{background:linear-gradient(135deg,var(--primary) 0%,#0a2540 60%,#071d35 100%);color:#fff;padding:32px 20px 24px;text-align:center;position:relative;overflow:hidden}
+.hdr::before{content:'';position:absolute;top:-50px;right:-50px;width:220px;height:220px;border-radius:50%;background:rgba(233,69,96,0.13);pointer-events:none}
+.hdr-icon{font-size:2.8rem;margin-bottom:8px;display:block}
+.hdr h1{font-size:1.75rem;font-weight:900;line-height:1.3}
+.hdr p{margin-top:8px;font-size:.9rem;opacity:.75}
+.badge{display:inline-block;background:var(--accent2);color:#1a1a1a;border-radius:20px;padding:3px 14px;font-size:.78rem;font-weight:700;margin-top:10px}
+.prog-wrap{background:#fff;padding:12px 20px 10px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10;box-shadow:0 2px 12px rgba(15,52,96,.07)}
+.prog-info{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;font-size:.82rem;color:var(--muted);font-weight:700}
+.prog-bar-bg{background:#e2e8f5;border-radius:10px;height:8px;overflow:hidden}
+.prog-bar-fill{height:100%;background:linear-gradient(90deg,var(--primary-light),var(--accent));border-radius:10px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.quiz-wrap{max-width:740px;margin:0 auto;padding:24px 16px 60px}
+#start-screen{text-align:center;padding:32px 8px}
+.start-card{background:var(--card);border-radius:24px;box-shadow:var(--shadow);padding:40px 28px 34px;border:1.5px solid var(--border);max-width:520px;margin:0 auto}
+.start-icon{font-size:3.5rem;margin-bottom:12px}
+.start-card h2{font-size:1.4rem;font-weight:900;margin-bottom:10px}
+.start-card p{color:var(--muted);font-size:.93rem;margin-bottom:20px;line-height:1.7}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;margin-bottom:26px}
+.chip{background:#eaf0ff;color:var(--primary);border-radius:20px;padding:5px 13px;font-size:.79rem;font-weight:700}
+.start-btn{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;border:none;border-radius:14px;padding:14px 48px;font-family:inherit;font-size:1rem;font-weight:800;cursor:pointer;box-shadow:0 4px 20px rgba(15,52,96,.25);transition:transform .13s,opacity .18s}
+.start-btn:hover{transform:scale(1.04);opacity:.92}
+.q-card{background:var(--card);border-radius:20px;box-shadow:var(--shadow);padding:28px 26px 22px;margin-bottom:18px;border:1.5px solid var(--border);animation:slideIn .38s cubic-bezier(.4,0,.2,1);display:none}
+.q-card.active{display:block}
+@keyframes slideIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.cat-tag{display:inline-block;background:rgba(15,52,96,.1);color:var(--primary);border-radius:12px;padding:2px 10px;font-size:.72rem;font-weight:700;margin-bottom:12px}
+.q-num{display:inline-flex;align-items:center;gap:7px;background:var(--primary);color:#fff;border-radius:30px;padding:4px 13px;font-size:.78rem;font-weight:700;margin-bottom:14px}
+.q-text{font-size:1.08rem;font-weight:700;line-height:1.75;color:var(--text);margin-bottom:20px;border-right:4px solid var(--accent);padding-right:13px}
+.opts-list{list-style:none;display:flex;flex-direction:column;gap:11px}
+.opt-btn{display:flex;align-items:center;gap:13px;background:#f5f8ff;border:2px solid var(--border);border-radius:14px;padding:13px 17px;cursor:pointer;font-family:inherit;font-size:.97rem;font-weight:500;color:var(--text);text-align:right;transition:border-color .18s,background .18s,transform .13s;width:100%}
+.opt-btn:hover:not(:disabled){border-color:var(--primary-light);background:#eaf0ff;transform:translateX(-3px)}
+.opt-letter{min-width:33px;height:33px;background:var(--primary);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:800;flex-shrink:0;transition:background .18s}
+.opt-btn.correct{border-color:var(--success);background:var(--success-bg);color:var(--success)}
+.opt-btn.correct .opt-letter{background:var(--success)}
+.opt-btn.wrong{border-color:var(--error);background:var(--error-bg);color:var(--error)}
+.opt-btn.wrong .opt-letter{background:var(--error)}
+.opt-btn:disabled{cursor:default}
+.fb-box{margin-top:18px;border-radius:14px;padding:15px 17px;font-size:.92rem;line-height:1.75;font-weight:500;display:none;animation:fadeUp .3s ease}
+.fb-box.show{display:block}
+.fb-box.correct-fb{background:var(--success-bg);border:1.5px solid #a7e8cc;color:var(--success)}
+.fb-box.wrong-fb{background:var(--error-bg);border:1.5px solid #f5b3ab;color:var(--error)}
+.fb-title{font-size:.97rem;font-weight:800;margin-bottom:5px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.next-btn{display:none;margin:20px auto 0;background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;border:none;border-radius:14px;padding:13px 38px;font-family:inherit;font-size:.97rem;font-weight:700;cursor:pointer;transition:opacity .18s,transform .13s;box-shadow:0 4px 20px rgba(15,52,96,.22)}
+.next-btn:hover{opacity:.9;transform:scale(1.03)}
+.next-btn.show{display:block}
+#results-screen{display:none;animation:slideIn .45s ease}
+#results-screen.show{display:block}
+.res-card{background:var(--card);border-radius:24px;box-shadow:var(--shadow);padding:38px 26px 34px;text-align:center;border:1.5px solid var(--border)}
+.score-circle{width:128px;height:128px;border-radius:50%;margin:0 auto 22px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.score-circle::before{content:'';position:absolute;inset:0;border-radius:50%;background:conic-gradient(var(--primary) 0%,var(--accent2) var(--pct,0%),#e2e8f5 var(--pct,0%));z-index:0}
+.score-inner{position:relative;z-index:1;width:100px;height:100px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.score-num{font-size:1.9rem;font-weight:900;line-height:1}
+.score-total{font-size:.78rem;color:var(--muted);font-weight:600}
+.res-title{font-size:1.4rem;font-weight:900;margin-bottom:7px}
+.res-sub{color:var(--muted);font-size:.92rem;margin-bottom:22px}
+.summary-list{text-align:right;margin-top:24px;display:flex;flex-direction:column;gap:9px}
+.sum-item{background:#f5f8ff;border-radius:12px;padding:12px 15px;border-right:4px solid var(--border);font-size:.88rem;font-weight:600;line-height:1.6}
+.sum-item.sc{border-color:var(--success);background:var(--success-bg)}
+.sum-item.sw{border-color:var(--error);background:var(--error-bg)}
+.sum-q{color:var(--muted);font-size:.79rem;font-weight:500;margin-bottom:2px}
+.sum-lbl{font-size:.75rem;font-weight:700;margin-top:3px}
+.sum-lbl.cl{color:var(--success)}.sum-lbl.wl{color:var(--error)}
+.restart-btn{margin-top:28px;background:linear-gradient(135deg,var(--accent2),#d98e00);color:#1a1a1a;border:none;border-radius:14px;padding:13px 42px;font-family:inherit;font-size:1rem;font-weight:800;cursor:pointer;box-shadow:0 4px 20px rgba(240,165,0,.28);transition:transform .13s,opacity .18s}
+.restart-btn:hover{transform:scale(1.04);opacity:.92}
+.ex{color:#0a7a50}.gd{color:#1a5ba8}.ok{color:#b07500}.lo{color:#b8291e}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <span class="hdr-icon">⚡🔌</span>
+  <h1>اختبار الفيزياء<br>الفصل الثاني: الحث الكهرومغناطيسي</h1>
+  <p>الصف السادس الإعدادي — المنهج العراقي — الفصل الأول 2026</p>
+  <div class="badge">40 سؤالاً اختيار من متعدد</div>
+</div>
+<div class="prog-wrap" id="prog-wrap" style="display:none">
+  <div class="prog-info">
+    <span id="q-counter">سؤال 1 من 40</span>
+    <span id="score-live">النتيجة: 0</span>
+  </div>
+  <div class="prog-bar-bg"><div class="prog-bar-fill" id="prog-fill" style="width:0%"></div></div>
+</div>
+<div class="quiz-wrap">
+<div id="start-screen">
+  <div class="start-card">
+    <div class="start-icon">🧲</div>
+    <h2>هل أنت مستعد؟</h2>
+    <p>يتضمن هذا الاختبار 40 سؤالاً شاملاً يغطي جميع محاور الفصل الثاني — من قوة لورنز وتجربة فاراداي، إلى قوانين لنز وفاراداي، التيارات الدوامة، المولدات، المحركات، والحث الذاتي والمتبادل. ستحصل على تغذية راجعة فورية بعد كل سؤال.</p>
+    <div class="chips">
+      <span class="chip">📚 40 سؤالاً</span><span class="chip">⏱ بدون وقت</span>
+      <span class="chip">✅ تغذية راجعة فورية</span><span class="chip">🇮🇶 المنهج العراقي</span>
+    </div>
+    <button class="start-btn" onclick="startQuiz()">ابدأ الاختبار ▶</button>
+  </div>
+</div>
+<div id="quiz-screen" style="display:none"></div>
+<div id="results-screen"></div>
+</div>
+<script>
+const Q=[
+{c:"المجالان الكهربائي والمغناطيسي",q:"إذا تحرك جسيم مشحون موجبًا عموديًا على مجال كهربائي منتظم، فإنه يتأثر بـ:",o:["قوة مغناطيسية عمودية على المجال","قوة كهربائية موازية لخطوط المجال","لا يتأثر بأية قوة","قوة مغناطيسية موازية للسرعة"],a:1,e:"القوة الكهربائية: FE = qE وهي موازية لخطوط المجال الكهربائي."},
+{c:"المجالان الكهربائي والمغناطيسي",q:"إذا تحرك جسيم مشحون موجبًا بسرعة عمودية على مجال مغناطيسي منتظم، فإنه يتخذ مساراً:",o:["مستقيماً موازياً للمجال","دائرياً بسبب تأثير القوة المغناطيسية عمودياً على متجه السرعة","مستقيماً باتجاه المجال","يبقى في مكانه"],a:1,e:"القوة المغناطيسية تؤثر عموديًا على متجه السرعة فينحرف الجسيم في مسار دائري."},
+{c:"المجالان الكهربائي والمغناطيسي",q:"العلاقة الصحيحة للقوة المغناطيسية على شحنة متحركة هي:",o:["FB = q·E","FB = q·v·B·sinθ","FB = q·v + B","FB = q/(v·B)"],a:1,e:"FB = q·v·B·sinθ حيث θ الزاوية بين متجه السرعة ومتجه كثافة الفيض المغناطيسي."},
+{c:"المجالان الكهربائي والمغناطيسي",q:"متى تكون القوة المغناطيسية على الجسيم المشحون تساوي صفراً؟",o:["عند θ = 90°","عند θ = 0° (السرعة موازية للمجال)","عند زيادة الشحنة","عند زيادة سرعة الجسيم"],a:1,e:"عند θ = 0° يكون sin0° = 0 فلا قوة مغناطيسية."},
+{c:"المجالان الكهربائي والمغناطيسي",q:"قوة لورنز هي:",o:["القوة الكهربائية وحدها","القوة المغناطيسية وحدها","محصلة القوتين الكهربائية والمغناطيسية معًا","قوة الجاذبية على الجسيم المشحون"],a:2,e:"FLorentz = FE + FB: مجموع القوة الكهربائية والمغناطيسية معاً."},
+{c:"المجالان الكهربائي والمغناطيسي",q:"تُستثمر قوة لورنز في:",o:["المقاومات الكهربائية","أنبوبة الأشعة الكاثودية للتحكم في مسار الحزمة الإلكترونية","كاشفات المعادن فقط","مكابح القطارات فقط"],a:1,e:"تُستثمر قوة لورنز في أنبوبة الأشعة الكاثودية للتحكم في مسار الحزمة الإلكترونية على الشاشة."},
+{c:"المجالان الكهربائي والمغناطيسي",q:"كيف تعرف عملياً نوع المجال (كهربائي أم مغناطيسي) في حيز معين؟",o:["بمقياس الجهد","بقذف جسيم مشحون: انحراف موازٍ → كهربائي، مسار دائري → مغناطيسي","بملاحظة درجة الحرارة","بملاحظة لون الجسيم"],a:1,e:"نقذف جسيماً مشحوناً: إن انحرف موازياً → كهربائي، إن اتخذ مساراً دائرياً → مغناطيسي."},
+{c:"الحث الكهرومغناطيسي",q:"من اكتشف أن التيار الكهربائي يولد مجالاً مغناطيسياً؟",o:["فاراداي","هنري","أورستد","لنز"],a:2,e:"أورستد أول من اكتشف أن التيار الكهربائي يولد مجالاً مغناطيسياً."},
+{c:"الحث الكهرومغناطيسي",q:"العامل الأساسي لتوليد تيار محتث في دائرة مغلقة هو:",o:["وجود مقاومة عالية","تغيّر في الفيض المغناطيسي (ΔΦB/Δt)","وجود بطارية قوية","ثبات الفيض المغناطيسي"],a:1,e:"التيار المحتث يتولد فقط عند حصول تغيّر في الفيض المغناطيسي الذي يخترق الدائرة المغلقة لوحدة الزمن."},
+{c:"الحث الكهرومغناطيسي",q:"لماذا فشلت المحاولات السابقة لتوليد تيار بمجال مغناطيسي؟",o:["فولطية منخفضة","اعتمدت فقط على مجالات مغناطيسية ثابتة","الدائرة لم تكن مغلقة","المقاومة كانت صغيرة جداً"],a:1,e:"المجالات الثابتة لا تُغيّر الفيض لذا لا تولّد تياراً. يلزم تغيّر في الفيض."},
+{c:"الحث الكهرومغناطيسي",q:"استنتاج فاراداي من تجربته هو:",o:["التيار يتولد عند ثبات الفيض","التيار يتولد في دائرة مغلقة فقط عند تغيّر الفيض المغناطيسي لوحدة الزمن","التيار يعتمد على مقاومة الملف فقط","التيار يتولد دائماً بوجود بطارية"],a:1,e:"فاراداي: تيار محتث = تغيّر في الفيض المغناطيسي الذي يخترق الدائرة المغلقة لوحدة الزمن."},
+{c:"القوة الدافعة الحركية",q:"القوة الدافعة الكهربائية الحركية (εmotional) هي:",o:["القوة الناتجة عن دوران الملف في مجال ثابت","القوة الدافعة المُستحثة بتحريك ساق موصلة داخل مجال مغناطيسي منتظم","الفرق في الجهد بين طرفي مقاومة","قوة الجاذبية على الساق"],a:1,e:"εmotional تُستحث بتحريك ساق موصلة داخل مجال مغناطيسي: εmotional = vBl."},
+{c:"القوة الدافعة الحركية",q:"العلاقة الصحيحة للقوة الدافعة الكهربائية الحركية (عند الحركة العمودية) هي:",o:["ε = v/Bl","ε = v·B·l","ε = v + B + l","ε = B/(v·l)"],a:1,e:"εmotional = v·B·l عند الحركة العمودية تماماً على الفيض المغناطيسي."},
+{c:"القوة الدافعة الحركية",q:"ساق طولها 1.6m تنزلق بسرعة 5m/s عمودياً على مجال كثافته 0.8T. ما القوة الدافعة الحركية؟",o:["3.2 V","6.4 V","8.0 V","4.0 V"],a:1,e:"ε = v·B·l = 5 × 0.8 × 1.6 = 6.4 V."},
+{c:"القوة الدافعة الحركية",q:"على ماذا تعتمد القوة الدافعة الكهربائية الحركية؟",o:["طول الساق فقط","كثافة الفيض فقط","سرعة الساق + كثافة الفيض + طول الساق + الزاوية معها","مقاومة الدائرة الخارجية فقط"],a:2,e:"εmotional = v·B·l·sinθ تعتمد على: السرعة (v)، الفيض (B)، الطول (l)، والزاوية (θ)."},
+{c:"القوة الدافعة الحركية",q:"عندما تكون سرعة الساق موازية للفيض المغناطيسي (θ=0°)، التيار المحتث:",o:["في أقصى قيمة","صفر","ثابت","متذبذب"],a:1,e:"عند θ=0°: sin0°=0 → FB=0 → لا تتحرك الشحنات → لا تيار محتث."},
+{c:"القوة الدافعة الحركية",q:"إذا انعكس اتجاه حركة الساق الموصلة أو اتجاه المجال المغناطيسي، فإن قطبية القوة الدافعة الحركية:",o:["تبقى ثابتة","تنعكس بسبب انعكاس اتجاه القوة المغناطيسية على الشحنات","تتضاعف","تصبح صفراً"],a:1,e:"انعكاس اتجاه حركة الساق أو المجال يعكس اتجاه القوة المغناطيسية على الشحنات فتنعكس القطبية."},
+{c:"الفيض المغناطيسي",q:"وحدة قياس الفيض المغناطيسي (ΦB) في النظام الدولي:",o:["تسلا (T)","هنري (H)","ويبر (Wb)","فاراد (F)"],a:2,e:"الفيض المغناطيسي يُقاس بالويبر (Wb). التسلا هي وحدة كثافة الفيض B = ΦB/A."},
+{c:"الفيض المغناطيسي",q:"العلاقة الصحيحة للفيض المغناطيسي عبر حلقة:",o:["ΦB = B/A","ΦB = B·A·sinθ","ΦB = B·A·cosθ","ΦB = B + A"],a:2,e:"ΦB = B·A·cosθ حيث θ الزاوية بين متجه المساحة A ومتجه كثافة الفيض B."},
+{c:"الفيض المغناطيسي",q:"متى يكون الفيض المغناطيسي عبر الحلقة في أعظم قيمة؟",o:["مستوى الحلقة موازٍ للفيض (θ=90°)","متجه المساحة موازٍ للفيض (θ=0°)","عند دوران الحلقة بسرعة عالية","عند مقاومة صفر"],a:1,e:"عند θ=0°: cos0°=1 → ΦB = BA (أعظم قيمة)."},
+{c:"الفيض المغناطيسي",q:"ما الفيض المغناطيسي عبر الحلقة عندما يكون مستواها موازياً لمتجه الفيض B؟",o:["ΦB = BA","ΦB = BA/2","ΦB = 0","ΦB = 2BA"],a:2,e:"مستوى الحلقة موازٍ للفيض → θ=90° بين متجه المساحة والفيض → ΦB = BAcos90° = 0."},
+{c:"قانون فاراداي",q:"ينص قانون فاراداي على أن:",o:["εind يتناسب عكسياً مع ΔΦB/Δt","εind يتناسب طرديًا مع المعدل الزمني للتغير في الفيض المغناطيسي","εind لا يعتمد على عدد اللفات","εind = V/R دائماً"],a:1,e:"فاراداي: εind ∝ ΔΦB/Δt. وللملف ذي N لفة: εind = -N·(ΔΦB/Δt)."},
+{c:"قانون فاراداي",q:"ما معنى الإشارة السالبة في قانون فاراداي؟",o:["εind دائماً سالبة القيمة","وُضعت وفق قانون لنز للدلالة على قطبية εind","الفيض دائماً يتناقص","التيار لا ينساب في الملف"],a:1,e:"الإشارة السالبة وُضعت وفق قانون لنز للدلالة على اتجاه (قطبية) القوة الدافعة المحتثة."},
+{c:"قانون فاراداي",q:"ملف 50 لفة، مساحة اللفة 20cm², تغير الفيض من 0 إلى 0.8T خلال 0.4s. القوة الدافعة المحتثة:",o:["0.1 V","0.2 V","0.4 V","1.0 V"],a:1,e:"εind = N·A·(ΔB/Δt) = 50 × 20×10⁻⁴ × (0.8/0.4) = 0.2 V."},
+{c:"قانون فاراداي",q:"ما العوامل الثلاثة التي إذا تغيّر أيٌّ منها يتولد εind؟",o:["المقاومة والتيار والفولطية","كثافة الفيض B والمساحة A والزاوية θ","عدد اللفات والمقاومة والسرعة","الطول والعرض والارتفاع"],a:1,e:"أي تغيّر في (B, A, θ) مع الزمن في ΦB = BAcosθ يسبب توليد εind."},
+{c:"قانون لنز",q:"ينص قانون لنز على أن:",o:["التيار المحتث يكون دائماً بنفس اتجاه التغير في الفيض","التيار المحتث في دائرة مغلقة يولّد مجالاً مغناطيسياً يعاكس التغير في الفيض الذي ولّده","التيار المحتث لا يعتمد على اتجاه المجال","التيار المحتث يزداد مع ثبات الفيض"],a:1,e:"لنز: التيار المحتث يولّد مجالاً مغناطيسياً معاكساً بتأثيره للتغير في الفيض المغناطيسي الذي ولّده."},
+{c:"قانون لنز",q:"ما الفائدة العملية من قانون لنز؟",o:["حساب مقاومة الملف","تعيين اتجاه التيار المحتث وهو تطبيق لقانون حفظ الطاقة","حساب الفيض المغناطيسي","تحديد طول الملف"],a:1,e:"قانون لنز: (1) تعيين اتجاه التيار المحتث، (2) تطبيق لقانون حفظ الطاقة."},
+{c:"قانون لنز",q:"عند اقتراب القطب الشمالي من وجه حلقة، يكون التيار المحتث:",o:["بعقارب الساعة ليولّد قطباً جنوبياً","معاكساً لعقارب الساعة ليولّد قطباً شمالياً يتنافر مع القطب المقترب","عشوائياً","لا يتولد تيار"],a:1,e:"وفق لنز: اقتراب Q الشمالي → ازدياد الفيض → التيار معاكس لعقارب الساعة → قطب شمالي يتنافر."},
+{c:"قانون لنز",q:"ساق مغناطيسية تسقط خلال حلقة ألمنيوم غير مقفلة. ماذا يحدث؟",o:["تتولد تيارات وتتباطأ الساق","لا تتولد تيارات ولا تتأثر الساق بأية قوة","تتولد تيارات عالية جداً","الساق تتسارع"],a:1,e:"الحلقة غير المقفلة دائرة مفتوحة → لا تيارات محتثة → لا قوة مغناطيسية تؤثر على الساق."},
+{c:"التيارات الدوامة",q:"التيارات الدوامة هي:",o:["تيارات مستمرة في الأسلاك","تيارات محتثة في صفائح موصلة معرّضة لفيض متغير بمسارات دائرية مغلقة","تيارات موازية للفيض","تيارات في الفراغ"],a:1,e:"التيارات الدوامة: تيارات محتثة في الصفائح الموصلة المعرّضة لفيض متغير، تتخذ مسارات دائرية مغلقة."},
+{c:"التيارات الدوامة",q:"مضرّة التيارات الدوامة الرئيسية هي:",o:["تزيد كفاءة المحركات","فقدان طاقة على شكل حرارة وفق قانون جول","تقلل التيار بالدائرة","تزيد كثافة الفيض"],a:1,e:"التيارات الدوامة تُبدّد طاقة على شكل حرارة في الأجهزة وفق قانون جول."},
+{c:"التيارات الدوامة",q:"كيف تُقلّل التيارات الدوامة في المحولات؟",o:["بزيادة مقاومة الملفات","بعمل القلب من صفائح رقيقة معزولة عن بعضها فتزداد المقاومة ويقل مقدارها","بزيادة عدد اللفات","باستخدام أسلاك أكثر موصلية"],a:1,e:"الصفائح الرقيقة المعزولة تزيد المقاومة الكلية فتقل التيارات الدوامة وبالتالي الطاقة المُهدرة."},
+{c:"التيارات الدوامة",q:"كيف تُستثمر التيارات الدوامة في مكابح القطارات الحديثة؟",o:["بزيادة سرعة العجلات","إغلاق دائرة ملفات مقابل القضبان → مجال قوي → تيارات دوامة في القضبان → قوة معرقلة تُوقف القطار","تقليل التيار الكهربائي","زيادة فيض المحرك"],a:1,e:"إغلاق دائرة الملفات يولّد مجالاً يخترق القضبان فتتولد تيارات دوامة وفق لنز تعرقل الحركة وتوقف القطار."},
+{c:"مولد التيار المتناوب",q:"مولد التيار المتناوب (AC) يحوّل:",o:["الطاقة الكهربائية إلى حرارة","الطاقة الميكانيكية إلى طاقة كهربائية متناوبة بوجود المجال المغناطيسي","الطاقة الكيميائية إلى كهربائية","الطاقة الضوئية إلى كهربائية"],a:1,e:"المولد AC: جهاز يُحوّل الطاقة الميكانيكية إلى طاقة كهربائية متناوبة بوجود المجال المغناطيسي."},
+{c:"مولد التيار المتناوب",q:"العلاقة الصحيحة لأعظم قوة دافعة محتثة في ملف نواة المولد:",o:["εmax = NBA/ω","εmax = N·B·A·ω","εmax = N/(B·A·ω)","εmax = NBA + ω"],a:1,e:"εmax = N·B·A·ω حيث N عدد اللفات، B كثافة الفيض، A مساحة اللفة، ω السرعة الزاوية."},
+{c:"مولد التيار المتناوب",q:"كم مرة تنعكس قطبية εind في الدورة الواحدة لمولد AC؟",o:["مرة واحدة","مرتين","أربع مرات","لا تنعكس"],a:1,e:"تنعكس قطبية القوة الدافعة الكهربائية المحتثة مرتين في الدورة الواحدة."},
+{c:"مولد التيار المستمر",q:"الفرق بين مولد AC ومولد DC هو:",o:["مولد DC يستخدم حلقتي زلق","مولد AC يستخدم حلقتي زلق، ومولد DC يستخدم المبادل لضمان تيار أحادي الاتجاه","لا فرق بينهما","مولد DC أضعف دائماً"],a:1,e:"في مولد DC يُستبدل حلقتا الزلق بمبادل (نصفا حلقة معزولتان) لجعل التيار في الخارج أحادي الاتجاه."},
+{c:"مولد التيار المستمر",q:"التيار الخارج من مولد DC ذي ملف واحد هو:",o:["مستمر ثابت تماماً","تيار نبضي ومتوسطه 0.636·Imax","تيار متناوب جيبي","تيار صفري"],a:1,e:"التيار الخارج نبضي ومتوسطه: Iaverage = 0.636 × Imax."},
+{c:"المحرك الكهربائي",q:"المحرك الكهربائي يحوّل:",o:["الطاقة الكهربائية إلى ضوء","الطاقة الكهربائية إلى طاقة ميكانيكية بوجود مجال مغناطيسي","الطاقة الحرارية إلى كهربائية","الطاقة الميكانيكية إلى كيميائية"],a:1,e:"المحرك يُحوّل الطاقة الكهربائية إلى طاقة ميكانيكية بوجود مجال مغناطيسي."},
+{c:"المحرك الكهربائي",q:"القوة الدافعة المضادة (εback) في المحرك:",o:["الفولطية المطبقة على المحرك","القوة الدافعة المحتثة في ملف النواة أثناء دورانه، معاكسة للمسبب وفق لنز","التيار الثابت في الدائرة","مقاومة الملف"],a:1,e:"εback تُولَّد في ملف النواة الدائر، وهي معاكسة للفولطية المسلطة وفق لنز."},
+{c:"الحث الذاتي",q:"ظاهرة الحث الذاتي هي:",o:["توليد قوة دافعة في ملف بسبب تغير تيار ملف آخر","توليد قوة دافعة في ملف نتيجة تغيّر التيار المنساب في الملف نفسه لوحدة الزمن","توليد تيار ثابت في الدائرة","توليد قوة دافعة بفعل مجال خارجي ثابت"],a:1,e:"الحث الذاتي: توليد εind في ملف نتيجة تغيّر التيار فيه نفسه: εind = -L·(ΔI/Δt)."},
+{c:"الحث الذاتي",q:"وحدة معامل الحث الذاتي (L):",o:["فاراد (F)","ويبر (Wb)","هنري (H)","تسلا (T)"],a:2,e:"معامل الحث الذاتي يُقاس بالهنري (H) = Volt·s/Ampere."},
+{c:"الحث الذاتي",q:"معامل الحث الذاتي L لا يعتمد على:",o:["عدد لفات الملف","الشكل الهندسي للملف","المعدل الزمني للتغير في التيار المنساب","النفوذية المغناطيسية للوسط في جوف الملف"],a:2,e:"L يعتمد على: عدد اللفات، حجم الملف، شكله الهندسي، والنفوذية المغناطيسية — لا على ΔI/Δt."},
+{c:"الحث الذاتي",q:"الطاقة المختزنة في المجال المغناطيسي للمحث:",o:["PE = L·I","PE = ½·L·I²","PE = L²·I","PE = L/I²"],a:1,e:"PE = ½·L·I²: الطاقة المختزنة في المجال المغناطيسي للمحث."},
+{c:"الحث الذاتي",q:"لماذا يتوهج مصباح النيون المربوط مع ملف لحظة فتح المفتاح؟",o:["البطارية تمده بجهد عالٍ","تلاشي التيار بسرعة يولّد εind ضخمة جداً تُعمل الملف كمصدر طاقة يكفي لإيهاج المصباح","مقاومة المصباح منخفضة","الفيض يزداد فجأة"],a:1,e:"التلاشي السريع للتيار (ΔI/Δt كبيرة) يولّد εind = L·(ΔI/Δt) ضخمة تُوهج المصباح رغم انفصال البطارية."},
+{c:"الحث المتبادل",q:"ظاهرة الحث المتبادل تعني:",o:["توليد εind في ملف بسبب تغير تياره الخاص","توليد εind في الملف الثانوي نتيجة تغيّر التيار في الملف الابتدائي المجاور","توليد تيار دوامي في لوح معدني","توليد مجال مغناطيسي في الفراغ"],a:1,e:"الحث المتبادل: تغيّر التيار في الملف الابتدائي → تغيّر فيض خلال الملف الثانوي → εind في الملف الثانوي."},
+{c:"الحث المتبادل",q:"العلاقة الصحيحة للقوة الدافعة في الملف الثانوي:",o:["εind2 = M + ΔI1/Δt","εind2 = -M·(ΔI1/Δt)","εind2 = M/(ΔI1/Δt)","εind2 = M·Δt"],a:1,e:"εind2 = -M·(ΔI1/Δt)، حيث M معامل الحث المتبادل."},
+{c:"الحث المتبادل",q:"عند الترابط المغناطيسي التام بين ملفين، معامل الحث المتبادل يُعطى بـ:",o:["M = L1 + L2","M = L1 - L2","M = √(L1 × L2)","M = L1/L2"],a:2,e:"عند الترابط التام: M = √(L1 × L2)."},
+{c:"الحث المتبادل",q:"ملفان بترابط تام، L1=0.4H وL2=0.9H. معامل الحث المتبادل M يساوي:",o:["0.36 H","0.60 H","1.30 H","0.45 H"],a:1,e:"M = √(0.4 × 0.9) = √0.36 = 0.6 H."},
+{c:"المجالات الكهربائية المحتثة والتطبيقات",q:"المجالات الكهربائية غير المستقرة هي:",o:["المجالات الناتجة عن الشحنات الساكنة","المجالات الكهربائية الناتجة عن تغيّرات الفيض المغناطيسي","المجالات في مكثفات مشحونة","المجالات الناتجة عن التيار المستمر"],a:1,e:"المجالات غير المستقرة تنشأ بواسطة التغيّرات في الفيض المغناطيسي، كما في الموجات الكهرومغناطيسية."},
+{c:"المجالات الكهربائية المحتثة والتطبيقات",q:"كيف تعمل بطاقة الائتمان وفق الحث الكهرومغناطيسي؟",o:["تُشحن كهرباء ثم تُفرغ","تحريك البطاقة الممغنطة أمام ملف سلكي يُستحث فيه تيار يُحوَّل إلى نبضات فولطية تحتوي المعلومات","تُرسل موجات راديوية","تستخدم خلايا شمسية"],a:1,e:"البطاقة الممغنطة حين تتحرك أمام ملف تُستحث فيه إشارة تُضخَّم وتُحوَّل إلى نبضات فولطية تُقرأ منها المعلومات."}
+];
+
+let cur=0,scr=0,ans=[],done=false;
+
+function startQuiz(){
+  document.getElementById('start-screen').style.display='none';
+  document.getElementById('quiz-screen').style.display='block';
+  document.getElementById('prog-wrap').style.display='block';
+  render();
+}
+
+function render(){
+  done=false;
+  const qs=document.getElementById('quiz-screen');
+  const q=Q[cur];
+  const L=['أ','ب','ج','د'];
+  qs.innerHTML=`<div class="q-card active">
+    <div class="cat-tag">📌 ${q.c}</div>
+    <div class="q-num"><span>⚡</span> سؤال ${cur+1} من ${Q.length}</div>
+    <div class="q-text">${q.q}</div>
+    <ul class="opts-list">${q.o.map((o,i)=>`<li><button class="opt-btn" id="o${i}" onclick="pick(${i})"><span class="opt-letter">${L[i]}</span><span>${o}</span></button></li>`).join('')}</ul>
+    <div class="fb-box" id="fb"></div>
+    <button class="next-btn" id="nb" onclick="next()">${cur<Q.length-1?'السؤال التالي ◀':'عرض النتيجة 🏁'}</button>
+  </div>`;
+  prog();
+}
+
+function pick(i){
+  if(done)return;
+  done=true;
+  const q=Q[cur];
+  const ok=i===q.a;
+  if(ok)scr++;
+  ans.push({i,correct:q.a,ok});
+  for(let j=0;j<q.o.length;j++){
+    const b=document.getElementById('o'+j);
+    b.disabled=true;
+    if(j===q.a)b.classList.add('correct');
+    else if(j===i&&!ok)b.classList.add('wrong');
+  }
+  const fb=document.getElementById('fb');
+  fb.className=`fb-box show ${ok?'correct-fb':'wrong-fb'}`;
+  fb.innerHTML=`<div class="fb-title">${ok?'✅ إجابة صحيحة!':'❌ إجابة خاطئة'}</div><div>${q.e}</div>`;
+  document.getElementById('nb').classList.add('show');
+  document.getElementById('score-live').textContent='النتيجة: '+scr;
+}
+
+function next(){
+  cur++;
+  if(cur<Q.length)render();
+  else results();
+}
+
+function prog(){
+  const p=(cur/Q.length)*100;
+  document.getElementById('prog-fill').style.width=p+'%';
+  document.getElementById('q-counter').textContent=`سؤال ${cur+1} من ${Q.length}`;
+  document.getElementById('score-live').textContent='النتيجة: '+scr;
+}
+
+function results(){
+  document.getElementById('quiz-screen').style.display='none';
+  document.getElementById('prog-wrap').style.display='none';
+  const p=Math.round((scr/Q.length)*100);
+  const em=p>=90?'🏆':p>=75?'🌟':p>=60?'👍':p>=40?'📖':'📚';
+  const msg=p>=90?'ممتاز! أداء استثنائي':p>=75?'جيد جداً! استمر':p>=60?'جيد، راجع بعض المفاهيم':p>=40?'مقبول، راجع الفصل':'راجع الدرس وأعد المحاولة';
+  const bc=p>=90?'ex':p>=75?'gd':p>=60?'ok':'lo';
+  const rs=document.getElementById('results-screen');
+  rs.innerHTML=`<div class="res-card">
+    <div class="score-circle" style="--pct:${p}%"><div class="score-inner"><span class="score-num ${bc}">${scr}</span><span class="score-total">من ${Q.length}</span></div></div>
+    <div class="res-title">${em} <span class="${bc}">${msg}</span></div>
+    <div class="res-sub">أجبت صحيحاً على ${scr} من ${Q.length} سؤال (${p}%)</div>
+    <div class="summary-list">${Q.map((q,i)=>{const ua=ans[i];const ok=ua&&ua.ok;return`<div class="sum-item ${ok?'sc':'sw'}"><div class="sum-q">س${i+1} [${q.c}]: ${q.q.substring(0,65)}${q.q.length>65?'…':''}</div><div class="sum-lbl ${ok?'cl':'wl'}">${ok?'✅ صحيحة':'❌ خاطئة — الصحيحة: '+q.o[q.a]}</div></div>`;}).join('')}</div>
+    <button class="restart-btn" onclick="restart()">🔄 إعادة الاختبار</button>
+  </div>`;
+  rs.classList.add('show');
+}
+
+function restart(){
+  cur=0;scr=0;ans=[];done=false;
+  document.getElementById('results-screen').classList.remove('show');
+  document.getElementById('results-screen').innerHTML='';
+  document.getElementById('quiz-screen').style.display='block';
+  document.getElementById('prog-wrap').style.display='block';
+  render();
+}
+</script>
+<footer style="text-align: center; padding: 40px;">
+    <a href="dashboard.html" style="color: #ffab00; font-size: 16px; text-decoration: none; border: 1px solid #ffab00; padding: 10px 20px; border-radius: 8px;">
+        ⬅ العودة لمركز الاختبارات
+    </a>
+</footer>
+</body>
+</html>
