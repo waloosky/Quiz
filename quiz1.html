@@ -7,890 +7,1606 @@
         ⬅ العودة لمركز الاختبارات
     </a>
 </header>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>بوابة الفيزياء الحديثة — الأستاذ وليد خالد الفتلاوي</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Estedad:wght@100..900&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg-deep:        #0d1117;
-    --bg-mid:         #0f1923;
-    --bg-card:        rgba(255,255,255,0.04);
-    --cyan:           #00e5ff;
-    --cyan-dim:       rgba(0,229,255,0.15);
-    --cyan-glow:      rgba(0,229,255,0.35);
-    --amber:          #ffb300;
-    --amber-dim:      rgba(255,179,0,0.15);
-    --amber-glow:     rgba(255,179,0,0.4);
-    --glass-border:   rgba(255,255,255,0.08);
-    --glass-bg:       rgba(255,255,255,0.03);
-    --text-primary:   #e8edf5;
-    --text-secondary: #8b9ab5;
-    --text-muted:     #4a5568;
-    --radius-lg:      20px;
-    --radius-xl:      32px;
-    --transition:     0.35s cubic-bezier(0.23, 1, 0.32, 1);
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>اختبار الفيزياء | الفصل الأول: المتسعات</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Estedad:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    /* ===================== CSS CUSTOM VARIABLES ===================== */
+    :root {
+      --coral-deep: #C0392B;
+      --coral-mid: #E74C3C;
+      --coral-light: #F1948A;
+      --teal-deep: #0E6655;
+      --teal-mid: #1ABC9C;
+      --teal-light: #76D7C4;
+      --white: #FFFFFF;
+      --off-white: #F8F9FA;
+      --grey-100: #F2F3F4;
+      --grey-200: #E5E7E9;
+      --grey-400: #AAB7B8;
+      --grey-600: #626567;
+      --grey-900: #1A1A2E;
+      --emerald: #1E8449;
+      --emerald-light: #A9DFBF;
+      --crimson: #C0392B;
+      --crimson-light: #F5B7B1;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+      --shadow-md: 0 8px 32px rgba(0,0,0,0.12);
+      --shadow-lg: 0 20px 60px rgba(0,0,0,0.18);
+      --radius-sm: 8px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-xl: 32px;
+      --transition-fast: 0.18s cubic-bezier(0.4,0,0.2,1);
+      --transition-mid: 0.35s cubic-bezier(0.4,0,0.2,1);
+      --transition-slow: 0.6s cubic-bezier(0.4,0,0.2,1);
+      --pane-gradient: linear-gradient(155deg, #C0392B 0%, #0E6655 100%);
+    }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    /* ===================== RESET & BASE ===================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      font-family: 'Estedad', sans-serif;
+      background: var(--grey-900);
+      color: var(--grey-900);
+      min-height: 100vh;
+      overflow-x: hidden;
+      direction: rtl;
+    }
 
-  html {
-    scroll-behavior: smooth;
-    scrollbar-width: none;
-  }
-  html::-webkit-scrollbar { display: none; }
+    /* ===================== APP SHELL ===================== */
+    #app {
+      display: grid;
+      grid-template-columns: 1fr;
+      min-height: 100vh;
+    }
 
-  body {
-    font-family: 'Estedad', sans-serif;
-    background: var(--bg-deep);
-    color: var(--text-primary);
-    min-height: 100vh;
-    overflow-x: hidden;
-    direction: rtl;
-    position: relative;
-  }
+    /* ===================== SCREENS ===================== */
+    .screen {
+      display: none;
+      min-height: 100vh;
+    }
+    .screen.active { display: flex; }
 
-  /* ── Canvas Background ── */
-  #particle-canvas {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-  }
+    /* ===================== WELCOME SCREEN ===================== */
+    #welcome-screen {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--grey-900);
+      position: relative;
+      overflow: hidden;
+      padding: 2rem;
+    }
+    #welcome-screen::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 30%, rgba(192,57,43,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 70% 50% at 80% 70%, rgba(14,102,85,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .welcome-noise {
+      position: absolute;
+      inset: 0;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .welcome-card {
+      position: relative;
+      z-index: 1;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-xl);
+      padding: 3.5rem 3rem;
+      max-width: 560px;
+      width: 100%;
+      text-align: center;
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow-lg), 0 0 0 1px rgba(255,255,255,0.04);
+      animation: fadeSlideUp 0.8s var(--transition-slow) both;
+    }
+    .welcome-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--pane-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.8rem;
+      font-size: 2rem;
+      box-shadow: 0 8px 30px rgba(192,57,43,0.4);
+      animation: pulseGlow 3s ease-in-out infinite;
+    }
+    .welcome-subject {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      color: var(--teal-mid);
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+    .welcome-title {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 0.6rem;
+    }
+    .welcome-subtitle {
+      font-size: 1rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+    .welcome-meta {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+    }
+    .meta-chip {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
+    }
+    .meta-chip-value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--white);
+    }
+    .meta-chip-label {
+      font-size: 0.72rem;
+      font-weight: 400;
+      color: rgba(255,255,255,0.45);
+    }
+    .meta-divider {
+      width: 1px;
+      background: rgba(255,255,255,0.1);
+      align-self: stretch;
+    }
+    .btn-start {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--pane-gradient);
+      color: var(--white);
+      font-family: 'Estedad', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      padding: 1rem 2.5rem;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: var(--transition-fast);
+      box-shadow: 0 6px 24px rgba(192,57,43,0.35);
+      width: 100%;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-start::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0);
+      transition: background var(--transition-fast);
+    }
+    .btn-start:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 36px rgba(192,57,43,0.45);
+    }
+    .btn-start:hover::after { background: rgba(255,255,255,0.06); }
+    .btn-start:active { transform: translateY(0); }
 
-  /* ── Radial Glow Blobs ── */
-  .blob {
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(120px);
-    opacity: 0.18;
-    pointer-events: none;
-    z-index: 0;
-  }
-  .blob-cyan  { width: 600px; height: 600px; background: var(--cyan);  top: -150px; right: -150px; animation: blobDrift 18s ease-in-out infinite alternate; }
-  .blob-amber { width: 500px; height: 500px; background: var(--amber); bottom: -100px; left: -100px; animation: blobDrift 22s ease-in-out infinite alternate-reverse; }
-  .blob-blue  { width: 400px; height: 400px; background: #1a4fff; top: 40%; left: 30%; animation: blobDrift 15s ease-in-out infinite alternate; }
+    /* ===================== QUIZ SCREEN ===================== */
+    #quiz-screen {
+      flex-direction: row;
+      min-height: 100vh;
+    }
 
-  @keyframes blobDrift {
-    0%   { transform: translate(0,0) scale(1); }
-    100% { transform: translate(40px, 30px) scale(1.08); }
-  }
+    /* ===== LEFT PANE (Status Dashboard - 40%) ===== */
+    .left-pane {
+      width: 40%;
+      min-height: 100vh;
+      background: var(--pane-gradient);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      padding: 2.5rem 2rem;
+      flex-shrink: 0;
+    }
+    .left-pane::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 90% 50% at -20% 20%, rgba(255,255,255,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 120% 80%, rgba(0,0,0,0.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .pane-noise {
+      position: absolute;
+      inset: 0;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
 
-  /* ── Layout Wrapper ── */
-  .page-wrapper {
-    position: relative;
-    z-index: 1;
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 40px 24px 60px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 36px;
-  }
+    /* Vertical typographic accent */
+    .vertical-accent {
+      position: absolute;
+      left: 1.2rem;
+      top: 50%;
+      transform: translateY(-50%) rotate(180deg);
+      writing-mode: vertical-rl;
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      color: rgba(255,255,255,0.12);
+      text-transform: uppercase;
+      pointer-events: none;
+      white-space: nowrap;
+      user-select: none;
+      -webkit-text-stroke: 1px rgba(255,255,255,0.25);
+      -webkit-text-fill-color: transparent;
+    }
 
-  /* ── Badge ── */
-  .expertise-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background: linear-gradient(135deg, rgba(0,229,255,0.12), rgba(255,179,0,0.10));
-    border: 1px solid rgba(0,229,255,0.25);
-    border-radius: 50px;
-    padding: 10px 22px;
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: var(--cyan);
-    letter-spacing: 0.03em;
-    animation: fadeSlideDown 0.7s var(--transition) both;
-    text-align: center;
-  }
-  .badge-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--amber);
-    box-shadow: 0 0 10px var(--amber);
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity:1; transform: scale(1); }
-    50%       { opacity:0.5; transform: scale(1.4); }
-  }
+    .pane-brand {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 2rem;
+    }
+    .pane-brand-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+    .pane-brand-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: rgba(255,255,255,0.9);
+      line-height: 1.3;
+    }
 
-  /* ── Hero Section ── */
-  .hero {
-    width: 100%;
-    text-align: center;
-    animation: fadeSlideDown 0.9s var(--transition) 0.1s both;
-  }
+    /* Micro illustration: capacitor SVG */
+    .pane-illustration {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: center;
+    }
+    .capacitor-svg {
+      width: 100%;
+      max-width: 200px;
+      filter: drop-shadow(0 8px 24px rgba(0,0,0,0.25));
+    }
 
-  .hero-title {
-    font-size: clamp(1.85rem, 5vw, 3.1rem);
-    font-weight: 900;
-    line-height: 1.25;
-    background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 50%, var(--amber) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 18px;
-    text-shadow: none;
-  }
+    /* Progress bar */
+    .progress-section {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 2rem;
+    }
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+    }
+    .progress-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.6);
+      text-transform: uppercase;
+    }
+    .progress-fraction {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: rgba(255,255,255,0.9);
+    }
+    .progress-track {
+      height: 5px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: rgba(255,255,255,0.85);
+      border-radius: 100px;
+      transition: width var(--transition-slow);
+      width: 0%;
+    }
 
-  .hero-subtitle {
-    font-size: clamp(0.88rem, 2.2vw, 1.05rem);
-    font-weight: 400;
-    color: var(--text-secondary);
-    max-width: 620px;
-    margin: 0 auto;
-    line-height: 1.9;
-  }
-  .hero-subtitle strong {
-    color: var(--amber);
-    font-weight: 700;
-  }
+    /* Score dashboard */
+    .score-dashboard {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .score-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-md);
+      padding: 1rem 0.75rem;
+      text-align: center;
+      backdrop-filter: blur(8px);
+      transition: var(--transition-fast);
+    }
+    .score-card-value {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 0.3rem;
+      transition: var(--transition-fast);
+    }
+    .score-card-label {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+    }
+    .score-card.correct { border-color: rgba(118,215,196,0.4); }
+    .score-card.correct .score-card-value { color: var(--teal-light); }
+    .score-card.incorrect { border-color: rgba(241,148,138,0.4); }
+    .score-card.incorrect .score-card-value { color: var(--coral-light); }
+    .score-card.score { border-color: rgba(255,255,255,0.25); }
 
-  /* ── Profile Orb ── */
-  .profile-orb-wrapper {
-    position: relative;
-    width: 130px;
-    height: 130px;
-    margin: 0 auto 24px;
-    animation: fadeSlideDown 0.8s var(--transition) 0.05s both;
-  }
-  .profile-orb {
-    width: 130px; height: 130px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #0d2244, #0a3060);
-    border: 2px solid rgba(0,229,255,0.3);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 3.5rem;
-    position: relative;
-    z-index: 2;
-    box-shadow: 0 0 40px rgba(0,229,255,0.2), 0 0 80px rgba(0,229,255,0.08);
-  }
-  .orb-ring {
-    position: absolute;
-    inset: -10px;
-    border-radius: 50%;
-    border: 1px solid rgba(0,229,255,0.2);
-    animation: spinRing 8s linear infinite;
-  }
-  .orb-ring::before {
-    content: '';
-    position: absolute;
-    top: -4px; left: 50%;
-    transform: translateX(-50%);
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--cyan);
-    box-shadow: 0 0 12px var(--cyan);
-  }
-  .orb-ring-2 {
-    position: absolute;
-    inset: -22px;
-    border-radius: 50%;
-    border: 1px solid rgba(255,179,0,0.15);
-    animation: spinRing 14s linear infinite reverse;
-  }
-  .orb-ring-2::before {
-    content: '';
-    position: absolute;
-    bottom: -4px; right: 10%;
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--amber);
-    box-shadow: 0 0 10px var(--amber);
-  }
-  @keyframes spinRing { to { transform: rotate(360deg); } }
+    /* pane footer */
+    .pane-footer {
+      position: relative;
+      z-index: 1;
+      margin-top: auto;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .pane-footer-text {
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: rgba(255,255,255,0.35);
+      text-align: center;
+      line-height: 1.6;
+    }
 
-  /* ── Exam Card (Glassmorphism) ── */
-  .exam-card {
-    width: 100%;
-    background: linear-gradient(135deg, rgba(0,229,255,0.04), rgba(255,179,0,0.03));
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-xl);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    padding: 36px 40px;
-    position: relative;
-    overflow: hidden;
-    animation: fadeSlideUp 0.9s var(--transition) 0.2s both;
-    transition: border-color var(--transition), box-shadow var(--transition);
-  }
-  .exam-card:hover {
-    border-color: rgba(0,229,255,0.2);
-    box-shadow: 0 0 60px rgba(0,229,255,0.07), 0 20px 60px rgba(0,0,0,0.4);
-  }
-  .exam-card::before {
-    content: '';
-    position: absolute;
-    top: 0; right: 0;
-    width: 200px; height: 200px;
-    background: radial-gradient(circle, rgba(0,229,255,0.06) 0%, transparent 70%);
-    pointer-events: none;
-  }
-  .exam-card::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0;
-    width: 150px; height: 150px;
-    background: radial-gradient(circle, rgba(255,179,0,0.05) 0%, transparent 70%);
-    pointer-events: none;
-  }
+    /* ===== RIGHT PANE (Quiz Content - 60%) ===== */
+    .right-pane {
+      width: 60%;
+      min-height: 100vh;
+      background: var(--white);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+    .quiz-content {
+      flex: 1;
+      padding: 3rem 3.5rem;
+      display: flex;
+      flex-direction: column;
+    }
 
-  .card-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 28px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid rgba(255,255,255,0.07);
-  }
-  .card-icon {
-    width: 48px; height: 48px;
-    border-radius: 14px;
-    background: linear-gradient(135deg, rgba(0,229,255,0.15), rgba(0,229,255,0.05));
-    border: 1px solid rgba(0,229,255,0.2);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.4rem;
-    flex-shrink: 0;
-  }
-  .card-title {
-    font-size: 1.25rem;
-    font-weight: 800;
-    color: var(--text-primary);
-  }
-  .card-subtitle-badge {
-    font-size: 0.72rem;
-    font-weight: 600;
-    color: var(--amber);
-    background: var(--amber-dim);
-    border: 1px solid rgba(255,179,0,0.2);
-    padding: 3px 10px;
-    border-radius: 30px;
-    margin-top: 4px;
-    display: inline-block;
-  }
+    /* Question header */
+    .question-header {
+      margin-bottom: 2rem;
+    }
+    .question-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--grey-100);
+      border-radius: 100px;
+      padding: 0.4rem 1rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--grey-600);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .question-badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--coral-mid);
+      animation: blink 1.8s ease-in-out infinite;
+    }
 
-  .guidelines-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-  }
-  .guideline-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-    padding: 16px 18px;
-    background: rgba(255,255,255,0.025);
-    border: 1px solid rgba(255,255,255,0.05);
-    border-radius: 14px;
-    transition: all var(--transition);
-    cursor: default;
-  }
-  .guideline-item:hover {
-    background: rgba(0,229,255,0.05);
-    border-color: rgba(0,229,255,0.15);
-    transform: translateX(-4px);
-  }
-  .guideline-num {
-    min-width: 34px; height: 34px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, rgba(0,229,255,0.2), rgba(0,229,255,0.08));
-    border: 1px solid rgba(0,229,255,0.25);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.85rem;
-    font-weight: 800;
-    color: var(--cyan);
-    flex-shrink: 0;
-  }
-  .guideline-text {
-    font-size: 0.92rem;
-    font-weight: 400;
-    color: var(--text-secondary);
-    line-height: 1.75;
-  }
-  .guideline-text strong {
-    color: var(--text-primary);
-    font-weight: 700;
-  }
+    /* Question text */
+    .question-text {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      font-weight: 500;
+      color: var(--grey-900);
+      line-height: 1.7;
+      padding-bottom: 1.5rem;
+      border-bottom: 2px solid var(--grey-100);
+      animation: fadeSlideRight 0.5s var(--transition-mid) both;
+    }
+    .question-text .formula {
+      display: inline-block;
+      background: var(--grey-100);
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.95em;
+      color: var(--coral-deep);
+      direction: ltr;
+    }
 
-  /* ── Primary CTA ── */
-  .cta-wrapper {
-    width: 100%;
-    text-align: center;
-    animation: fadeSlideUp 0.9s var(--transition) 0.3s both;
-  }
+    /* Options */
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      margin-top: 1.8rem;
+      margin-bottom: 1.5rem;
+    }
+    .option-btn {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--white);
+      border: 2px solid var(--grey-200);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      cursor: pointer;
+      text-align: right;
+      font-family: 'Estedad', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: var(--grey-900);
+      transition: border-color var(--transition-fast), background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+      position: relative;
+      overflow: hidden;
+      animation: fadeSlideRight 0.4s var(--transition-mid) both;
+    }
+    .option-btn:nth-child(1) { animation-delay: 0.05s; }
+    .option-btn:nth-child(2) { animation-delay: 0.10s; }
+    .option-btn:nth-child(3) { animation-delay: 0.15s; }
+    .option-btn:nth-child(4) { animation-delay: 0.20s; }
 
-  .cta-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 14px;
-    background: linear-gradient(135deg, #007aff 0%, #00b4ff 50%, var(--cyan) 100%);
-    color: #fff;
-    font-family: 'Estedad', sans-serif;
-    font-size: clamp(1rem, 2.5vw, 1.25rem);
-    font-weight: 800;
-    padding: 20px 44px;
-    border-radius: 60px;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    position: relative;
-    overflow: hidden;
-    box-shadow:
-      0 0 40px rgba(0,180,255,0.4),
-      0 0 80px rgba(0,180,255,0.15),
-      0 8px 32px rgba(0,0,0,0.4);
-    transition: all var(--transition);
-    letter-spacing: 0.02em;
-  }
-  .cta-btn::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
-    opacity: 0;
-    transition: opacity var(--transition);
-  }
-  .cta-btn:hover {
-    transform: translateY(-4px) scale(1.03);
-    box-shadow:
-      0 0 60px rgba(0,229,255,0.6),
-      0 0 120px rgba(0,229,255,0.2),
-      0 16px 48px rgba(0,0,0,0.5);
-  }
-  .cta-btn:hover::before { opacity: 1; }
-  .cta-btn:active { transform: translateY(-1px) scale(0.99); }
+    .option-btn:not(.locked):hover {
+      border-color: var(--coral-mid);
+      background: #FFF5F4;
+      transform: translateX(-3px);
+      box-shadow: var(--shadow-sm);
+    }
+    .option-letter {
+      min-width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: var(--grey-100);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--grey-600);
+      transition: var(--transition-fast);
+      flex-shrink: 0;
+    }
+    .option-text {
+      flex: 1;
+      line-height: 1.5;
+      direction: rtl;
+    }
+    .option-icon {
+      min-width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      opacity: 0;
+      transition: opacity var(--transition-fast);
+      flex-shrink: 0;
+    }
 
-  .cta-icon {
-    font-size: 1.4rem;
-    animation: zapPulse 1.8s ease-in-out infinite;
-  }
-  @keyframes zapPulse {
-    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 4px var(--cyan)); }
-    50%       { transform: scale(1.25); filter: drop-shadow(0 0 12px var(--cyan)); }
-  }
+    /* Correct state */
+    .option-btn.correct {
+      border-color: var(--emerald);
+      background: #EAF7F0;
+      animation: correctPulse 0.6s var(--transition-slow);
+    }
+    .option-btn.correct .option-letter {
+      background: var(--emerald);
+      color: var(--white);
+    }
+    .option-btn.correct .option-icon {
+      opacity: 1;
+      background: var(--emerald);
+      color: var(--white);
+    }
 
-  .cta-shine {
-    position: absolute;
-    top: 0; left: -100%;
-    width: 60%;
-    height: 100%;
-    background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%);
-    animation: shine 3s ease-in-out infinite;
-  }
-  @keyframes shine {
-    0%   { left: -100%; }
-    40%  { left: 120%; }
-    100% { left: 120%; }
-  }
+    /* Incorrect state */
+    .option-btn.incorrect {
+      border-color: var(--crimson);
+      background: #FDEDEC;
+    }
+    .option-btn.incorrect .option-letter {
+      background: var(--crimson);
+      color: var(--white);
+    }
+    .option-btn.incorrect .option-icon {
+      opacity: 1;
+      background: var(--crimson);
+      color: var(--white);
+    }
 
-  /* ── Contact Hub ── */
-  .contact-hub {
-    width: 100%;
-    animation: fadeSlideUp 0.9s var(--transition) 0.35s both;
-  }
-  .contact-title {
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    text-align: center;
-    margin-bottom: 18px;
-  }
-  .contact-buttons {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  .contact-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    padding: 15px 28px;
-    border-radius: 16px;
-    border: 1px solid;
-    font-family: 'Estedad', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 700;
-    text-decoration: none;
-    transition: all var(--transition);
-    position: relative;
-    overflow: hidden;
-    direction: rtl;
-  }
-  .contact-btn-call {
-    background: linear-gradient(135deg, rgba(52,199,89,0.12), rgba(52,199,89,0.05));
-    border-color: rgba(52,199,89,0.3);
-    color: #34c759;
-  }
-  .contact-btn-call:hover {
-    background: linear-gradient(135deg, rgba(52,199,89,0.22), rgba(52,199,89,0.1));
-    border-color: rgba(52,199,89,0.6);
-    transform: translateY(-3px);
-    box-shadow: 0 0 30px rgba(52,199,89,0.2), 0 8px 24px rgba(0,0,0,0.3);
-  }
-  .contact-btn-email {
-    background: linear-gradient(135deg, rgba(255,179,0,0.12), rgba(255,179,0,0.05));
-    border-color: rgba(255,179,0,0.3);
-    color: var(--amber);
-  }
-  .contact-btn-email:hover {
-    background: linear-gradient(135deg, rgba(255,179,0,0.22), rgba(255,179,0,0.1));
-    border-color: rgba(255,179,0,0.6);
-    transform: translateY(-3px);
-    box-shadow: 0 0 30px rgba(255,179,0,0.2), 0 8px 24px rgba(0,0,0,0.3);
-  }
-  .btn-icon-circle {
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.06);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1rem;
-    flex-shrink: 0;
-  }
+    /* Locked but not selected */
+    .option-btn.locked:not(.correct):not(.incorrect) {
+      opacity: 0.5;
+      cursor: default;
+    }
 
-  /* ── Social Footer ── */
-  .social-section {
-    width: 100%;
-    animation: fadeSlideUp 0.9s var(--transition) 0.4s both;
-  }
-  .social-title {
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  .social-grid {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 14px;
-  }
-  .social-link {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    transition: all var(--transition);
-  }
-  .social-link:hover { transform: translateY(-6px) scale(1.08); }
+    /* Ripple */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      transform: scale(0);
+      animation: rippleAnim 0.55s linear;
+      background: rgba(192,57,43,0.15);
+      pointer-events: none;
+    }
 
-  .social-icon-wrap {
-    width: 56px; height: 56px;
-    border-radius: 18px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.5rem;
-    border: 1px solid;
-    position: relative;
-    overflow: hidden;
-    transition: all var(--transition);
-  }
-  .social-icon-wrap::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    transition: opacity var(--transition);
-  }
-  .social-link:hover .social-icon-wrap::after { opacity: 1; }
+    /* Explanation */
+    .explanation-box {
+      background: rgba(14,102,85,0.04);
+      border: 1px solid rgba(14,102,85,0.18);
+      border-radius: var(--radius-md);
+      padding: 1.4rem 1.5rem;
+      margin-top: 0.5rem;
+      display: none;
+      backdrop-filter: blur(4px);
+      animation: slideDown 0.45s cubic-bezier(0.4,0,0.2,1) both;
+    }
+    .explanation-box.visible { display: block; }
+    .explanation-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.75rem;
+    }
+    .explanation-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--teal-mid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      color: white;
+      flex-shrink: 0;
+    }
+    .explanation-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--teal-deep);
+      text-transform: uppercase;
+    }
+    .explanation-text {
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: var(--grey-600);
+      line-height: 1.75;
+      direction: rtl;
+    }
+    .explanation-text strong {
+      font-weight: 700;
+      color: var(--grey-900);
+    }
+    .explanation-formula {
+      display: inline-block;
+      background: rgba(14,102,85,0.1);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-weight: 700;
+      color: var(--teal-deep);
+      direction: ltr;
+      font-size: 0.9em;
+    }
 
-  .si-telegram { background: rgba(0,136,204,0.12); border-color: rgba(0,136,204,0.3); color: #0088cc; }
-  .si-telegram::after { background: rgba(0,136,204,0.15); }
-  .si-telegram:hover { box-shadow: 0 0 24px rgba(0,136,204,0.4); border-color: rgba(0,136,204,0.6); }
+    /* Next button */
+    .btn-next {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--grey-900);
+      color: var(--white);
+      font-family: 'Estedad', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 0.9rem 2rem;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: var(--transition-fast);
+      margin-top: 1.5rem;
+      opacity: 0;
+      pointer-events: none;
+      align-self: flex-start;
+    }
+    .btn-next.visible {
+      opacity: 1;
+      pointer-events: all;
+      animation: fadeSlideUp 0.4s var(--transition-mid) both;
+    }
+    .btn-next:hover {
+      background: var(--coral-deep);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(192,57,43,0.3);
+    }
 
-  .si-youtube { background: rgba(255,0,0,0.1); border-color: rgba(255,0,0,0.25); color: #ff3333; }
-  .si-youtube::after { background: rgba(255,0,0,0.12); }
-  .si-youtube:hover { box-shadow: 0 0 24px rgba(255,0,0,0.35); border-color: rgba(255,0,0,0.5); }
+    /* ===================== RESULTS SCREEN ===================== */
+    #results-screen {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--grey-900);
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    #results-screen::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 30% 20%, rgba(14,102,85,0.2) 0%, transparent 70%),
+        radial-gradient(ellipse 70% 50% at 70% 80%, rgba(192,57,43,0.2) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .results-card {
+      position: relative;
+      z-index: 1;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-xl);
+      padding: 3.5rem 3rem;
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+      backdrop-filter: blur(12px);
+      animation: fadeSlideUp 0.8s var(--transition-slow) both;
+    }
+    .results-emoji {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      display: block;
+      animation: bounceIn 0.8s cubic-bezier(0.34,1.56,0.64,1) 0.4s both;
+    }
+    .results-grade {
+      font-size: clamp(3rem, 8vw, 5rem);
+      font-weight: 900;
+      background: var(--pane-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .results-label {
+      font-size: 1.1rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 2.5rem;
+    }
+    .results-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .result-stat {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-md);
+      padding: 1.2rem 0.75rem;
+    }
+    .result-stat-value {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--white);
+      display: block;
+    }
+    .result-stat-label {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      margin-top: 0.3rem;
+      display: block;
+    }
+    .results-message {
+      font-size: 1rem;
+      font-weight: 400;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+    .btn-restart {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--pane-gradient);
+      color: var(--white);
+      font-family: 'Estedad', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 1rem 2.5rem;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: var(--transition-fast);
+      box-shadow: 0 6px 24px rgba(192,57,43,0.35);
+      width: 100%;
+      justify-content: center;
+    }
+    .btn-restart:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 36px rgba(192,57,43,0.45);
+    }
 
-  .si-instagram { background: rgba(228,64,95,0.1); border-color: rgba(228,64,95,0.25); color: #e4405f; }
-  .si-instagram::after { background: rgba(228,64,95,0.12); }
-  .si-instagram:hover { box-shadow: 0 0 24px rgba(228,64,95,0.35); border-color: rgba(228,64,95,0.5); }
+    /* ===================== ANIMATIONS ===================== */
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeSlideRight {
+      from { opacity: 0; transform: translateX(16px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes correctPulse {
+      0% { transform: scale(1); }
+      30% { transform: scale(1.025); }
+      60% { transform: scale(0.995); }
+      100% { transform: scale(1); }
+    }
+    @keyframes rippleAnim {
+      to { transform: scale(4); opacity: 0; }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 8px 30px rgba(192,57,43,0.4); }
+      50% { box-shadow: 0 8px 40px rgba(192,57,43,0.65); }
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    @keyframes bounceIn {
+      from { opacity: 0; transform: scale(0.5); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes scoreFlash {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.25); }
+      100% { transform: scale(1); }
+    }
 
-  .si-facebook { background: rgba(24,119,242,0.1); border-color: rgba(24,119,242,0.25); color: #1877f2; }
-  .si-facebook::after { background: rgba(24,119,242,0.12); }
-  .si-facebook:hover { box-shadow: 0 0 24px rgba(24,119,242,0.35); border-color: rgba(24,119,242,0.5); }
-
-  .si-blog { background: rgba(255,102,0,0.1); border-color: rgba(255,102,0,0.25); color: #ff6600; }
-  .si-blog::after { background: rgba(255,102,0,0.12); }
-  .si-blog:hover { box-shadow: 0 0 24px rgba(255,102,0,0.35); border-color: rgba(255,102,0,0.5); }
-
-  .social-label {
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    transition: color var(--transition);
-    letter-spacing: 0.04em;
-  }
-  .social-link:hover .social-label { color: var(--text-secondary); }
-
-  /* ── Copyright Footer ── */
-  .footer-line {
-    font-size: 0.72rem;
-    color: var(--text-muted);
-    text-align: center;
-    padding-top: 10px;
-    border-top: 1px solid rgba(255,255,255,0.04);
-    width: 100%;
-    animation: fadeSlideUp 1s var(--transition) 0.5s both;
-    line-height: 1.9;
-  }
-  .footer-line span { color: rgba(255,179,0,0.5); }
-
-  /* ── Divider ── */
-  .divider {
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(0,229,255,0.2), rgba(255,179,0,0.2), transparent);
-  }
-
-  /* ── Keyframes ── */
-  @keyframes fadeSlideDown {
-    from { opacity:0; transform: translateY(-20px); }
-    to   { opacity:1; transform: translateY(0); }
-  }
-  @keyframes fadeSlideUp {
-    from { opacity:0; transform: translateY(20px); }
-    to   { opacity:1; transform: translateY(0); }
-  }
-
-  /* ── Scanline Overlay ── */
-  .scanline {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(0,0,0,0.03) 2px,
-      rgba(0,0,0,0.03) 4px
-    );
-  }
-
-  /* ── Responsive ── */
-  @media (max-width: 600px) {
-    .page-wrapper { padding: 28px 16px 48px; gap: 28px; }
-    .exam-card    { padding: 24px 20px; }
-    .cta-btn      { padding: 18px 28px; width: 100%; justify-content: center; }
-    .contact-buttons { flex-direction: column; }
-    .contact-btn  { justify-content: center; }
-    .social-grid  { gap: 12px; }
-    .social-icon-wrap { width: 50px; height: 50px; font-size: 1.3rem; border-radius: 14px; }
-    .card-header  { flex-wrap: wrap; }
-  }
-
-  /* ── SVG Icons inline ── */
-  .icon-svg { width: 1.1em; height: 1.1em; display: inline-block; vertical-align: middle; }
-</style>
+    /* ===================== RESPONSIVE ===================== */
+    @media (max-width: 900px) {
+      #quiz-screen { flex-direction: column; }
+      .left-pane { width: 100%; min-height: auto; padding: 1.5rem 1.5rem 2rem; }
+      .right-pane { width: 100%; }
+      .score-dashboard { grid-template-columns: repeat(3, 1fr); }
+      .vertical-accent { display: none; }
+      .quiz-content { padding: 2rem 1.5rem; }
+      .pane-illustration { display: none; }
+    }
+    @media (max-width: 540px) {
+      .welcome-card { padding: 2.5rem 1.5rem; }
+      .welcome-meta { gap: 0.75rem; }
+      .results-stats { grid-template-columns: repeat(3, 1fr); }
+      .results-card { padding: 2rem 1.25rem; }
+      .quiz-content { padding: 1.5rem 1.25rem; }
+    }
+  </style>
 </head>
 <body>
+  <div id="app">
 
-<!-- Background -->
-<canvas id="particle-canvas"></canvas>
-<div class="scanline"></div>
-<div class="blob blob-cyan"></div>
-<div class="blob blob-amber"></div>
-<div class="blob blob-blue"></div>
-
-<div class="page-wrapper">
-
-  <!-- Badge -->
-  <div class="expertise-badge">
-    <span class="badge-dot"></span>
-    خبرة في التدريس والتميز منذ عام 2006 — 20 عاماً من البناء والعطاء
-  </div>
-
-  <!-- Profile Orb -->
-  <div class="profile-orb-wrapper">
-    <div class="orb-ring"></div>
-    <div class="orb-ring-2"></div>
-    <div class="profile-orb">⚛️</div>
-  </div>
-
-  <!-- Hero -->
-  <header class="hero">
-    <h1 class="hero-title">بوابة الفيزياء الحديثة<br>للاختبارات التفاعلية</h1>
-    <p class="hero-subtitle">
-      تحت إشراف <strong>الأستاذ وليد خالد الفتلاوي</strong><br>
-      مؤسس متوسطة رؤيا الأهلية للبنين في السيدية
-    </p>
-  </header>
-
-  <div class="divider"></div>
-
-  <!-- Exam Guidelines Card -->
-  <div class="exam-card">
-    <div class="card-header">
-      <div class="card-icon">📋</div>
-      <div>
-        <div class="card-title">لوحة إرشادات الامتحان</div>
-        <div class="card-subtitle-badge">الصف السادس العلمي</div>
-      </div>
-    </div>
-    <ul class="guidelines-list">
-      <li class="guideline-item">
-        <div class="guideline-num">١</div>
-        <div class="guideline-text">
-          <strong>القراءة بتمعّن:</strong> راجع القوانين والملاحظات الذهبية جيداً قبل الضغط على زر البدء، فالاستعداد المسبق يُحدث الفارق.
+    <!-- ===== WELCOME SCREEN ===== -->
+    <section id="welcome-screen" class="screen active" aria-label="شاشة الترحيب">
+      <div class="welcome-noise"></div>
+      <article class="welcome-card">
+        <div class="welcome-icon">⚡</div>
+        <p class="welcome-subject">المنهج العراقي · الصف السادس العلمي</p>
+        <h1 class="welcome-title">الفصل الأول<br>المتسعات</h1>
+        <p class="welcome-subtitle">اختبر معلوماتك في الفيزياء الحديثة بأسئلة تفاعلية شاملة مع شرح علمي مفصّل لكل إجابة.</p>
+        <div class="welcome-meta">
+          <div class="meta-chip">
+            <span class="meta-chip-value">20</span>
+            <span class="meta-chip-label">سؤال</span>
+          </div>
+          <div class="meta-divider"></div>
+          <div class="meta-chip">
+            <span class="meta-chip-value">4</span>
+            <span class="meta-chip-label">خيارات</span>
+          </div>
+          <div class="meta-divider"></div>
+          <div class="meta-chip">
+            <span class="meta-chip-value">∞</span>
+            <span class="meta-chip-label">محاولات</span>
+          </div>
         </div>
-      </li>
-      <li class="guideline-item">
-        <div class="guideline-num">٢</div>
-        <div class="guideline-text">
-          <strong>التركيز والوقت:</strong> الاختبارات محددة بزمن دقيق لمحاكاة أجواء الامتحان الوزاري بواقعية عالية.
-        </div>
-      </li>
-      <li class="guideline-item">
-        <div class="guideline-num">٣</div>
-        <div class="guideline-text">
-          <strong>التغذية الراجعة:</strong> استثمر الشرح العلمي الذي يظهر بعد كل سؤال لفهم فكرة الحل وتعزيز استيعابك.
-        </div>
-      </li>
-      <li class="guideline-item">
-        <div class="guideline-num">٤</div>
-        <div class="guideline-text">
-          <strong>التكرار أساس النجاح:</strong> عند إعادة الاختبار ستتغير الأسئلة عشوائياً لضمان شمولية الفهم وعمق التحضير.
-        </div>
-      </li>
-    </ul>
-  </div>
+        <button class="btn-start" onclick="startQuiz()">
+          <span>ابدأ الاختبار الآن</span>
+          <span>←</span>
+        </button>
+      </article>
+    </section>
 
-  <!-- Primary CTA -->
-  <div class="cta-wrapper">
-    <a href="#" class="cta-btn">
-      <span class="cta-shine"></span>
-      <span class="cta-icon">⚡</span>
-استفد من النسخة المجانية لفترة محدودة
-    </a>
-  </div>
+    <!-- ===== QUIZ SCREEN ===== -->
+    <section id="quiz-screen" class="screen" aria-label="شاشة الاختبار">
 
-  <div class="divider"></div>
+      <!-- LEFT PANE -->
+      <aside class="left-pane" aria-label="لوحة المعلومات">
+        <div class="pane-noise"></div>
+        <div class="vertical-accent">الفيزياء الحديثة</div>
 
-  <!-- Contact Hub -->
-  <div class="contact-hub">
-    <div class="contact-title">تواصل مع الأستاذ مباشرةً</div>
-    <div class="contact-buttons">
-      <a href="tel:009647718597632" class="contact-btn contact-btn-call">
-        <div class="btn-icon-circle">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.63 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+        <div class="pane-brand">
+          <p class="pane-brand-label">المنهج العراقي · الصف السادس</p>
+          <h2 class="pane-brand-title">الفصل الأول<br>المتسعات</h2>
+        </div>
+
+        <!-- Capacitor Micro-illustration -->
+        <div class="pane-illustration">
+          <svg class="capacitor-svg" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <!-- Wires -->
+            <line x1="20" y1="80" x2="68" y2="80" stroke="rgba(255,255,255,0.6)" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="132" y1="80" x2="180" y2="80" stroke="rgba(255,255,255,0.6)" stroke-width="2.5" stroke-linecap="round"/>
+            <!-- Plates -->
+            <rect x="68" y="36" width="10" height="88" rx="3" fill="rgba(255,255,255,0.85)"/>
+            <rect x="122" y="36" width="10" height="88" rx="3" fill="rgba(255,255,255,0.85)"/>
+            <!-- E-field arrows in between -->
+            <defs>
+              <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+                <path d="M0,0 L6,3 L0,6 Z" fill="rgba(255,255,255,0.35)"/>
+              </marker>
+            </defs>
+            <line x1="85" y1="60" x2="117" y2="60" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" marker-end="url(#arr)"/>
+            <line x1="85" y1="80" x2="117" y2="80" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" marker-end="url(#arr)"/>
+            <line x1="85" y1="100" x2="117" y2="100" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" marker-end="url(#arr)"/>
+            <!-- + and - labels -->
+            <text x="57" y="84" font-size="18" fill="rgba(255,255,255,0.8)" font-family="Estedad,sans-serif" font-weight="900" text-anchor="middle">+</text>
+            <text x="143" y="84" font-size="18" fill="rgba(255,255,255,0.8)" font-family="Estedad,sans-serif" font-weight="900" text-anchor="middle">−</text>
+            <!-- Q label -->
+            <text x="100" y="148" font-size="11" fill="rgba(255,255,255,0.4)" font-family="Estedad,sans-serif" text-anchor="middle">C = Q / ΔV</text>
           </svg>
         </div>
-        اتصل بنا
-      </a>
-      <a href="mailto:waloosky@gmail.com" class="contact-btn contact-btn-email">
-        <div class="btn-icon-circle">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-            <polyline points="22,6 12,13 2,6"></polyline>
-          </svg>
+
+        <!-- Progress -->
+        <div class="progress-section">
+          <div class="progress-header">
+            <span class="progress-label">التقدم</span>
+            <span class="progress-fraction" id="progress-text">0 / 20</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
         </div>
-        راسلنا بالبريد
-      </a>
-    </div>
+
+        <!-- Score cards -->
+        <div class="score-dashboard">
+          <div class="score-card score">
+            <div class="score-card-value" id="score-display">0</div>
+            <div class="score-card-label">النتيجة</div>
+          </div>
+          <div class="score-card correct">
+            <div class="score-card-value" id="correct-display">0</div>
+            <div class="score-card-label">صحيح</div>
+          </div>
+          <div class="score-card incorrect">
+            <div class="score-card-value" id="incorrect-display">0</div>
+            <div class="score-card-label">خطأ</div>
+          </div>
+        </div>
+
+        <div class="pane-footer">
+          <p class="pane-footer-text">الفيزياء الحديثة · المتسعات<br>المنهج العراقي ٢٠٢٤</p>
+        </div>
+      </aside>
+
+      <!-- RIGHT PANE -->
+      <main class="right-pane">
+        <div class="quiz-content">
+          <header class="question-header">
+            <div class="question-badge">
+              <div class="question-badge-dot"></div>
+              <span id="question-counter">السؤال ١ من ٢٠</span>
+            </div>
+            <p class="question-text" id="question-text">جاري تحميل السؤال...</p>
+          </header>
+
+          <div class="options-grid" id="options-container" role="group" aria-label="خيارات الإجابة">
+            <!-- Options injected by JS -->
+          </div>
+
+          <div class="explanation-box" id="explanation-box">
+            <div class="explanation-header">
+              <div class="explanation-icon">💡</div>
+              <span class="explanation-title">الشرح العلمي</span>
+            </div>
+            <p class="explanation-text" id="explanation-text"></p>
+          </div>
+
+          <button class="btn-next" id="btn-next" onclick="nextQuestion()">
+            <span id="btn-next-label">السؤال التالي</span>
+            <span>←</span>
+          </button>
+        </div>
+      </main>
+    </section>
+
+    <!-- ===== RESULTS SCREEN ===== -->
+    <section id="results-screen" class="screen" aria-label="شاشة النتائج">
+      <article class="results-card">
+        <span class="results-emoji" id="results-emoji">🏆</span>
+        <div class="results-grade" id="results-grade">0%</div>
+        <p class="results-label" id="results-label">نتيجتك النهائية</p>
+        <div class="results-stats">
+          <div class="result-stat">
+            <span class="result-stat-value" id="res-correct">0</span>
+            <span class="result-stat-label">صحيح</span>
+          </div>
+          <div class="result-stat">
+            <span class="result-stat-value" id="res-incorrect">0</span>
+            <span class="result-stat-label">خطأ</span>
+          </div>
+          <div class="result-stat">
+            <span class="result-stat-value" id="res-total">20</span>
+            <span class="result-stat-label">أسئلة</span>
+          </div>
+        </div>
+        <p class="results-message" id="results-message">أحسنت! استمر في الممارسة لتحقيق أفضل النتائج.</p>
+        <button class="btn-restart" onclick="restartQuiz()">
+          <span>إعادة الاختبار</span>
+          <span>↺</span>
+        </button>
+      </article>
+    </section>
+
   </div>
 
-  <!-- Social -->
-  <div class="social-section">
-    <div class="social-title">تابعنا على منصاتنا الرسمية</div>
-    <div class="social-grid">
-
-      <a href="https://t.me/walidphysics" target="_blank" rel="noopener" class="social-link">
-        <div class="social-icon-wrap si-telegram">
-          <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-          </svg>
-        </div>
-        <span class="social-label">Telegram</span>
-      </a>
-
-      <a href="https://www.youtube.com/@WalidK" target="_blank" rel="noopener" class="social-link">
-        <div class="social-icon-wrap si-youtube">
-          <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-          </svg>
-        </div>
-        <span class="social-label">YouTube</span>
-      </a>
-
-      <a href="https://www.instagram.com/waloosky" target="_blank" rel="noopener" class="social-link">
-        <div class="social-icon-wrap si-instagram">
-          <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-          </svg>
-        </div>
-        <span class="social-label">Instagram</span>
-      </a>
-
-      <a href="https://www.facebook.com/waloo" target="_blank" rel="noopener" class="social-link">
-        <div class="social-icon-wrap si-facebook">
-          <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-          </svg>
-        </div>
-        <span class="social-label">Facebook</span>
-      </a>
-
-      <a href="https://physicswalid.blogspot.com/" target="_blank" rel="noopener" class="social-link">
-        <div class="social-icon-wrap si-blog">
-          <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-            <path d="M21.976 24H2.026C.9 24 0 23.1 0 21.976V2.026C0 .9.9 0 2.026 0h19.95C23.1 0 24 .9 24 2.026v19.95C24 23.1 23.1 24 21.976 24zM11.264 5.5H8.914C6.97 5.5 5.5 6.97 5.5 8.914v6.172C5.5 17.03 6.97 18.5 8.914 18.5h6.172c1.944 0 3.414-1.47 3.414-3.414v-3.352c0-.621-.504-1.125-1.125-1.125h-.563c-.621 0-1.125.504-1.125 1.125v2.788c0 .621-.504 1.125-1.125 1.125h-4.5c-.621 0-1.125-.504-1.125-1.125v-4.5c0-.621.504-1.125 1.125-1.125h2.203c.621 0 1.125-.504 1.125-1.125V6.625c0-.621-.504-1.125-1.125-1.125zm4.236 0h-.563c-.621 0-1.125.504-1.125 1.125v.563c0 .621.504 1.125 1.125 1.125h.563c.621 0 1.125-.504 1.125-1.125v-.563c0-.621-.504-1.125-1.125-1.125z"/>
-          </svg>
-        </div>
-        <span class="social-label">Blogspot</span>
-      </a>
-
-    </div>
-  </div>
-
-  <div class="divider"></div>
-
-  <!-- Footer -->
-  <div class="footer-line">
-    جميع الحقوق محفوظة <span>©</span> ٢٠٢٦ — الأستاذ وليد خالد الفتلاوي<br>
-    منصة الاختبارات التفاعلية للصف السادس العلمي
-  </div>
-
-</div><!-- end page-wrapper -->
-
-<script>
-(function(){
-  // ── Particle Canvas ──
-  const canvas = document.getElementById('particle-canvas');
-  const ctx    = canvas.getContext('2d');
-  let W, H, particles = [], animId;
-
-  const PARTICLE_COUNT = 90;
-  const COLORS = [
-    'rgba(0,229,255,',
-    'rgba(255,179,0,',
-    'rgba(0,100,255,',
-    'rgba(255,255,255,'
+  <script>
+  // ===================================================================
+  // PHYSICS QUESTION POOL – Iraqi 6th Grade Curriculum, Chapter 1
+  // ===================================================================
+  const physicsQuestionPool = [
+    {
+      id: 1,
+      question: "ما تعريف سعة المتسعة (C)؟",
+      options: [
+        "نسبة الشحنة المخزونة في أي من الصفيحتين إلى فرق الجهد بينهما",
+        "حاصل ضرب الشحنة المخزونة وفرق الجهد بينهما",
+        "نسبة فرق الجهد إلى الطاقة المخزونة",
+        "مقدار الطاقة المخزونة في المجال الكهربائي"
+      ],
+      correctIndex: 0,
+      explanation: "سعة المتسعة هي النسبة بين مقدار الشحنة (Q) المخزونة في أي من الصفيحتين إلى فرق الجهد (ΔV) بينهما وفق العلاقة: <span class='explanation-formula'>C = Q / ΔV</span>. تُقاس السعة بوحدة الفاراد (F)، وهي تُعبّر عن قدرة المتسعة على تخزين الشحنة."
+    },
+    {
+      id: 2,
+      question: "متسعة موصولة ببطارية جهدها 12V وتخزّن شحنة مقدارها 60 µC، ما مقدار سعتها؟",
+      options: [
+        "5 µF",
+        "720 µF",
+        "0.2 µF",
+        "72 µF"
+      ],
+      correctIndex: 0,
+      explanation: "باستخدام العلاقة <span class='explanation-formula'>C = Q / ΔV</span>، نحصل على: C = 60×10⁻⁶ ÷ 12 = <strong>5×10⁻⁶ F = 5 µF</strong>. تأكّد دائماً من تحويل الوحدات قبل التعويض."
+    },
+    {
+      id: 3,
+      question: "ما العوامل الثلاثة التي تؤثر في سعة المتسعة ذات الصفيحتين المتوازيتين؟",
+      options: [
+        "المساحة السطحية، البعد بين الصفيحتين، نوع العازل",
+        "درجة الحرارة، الشحنة، البعد بين الصفيحتين",
+        "المساحة السطحية، الشحنة، فرق الجهد",
+        "نوع الموصل، الضغط، البعد بين الصفيحتين"
+      ],
+      correctIndex: 0,
+      explanation: "سعة المتسعة ذات الصفيحتين المتوازيتين تعتمد على: <strong>المساحة السطحية (A)</strong> – تناسب طردي، <strong>البعد بين الصفيحتين (d)</strong> – تناسب عكسي، <strong>نوع العازل (k)</strong>. صياغة ذلك رياضياً: <span class='explanation-formula'>C = kε₀A / d</span>."
+    },
+    {
+      id: 4,
+      question: "عند إدخال مادة عازلة ثابت عزلها (k=3) بين صفيحتي متسعة مفصولة عن المصدر، ماذا يحدث للشحنة المخزونة؟",
+      options: [
+        "تبقى ثابتة لأن المتسعة مفصولة عن المصدر",
+        "تتضاعف ثلاث مرات",
+        "تقل إلى الثلث",
+        "تنعدم تماماً"
+      ],
+      correctIndex: 0,
+      explanation: "عندما تكون المتسعة <strong>مفصولة عن المصدر</strong>، تبقى الشحنة الكلية (Qt) ثابتة لأنه لا يوجد مسار لتدفق الشحنة. الذي يتغير هو: السعة تزداد (Ck = kC)، فرق الجهد يقل (ΔVk = ΔV/k)، والمجال الكهربائي يقل (Ek = E/k)."
+    },
+    {
+      id: 5,
+      question: "متسعة سعتها 10 pF شُحنت بجهد 12V ثم فُصلت عن البطارية، ثم أُدخلت مادة عازلة ثابت عزلها k=6. ما مقدار فرق الجهد بعد إدخال العازل؟",
+      options: [
+        "2 V",
+        "72 V",
+        "12 V",
+        "6 V"
+      ],
+      correctIndex: 0,
+      explanation: "بعد الفصل عن المصدر، الشحنة ثابتة. فرق الجهد يقل بنسبة k: <span class='explanation-formula'>ΔVk = ΔV / k = 12 / 6 = 2 V</span>. السعة الجديدة: Ck = 6×10 = 60 pF. التحقق: Q = C×ΔV = 10×12 = 120 pC = 60×2 ✓"
+    },
+    {
+      id: 6,
+      question: "ما الفرق بين العازل القطبي والعازل غير القطبي؟",
+      options: [
+        "القطبي له عزوم ثنائية دائمية، وغير القطبي يكتسب عزوماً مؤقتة بالحث",
+        "القطبي يكتسب عزوماً مؤقتة، وغير القطبي له عزوم دائمة",
+        "القطبي موصل وغير القطبي عازل",
+        "لا فرق بينهما من حيث التأثير في المجال الكهربائي"
+      ],
+      correctIndex: 0,
+      explanation: "<strong>العازل القطبي</strong> (كالماء النقي): جزيئاته تمتلك عزوماً ثنائية القطب <strong>دائمية</strong>، والمسافة بين مركزي الشحنتين ثابتة. <strong>العازل غير القطبي</strong> (كالزجاج والبولي ايثلين): جزيئاته تكتسب عزوماً <strong>مؤقتة</strong> بالحث الكهربائي عند وضعها في المجال الكهربائي."
+    },
+    {
+      id: 7,
+      question: "عند توصيل متسعتين (C1=4µF، C2=6µF) على التوازي، ما مقدار السعة المكافئة؟",
+      options: [
+        "10 µF",
+        "2.4 µF",
+        "1.67 µF",
+        "24 µF"
+      ],
+      correctIndex: 0,
+      explanation: "في الربط على <strong>التوازي</strong>: <span class='explanation-formula'>Ceq = C1 + C2 = 4 + 6 = 10 µF</span>. في التوازي: فرق الجهد على كل متسعة متساوٍ، والشحنة الكلية تساوي مجموع الشحنات."
+    },
+    {
+      id: 8,
+      question: "عند توصيل متسعتين (C1=4µF، C2=6µF) على التوالي، ما مقدار السعة المكافئة؟",
+      options: [
+        "2.4 µF",
+        "10 µF",
+        "24 µF",
+        "0.417 µF"
+      ],
+      correctIndex: 0,
+      explanation: "في الربط على <strong>التوالي</strong>: <span class='explanation-formula'>1/Ceq = 1/C1 + 1/C2 = 1/4 + 1/6 = 5/12</span>، إذاً: <span class='explanation-formula'>Ceq = 12/5 = 2.4 µF</span>. في التوالي: الشحنة على كل متسعة متساوية."
+    },
+    {
+      id: 9,
+      question: "ما وحدة السعة الكهربائية في النظام الدولي؟",
+      options: [
+        "الفاراد (F) = C/V",
+        "الكولوم (C)",
+        "الفولت (V)",
+        "الأوم (Ω)"
+      ],
+      correctIndex: 0,
+      explanation: "وحدة السعة هي <strong>الفاراد (F)</strong>. سعة المتسعة تساوي فاراداً واحداً عندما يُخزّن كولوم واحد من الشحنة عند فرق جهد مقداره فولت واحد: <span class='explanation-formula'>1 F = 1 C / 1 V</span>."
+    },
+    {
+      id: 10,
+      question: "متسعة موصولة ببطارية جهدها 100V وسعتها 20µF. ما مقدار الطاقة المخزونة فيها؟",
+      options: [
+        "0.1 J",
+        "2000 J",
+        "0.001 J",
+        "10 J"
+      ],
+      correctIndex: 0,
+      explanation: "طاقة المتسعة تُحسب بالعلاقة: <span class='explanation-formula'>PE = ½ × C × (ΔV)²</span><br>PE = ½ × 20×10⁻⁶ × (100)² = ½ × 20×10⁻⁶ × 10000 = <strong>0.1 J</strong>. يمكن أيضاً استخدام: PE = ½QΔV = ½Q²/C"
+    },
+    {
+      id: 11,
+      question: "ما تعريف ثابت العزل الكهربائي (k) لمادة عازلة؟",
+      options: [
+        "نسبة سعة المتسعة بوجود العازل إلى سعتها في الفراغ أو الهواء",
+        "نسبة المجال الكهربائي في العازل إلى المجال في الفراغ",
+        "حاصل ضرب السماحية بمساحة الصفيحة",
+        "نسبة فرق الجهد بوجود العازل إلى فرق الجهد في الفراغ"
+      ],
+      correctIndex: 0,
+      explanation: "ثابت العزل الكهربائي (k) يُعرَّف بالعلاقة: <span class='explanation-formula'>k = Ck / C</span>، حيث Ck هي سعة المتسعة بوجود العازل و C هي سعتها في الفراغ أو الهواء. ثابت العزل دائماً ≥ 1، وقيمته 1 للهواء والفراغ."
+    },
+    {
+      id: 12,
+      question: "عند إدخال عازل بثابت k=4 بين صفيحتي متسعة (C=5µF) لا تزال موصولة بالبطارية، ما مقدار سعتها الجديدة؟",
+      options: [
+        "20 µF",
+        "1.25 µF",
+        "5 µF",
+        "80 µF"
+      ],
+      correctIndex: 0,
+      explanation: "عند إدخال عازل بثابت (k): <span class='explanation-formula'>Ck = k × C = 4 × 5 = 20 µF</span>. بما أن المتسعة <strong>لا تزال موصولة بالبطارية</strong>: فرق الجهد يبقى ثابتاً، السعة تزداد بمقدار k، والشحنة تزداد بمقدار k أيضاً."
+    },
+    {
+      id: 13,
+      question: "ما المقصود بقوة العزل الكهربائي لمادة؟",
+      options: [
+        "أقصى مجال كهربائي يمكن أن تتحمله المادة قبل حصول الانهيار الكهربائي",
+        "مقدار الشحنة التي يمكن للعازل تخزينها",
+        "السعة القصوى للمتسعة عند استخدام ذلك العازل",
+        "مقاومة المادة للتيار الكهربائي"
+      ],
+      correctIndex: 0,
+      explanation: "قوة العزل الكهربائي لمادة هي <strong>أقصى مجال كهربائي</strong> يمكن أن تتحمله تلك المادة قبل حصول الانهيار الكهربائي (electric breakdown). إذا تجاوز المجال هذه القيمة، تمر شرارة عبر العازل ويتلف المتسعة. لذلك يُكتب على كل متسعة قيمة الجهد الأقصى المسموح به."
+    },
+    {
+      id: 14,
+      question: "ما أشكال المتسعات الثلاثة المذكورة في المنهج؟",
+      options: [
+        "الصفيحتان المتوازيتان، الاسطوانتان المتمركزتان، الكرتان المتمركزتان",
+        "الكروية، الأسطوانية، المربعة",
+        "القرصية، الخطية، المستوية",
+        "الإلكترونية، الأيونية، المغناطيسية"
+      ],
+      correctIndex: 0,
+      explanation: "أشكال المتسعات الثلاثة في المنهج العراقي هي: <strong>(1)</strong> متسعة الصفيحتين المتوازيتين، <strong>(2)</strong> متسعة ذات الاسطوانتين المتمركزتين، <strong>(3)</strong> متسعة ذات الكرتين المتمركزتين."
+    },
+    {
+      id: 15,
+      question: "ما سعة المتسعة الكافئة لـ 6 متسعات متساوية (كل منها C=3µF) موصولة على التوالي؟",
+      options: [
+        "0.5 µF",
+        "18 µF",
+        "3 µF",
+        "0.167 µF"
+      ],
+      correctIndex: 0,
+      explanation: "للتوالي: <span class='explanation-formula'>1/Ceq = n/C = 6/3 = 2</span>، إذاً <span class='explanation-formula'>Ceq = 1/2 = 0.5 µF</span>. في التوالي، السعة المكافئة دائماً أصغر من أصغر سعة في المجموعة."
+    },
+    {
+      id: 16,
+      question: "لماذا يُستخدم نظام الموصلَين (المتسعة) بدلاً من الموصل المنفرد لتخزين الشحنات؟",
+      options: [
+        "لأن الموصل المنفرد يرتفع جهده بزيادة الشحنة مما يسبب تفريغها عبر الهواء",
+        "لأن الموصل المنفرد أغلى في التصنيع",
+        "لأن المتسعة تولد شحنات تلقائياً",
+        "لأن الموصل المنفرد لا يتأثر بالمجال الكهربائي"
+      ],
+      correctIndex: 0,
+      explanation: "الموصل المنفرد: عند إضافة شحنات تزداد V على مسافة r ثابتة (<span class='explanation-formula'>V = Q/4πε₀r</span>). يرتفع فرق الجهد والمجال E حتى يتجاوز قوة عزل الهواء فيحدث تفريغ. المتسعة تحل هذه المشكلة بتوزيع المجال بين الصفيحتين وخفض الجهد الفعّال."
+    },
+    {
+      id: 17,
+      question: "عند شحن متسعة: يوصل القطب الموجب للبطارية بإحدى الصفيحتين. ما الشحنة التي تظهر على الصفيحة الأخرى؟",
+      options: [
+        "شحنة سالبة مساوية بالمقدار للشحنة الموجبة",
+        "شحنة موجبة مساوية للشحنة الأولى",
+        "لا تظهر أي شحنة",
+        "شحنة موجبة ضعف الشحنة الأولى"
+      ],
+      correctIndex: 0,
+      explanation: "عند شحن المتسعة: الصفيحة الموصلة بالقطب الموجب تكتسب شحنة <strong>+Q</strong>، والأخرى المتصلة بالقطب السالب تكتسب <strong>-Q</strong>. الشحنتان متساويتان بالمقدار ومختلفتان بالنوع، لذا الشحنة الكلية صفر. تقع الشحنات على الأسطح المتقابلة بسبب قوة التجاذب."
+    },
+    {
+      id: 18,
+      question: "إذا قُلِّص البعد بين صفيحتي متسعة مشحونة مفصولة عن المصدر إلى النصف، ماذا يحدث للسعة؟",
+      options: [
+        "تتضاعف السعة إلى الضعف",
+        "تقل السعة إلى النصف",
+        "تبقى السعة ثابتة",
+        "تتضاعف السعة أربع مرات"
+      ],
+      correctIndex: 0,
+      explanation: "السعة تتناسب عكسياً مع البعد: <span class='explanation-formula'>C = ε₀A/d</span>. إذا أصبح <span class='explanation-formula'>d' = d/2</span>، فإن <span class='explanation-formula'>C' = ε₀A/(d/2) = 2ε₀A/d = 2C</span>. فرق الجهد يقل إلى النصف (الشحنة ثابتة): <span class='explanation-formula'>ΔV' = Q/C' = Q/2C = ΔV/2</span>."
+    },
+    {
+      id: 19,
+      question: "متسعتان (C1=6µF، C2=12µF) على التوالي موصولتان بـ 90V. ما فرق الجهد على C1؟",
+      options: [
+        "60 V",
+        "30 V",
+        "45 V",
+        "90 V"
+      ],
+      correctIndex: 0,
+      explanation: "التوالي: <span class='explanation-formula'>Ceq = (6×12)/(6+12) = 4 µF</span>. الشحنة الكلية: <span class='explanation-formula'>Q = Ceq × ΔV = 4 × 90 = 360 µC</span>. في التوالي Q1=Q2=360µC. فرق جهد C1: <span class='explanation-formula'>ΔV1 = Q/C1 = 360/6 = 60 V</span>. فرق جهد C2: ΔV2 = 360/12 = 30 V. التحقق: 60+30 = 90 V ✓"
+    },
+    {
+      id: 20,
+      question: "ماذا يحدث للمجال الكهربائي بين صفيحتي متسعة موصولة ببطارية عند إدخال عازل ثابت عزله k؟",
+      options: [
+        "يبقى ثابتاً لثبوت فرق الجهد والبعد",
+        "يقل بنسبة k",
+        "يزداد بنسبة k",
+        "يتضاعف"
+      ],
+      correctIndex: 0,
+      explanation: "المجال الكهربائي يُعطى بالعلاقة: <span class='explanation-formula'>E = ΔV / d</span>. عند اتصال المتسعة بالبطارية: فرق الجهد <strong>ثابت</strong> (يساوي جهد البطارية)، والبعد d ثابت أيضاً. إذاً E = ΔV/d = <strong>ثابت</strong>. لذا رغم إدخال العازل، يبقى المجال الكهربائي ثابتاً."
+    },
+    {
+      id: 21,
+      question: "ما الهدف من كتابة قيمة محددة على جسم المتسعة؟",
+      options: [
+        "تحديد أقصى فرق جهد مسموح به لمنع الانهيار الكهربائي للعازل",
+        "تحديد مقدار الشحنة القصوى",
+        "بيان نوع المادة العازلة المستخدمة",
+        "تحديد درجة الحرارة القصوى للتشغيل"
+      ],
+      correctIndex: 0,
+      explanation: "القيمة المكتوبة على المتسعة تُحدد <strong>أقصى فرق جهد كهربائي</strong> يمكن أن تعمل عنده المتسعة بأمان. إذا تجاوز فرق الجهد هذه القيمة، يشتد المجال الكهربائي إلى ما يتجاوز قوة العزل للمادة بين الصفيحتين، مما يؤدي إلى انهيار كهربائي وتلف المتسعة."
+    },
+    {
+      id: 22,
+      question: "في دائرة تيار مستمر: متسعة ومقاومة موصولتان على التوالي بمصدر جهده ΔVt. ما مقدار التيار عند اكتمال شحن المتسعة؟",
+      options: [
+        "صفر لأن فرق الجهد على المتسعة يساوي جهد المصدر",
+        "ΔVt / R",
+        "ΔVt / 2R",
+        "لانهاية"
+      ],
+      correctIndex: 0,
+      explanation: "عند اكتمال شحن المتسعة: جهدها يصبح مساوياً لجهد المصدر (ΔVc = ΔVt)، لذا لا يوجد فرق جهد يدفع تياراً عبر المقاومة. <span class='explanation-formula'>I = 0</span>. التيار يبدأ بقيمة كبيرة (I = ΔVt/R) ثم يتناقص تدريجياً إلى الصفر مع اكتمال الشحن."
+    },
+    {
+      id: 23,
+      question: "علاقة الطاقة المخزونة في متسعة سعتها C وشحنتها Q هي:",
+      options: [
+        "PE = Q² / (2C)",
+        "PE = 2Q² / C",
+        "PE = Q / (2C)",
+        "PE = Q² × 2C"
+      ],
+      correctIndex: 0,
+      explanation: "الطاقة المخزونة في المتسعة يمكن حسابها بثلاث صيغ مكافئة:<br><span class='explanation-formula'>PE = ½ C(ΔV)²</span><br><span class='explanation-formula'>PE = ½ Q(ΔV)</span><br><span class='explanation-formula'>PE = Q² / (2C)</span><br>استخدم الصيغة التي تتضمن المعطيات المتوفرة في المسألة."
+    },
+    {
+      id: 24,
+      question: "ما تأثير مضاعفة المساحة السطحية للصفيحتين في متسعة موصولة ببطارية ثابتة؟",
+      options: [
+        "تتضاعف السعة والشحنة، ويبقى فرق الجهد ثابتاً",
+        "يتضاعف فرق الجهد فقط",
+        "تتضاعف الشحنة فقط وتبقى السعة ثابتة",
+        "يقل فرق الجهد إلى النصف"
+      ],
+      correctIndex: 0,
+      explanation: "السعة تتناسب طردياً مع المساحة: <span class='explanation-formula'>C = ε₀A/d</span>. إذا ضاعفت A، تضاعفت C. بما أن البطارية متصلة، فرق الجهد <strong>ثابت</strong>. لذا تضاعفت الشحنة: <span class='explanation-formula'>Q = CΔV</span>. الطاقة تتضاعف هي الأخرى: PE = ½C(ΔV)² = 2×(½C₀ΔV²)."
+    },
+    {
+      id: 25,
+      question: "ما قيمة ثابت العزل الكهربائي k للهواء والفراغ؟",
+      options: [
+        "k = 1",
+        "k = 0",
+        "k = 8.85×10⁻¹²",
+        "k = 9×10⁹"
+      ],
+      correctIndex: 0,
+      explanation: "ثابت العزل الكهربائي (k) للهواء والفراغ يساوي <strong>1</strong> بالضبط. لذا فإن سعة المتسعة في الهواء أو الفراغ: <span class='explanation-formula'>C = ε₀A/d</span>. وعند إدخال أي مادة عازلة: k > 1، مما يعني Ck > C دائماً."
+    },
+    {
+      id: 26,
+      question: "إذا كانت سعة متسعتين على التوازي (Ceq = 9µF) وعددها 6 متسعات متساوية، ما سعتها عند توصيلها على التوالي؟",
+      options: [
+        "0.25 µF",
+        "9 µF",
+        "54 µF",
+        "1.5 µF"
+      ],
+      correctIndex: 0,
+      explanation: "في التوازي: Ceq = 6C = 9µF → <strong>C = 1.5 µF</strong>. في التوالي: <span class='explanation-formula'>1/Ceq = 6/C = 6/1.5 = 4</span> → <span class='explanation-formula'>Ceq = 0.25 µF</span>."
+    },
+    {
+      id: 27,
+      question: "ما الذي يحدث للمجال الكهربائي بين صفيحتي متسعة مفصولة عن المصدر عند إدخال عازل ثابت عزله k=2؟",
+      options: [
+        "يقل إلى النصف (Ek = E/2)",
+        "يبقى ثابتاً",
+        "يتضاعف",
+        "يصبح صفراً"
+      ],
+      correctIndex: 0,
+      explanation: "عند فصل المتسعة عن المصدر، الشحنة ثابتة. <span class='explanation-formula'>E = ΔV/d</span>. عند إدخال العازل: ΔVk = ΔV/k = ΔV/2. لذا: <span class='explanation-formula'>Ek = ΔVk/d = (ΔV/k)/d = E/k = E/2</span>. المجال يقل بنسبة k."
+    },
+    {
+      id: 28,
+      question: "ما التعريف العلمي للمتسعة؟",
+      options: [
+        "جهاز يُستخدم لتخزين الشحنة والطاقة الكهربائية، يتكون من صفيحتين موصلتين مفصولتين بعازل",
+        "جهاز يولد تياراً كهربائياً مستمراً",
+        "مقاومة كهربائية متغيرة",
+        "جهاز يحول الطاقة الكهربائية إلى حرارة"
+      ],
+      correctIndex: 0,
+      explanation: "المتسعة هي جهاز يُستخدم <strong>لتخزين الشحنة والطاقة الكهربائية</strong>. يتكون من زوج (أو أكثر) من الألواح الموصلة المتوازية مفصولة بعازل كهربائي (هواء أو فراغ أو مادة عازلة). الشحنة الكلية على الصفيحتين معاً تساوي صفراً (+Q و-Q)."
+    },
+    {
+      id: 29,
+      question: "متسعة سعتها C=8µF مشحونة بشحنة Q=200µC. ما مقدار الطاقة المخزونة فيها؟",
+      options: [
+        "2.5×10⁻³ J",
+        "0.0016 J",
+        "800 J",
+        "25 J"
+      ],
+      correctIndex: 0,
+      explanation: "<span class='explanation-formula'>PE = Q² / (2C) = (200×10⁻⁶)² / (2×8×10⁻⁶)</span><br>= (4×10⁻⁸) / (16×10⁻⁶)<br>= <strong>2.5×10⁻³ J</strong>. تأكد دائماً من تحويل الوحدات إلى SI قبل التعويض في معادلات الطاقة."
+    },
+    {
+      id: 30,
+      question: "ما الذي يُثبَّت عند إبقاء المتسعة موصولة بالبطارية أثناء إدخال عازل كهربائي؟",
+      options: [
+        "فرق الجهد (ΔV) يبقى ثابتاً مساوياً لجهد البطارية",
+        "الشحنة المخزونة (Q) تبقى ثابتة",
+        "السعة (C) تبقى ثابتة",
+        "المجال الكهربائي (E) يقل بنسبة k"
+      ],
+      correctIndex: 0,
+      explanation: "عند اتصال المتسعة بالبطارية: <strong>فرق الجهد (ΔV) ثابت</strong> دائماً لأنه يساوي جهد البطارية. ما يتغير: السعة ترتفع بـ k، والشحنة ترتفع بـ k، والطاقة ترتفع بـ k، والمجال الكهربائي يبقى ثابتاً (لأن E = ΔV/d)."
+    }
   ];
 
-  function resize() {
-    W = canvas.width  = window.innerWidth;
-    H = canvas.height = window.innerHeight;
+  // ===================================================================
+  // STATE MANAGEMENT
+  // ===================================================================
+  const STATE = {
+    questions: [],
+    currentIndex: 0,
+    score: 0,
+    correct: 0,
+    incorrect: 0,
+    answered: false,
+    totalQuestions: 20
+  };
+
+  // Arabic number helper
+  function toArabicNumerals(n) {
+    return String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
   }
 
-  function rand(min, max) { return Math.random() * (max - min) + min; }
-
-  function createParticle() {
-    return {
-      x:     rand(0, W),
-      y:     rand(0, H),
-      r:     rand(0.6, 2.5),
-      vx:    rand(-0.3, 0.3),
-      vy:    rand(-0.25, 0.25),
-      alpha: rand(0.1, 0.55),
-      color: COLORS[Math.floor(Math.random() * COLORS.length)],
-      life:  rand(0.003, 0.007),
-      phase: rand(0, Math.PI * 2)
-    };
+  // Shuffle array (Fisher-Yates)
+  function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
   }
 
-  function initParticles() {
-    particles = [];
-    for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(createParticle());
+  // Show screen
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
   }
 
-  let lastTime = 0;
-  function animate(ts) {
-    const dt = ts - lastTime;
-    lastTime = ts;
-    ctx.clearRect(0, 0, W, H);
+  // ===================================================================
+  // QUIZ INITIALIZATION
+  // ===================================================================
+  function startQuiz() {
+    STATE.questions = shuffle(physicsQuestionPool).slice(0, STATE.totalQuestions);
+    STATE.currentIndex = 0;
+    STATE.score = 0;
+    STATE.correct = 0;
+    STATE.incorrect = 0;
+    STATE.answered = false;
 
-    for (let i = 0; i < particles.length; i++) {
-      const p = particles[i];
-      p.phase += p.life;
-      const a = p.alpha * (0.5 + 0.5 * Math.sin(p.phase));
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = p.color + a + ')';
-      ctx.fill();
+    updateDashboard();
+    showScreen('quiz-screen');
+    renderQuestion();
+  }
 
-      p.x += p.vx;
-      p.y += p.vy;
+  function restartQuiz() {
+    startQuiz();
+  }
 
-      if (p.x < -10) p.x = W + 10;
-      if (p.x > W + 10) p.x = -10;
-      if (p.y < -10) p.y = H + 10;
-      if (p.y > H + 10) p.y = -10;
+  // ===================================================================
+  // RENDER QUESTION
+  // ===================================================================
+  function renderQuestion() {
+    const q = STATE.questions[STATE.currentIndex];
+    STATE.answered = false;
+
+    // Update counter
+    const num = STATE.currentIndex + 1;
+    document.getElementById('question-counter').textContent =
+      `السؤال ${toArabicNumerals(num)} من ${toArabicNumerals(STATE.totalQuestions)}`;
+
+    // Question text
+    const qEl = document.getElementById('question-text');
+    qEl.innerHTML = q.question;
+    qEl.style.animation = 'none';
+    void qEl.offsetWidth;
+    qEl.style.animation = '';
+
+    // Clear and render options
+    const container = document.getElementById('options-container');
+    container.innerHTML = '';
+    const letters = ['أ', 'ب', 'ج', 'د'];
+    q.options.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'option-btn';
+      btn.setAttribute('role', 'radio');
+      btn.setAttribute('aria-label', `الخيار ${letters[i]}: ${opt}`);
+      btn.innerHTML = `
+        <div class="option-letter">${letters[i]}</div>
+        <div class="option-text">${opt}</div>
+        <div class="option-icon" id="icon-${i}"></div>
+      `;
+      btn.addEventListener('click', (e) => handleAnswer(i, btn, e));
+      container.appendChild(btn);
+    });
+
+    // Hide explanation and next button
+    const expBox = document.getElementById('explanation-box');
+    expBox.classList.remove('visible');
+    expBox.style.display = 'none';
+
+    const btnNext = document.getElementById('btn-next');
+    btnNext.classList.remove('visible');
+
+    // Update btn next label
+    const isLast = STATE.currentIndex === STATE.totalQuestions - 1;
+    document.getElementById('btn-next-label').textContent = isLast ? 'عرض النتائج' : 'السؤال التالي';
+
+    // Scroll to top of right pane
+    const rightPane = document.querySelector('.right-pane');
+    if (rightPane) rightPane.scrollTop = 0;
+  }
+
+  // ===================================================================
+  // HANDLE ANSWER
+  // ===================================================================
+  function handleAnswer(selectedIndex, btn, event) {
+    if (STATE.answered) return;
+    STATE.answered = true;
+
+    const q = STATE.questions[STATE.currentIndex];
+    const allBtns = document.querySelectorAll('.option-btn');
+    const isCorrect = selectedIndex === q.correctIndex;
+
+    // Ripple effect
+    createRipple(btn, event);
+
+    // Lock all buttons
+    allBtns.forEach(b => b.classList.add('locked'));
+
+    // Mark selected
+    if (isCorrect) {
+      btn.classList.add('correct');
+      document.getElementById(`icon-${selectedIndex}`).textContent = '✓';
+      STATE.correct++;
+      STATE.score = Math.round((STATE.correct / (STATE.currentIndex + 1)) * 100);
+    } else {
+      btn.classList.add('incorrect');
+      document.getElementById(`icon-${selectedIndex}`).textContent = '✗';
+      // Show correct answer
+      const correctBtn = allBtns[q.correctIndex];
+      correctBtn.classList.add('correct');
+      document.getElementById(`icon-${q.correctIndex}`).textContent = '✓';
+      STATE.incorrect++;
+      STATE.score = Math.round((STATE.correct / (STATE.currentIndex + 1)) * 100);
     }
 
-    // draw faint connecting lines
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const dist = Math.sqrt(dx*dx + dy*dy);
-        if (dist < 100) {
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          const opacity = (1 - dist / 100) * 0.07;
-          ctx.strokeStyle = 'rgba(0,229,255,' + opacity + ')';
-          ctx.lineWidth = 0.5;
-          ctx.stroke();
-        }
-      }
+    // Show explanation
+    const expBox = document.getElementById('explanation-box');
+    document.getElementById('explanation-text').innerHTML = q.explanation;
+    expBox.style.display = 'block';
+    void expBox.offsetWidth;
+    expBox.classList.add('visible');
+
+    // Show next button
+    const btnNext = document.getElementById('btn-next');
+    setTimeout(() => btnNext.classList.add('visible'), 300);
+
+    // Update dashboard
+    updateDashboard();
+  }
+
+  // ===================================================================
+  // NEXT QUESTION
+  // ===================================================================
+  function nextQuestion() {
+    STATE.currentIndex++;
+    if (STATE.currentIndex >= STATE.totalQuestions) {
+      showResults();
+    } else {
+      renderQuestion();
+      updateDashboard();
+    }
+  }
+
+  // ===================================================================
+  // UPDATE DASHBOARD
+  // ===================================================================
+  function updateDashboard() {
+    const progress = (STATE.currentIndex / STATE.totalQuestions) * 100;
+    document.getElementById('progress-fill').style.width = progress + '%';
+    document.getElementById('progress-text').textContent =
+      `${toArabicNumerals(STATE.currentIndex)} / ${toArabicNumerals(STATE.totalQuestions)}`;
+
+    // Animate score values
+    animateValue('score-display', STATE.score, '%');
+    animateValue('correct-display', STATE.correct, '');
+    animateValue('incorrect-display', STATE.incorrect, '');
+  }
+
+  function animateValue(id, newVal, suffix) {
+    const el = document.getElementById(id);
+    const text = newVal + suffix;
+    if (el.textContent !== text) {
+      el.textContent = text;
+      el.style.animation = 'none';
+      void el.offsetWidth;
+      el.style.animation = 'scoreFlash 0.35s cubic-bezier(0.34,1.56,0.64,1)';
+    }
+  }
+
+  // ===================================================================
+  // RIPPLE EFFECT
+  // ===================================================================
+  function createRipple(btn, event) {
+    const rect = btn.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height) * 2;
+    const x = (event.clientX - rect.left) - size / 2;
+    const y = (event.clientY - rect.top) - size / 2;
+    const ripple = document.createElement('span');
+    ripple.className = 'ripple';
+    ripple.style.cssText = `width:${size}px;height:${size}px;left:${x}px;top:${y}px;`;
+    btn.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 600);
+  }
+
+  // ===================================================================
+  // SHOW RESULTS
+  // ===================================================================
+  function showResults() {
+    const pct = Math.round((STATE.correct / STATE.totalQuestions) * 100);
+    document.getElementById('results-grade').textContent = pct + '%';
+    document.getElementById('res-correct').textContent = STATE.correct;
+    document.getElementById('res-incorrect').textContent = STATE.incorrect;
+    document.getElementById('res-total').textContent = STATE.totalQuestions;
+
+    let emoji, label, message;
+    if (pct >= 90) {
+      emoji = '🏆'; label = 'ممتاز'; message = 'أداء رائع! أنت متمكن من مادة المتسعات بامتياز. استمر في هذا التفوق!';
+    } else if (pct >= 75) {
+      emoji = '🌟'; label = 'جيد جداً'; message = 'نتيجة جيدة جداً! مراجعة بعض النقاط ستجعلك متميزاً.';
+    } else if (pct >= 60) {
+      emoji = '👍'; label = 'جيد'; message = 'بداية جيدة! راجع الأجزاء التي أخطأت فيها وأعد الاختبار.';
+    } else if (pct >= 40) {
+      emoji = '📚'; label = 'مقبول'; message = 'تحتاج إلى مراجعة أعمق للمادة. لا تستسلم وحاول مرة أخرى!';
+    } else {
+      emoji = '💪'; label = 'راجع المادة'; message = 'لا بأس في البداية! راجع الفصل الأول جيداً ثم أعد المحاولة.';
     }
 
-    animId = requestAnimationFrame(animate);
+    document.getElementById('results-emoji').textContent = emoji;
+    document.getElementById('results-label').textContent = label;
+    document.getElementById('results-message').textContent = message;
+
+    showScreen('results-screen');
   }
-
-  resize();
-  initParticles();
-  animate(0);
-
-  window.addEventListener('resize', () => {
-    resize();
-    initParticles();
-  });
-
-  // ── Mouse Repel ──
-  window.addEventListener('mousemove', (e) => {
-    const mx = e.clientX, my = e.clientY;
-    particles.forEach(p => {
-      const dx = p.x - mx, dy = p.y - my;
-      const dist = Math.sqrt(dx*dx + dy*dy);
-      if (dist < 80) {
-        p.vx += dx / dist * 0.15;
-        p.vy += dy / dist * 0.15;
-        p.vx *= 0.9;
-        p.vy *= 0.9;
-      }
-    });
-  });
-
-  // ── CTA magnetic effect ──
-  const cta = document.querySelector('.cta-btn');
-  if (cta) {
-    cta.addEventListener('mousemove', function(e) {
-      const rect = this.getBoundingClientRect();
-      const cx = rect.left + rect.width  / 2;
-      const cy = rect.top  + rect.height / 2;
-      const dx = (e.clientX - cx) * 0.3;
-      const dy = (e.clientY - cy) * 0.3;
-      this.style.transform = `translateY(-4px) scale(1.03) translate(${dx}px, ${dy}px)`;
-    });
-    cta.addEventListener('mouseleave', function() {
-      this.style.transform = '';
-    });
-  }
-})();
-</script>
+  </script>
+<footer style="text-align: center; padding: 40px;">
+    <a href="dashboard.html" style="color: #ffab00; font-size: 16px; text-decoration: none; border: 1px solid #ffab00; padding: 10px 20px; border-radius: 8px;">
+        ⬅ العودة لمركز الاختبارات
+    </a>
+</footer>
 </body>
 </html>
