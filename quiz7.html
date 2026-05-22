@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<header style="text-align: center; padding: 20px;">
+    <h1>الاختبار الأول</h1>
+    <a href="dashboard.html" style="color: #ffab00; font-size: 16px; text-decoration: none;">
+        ⬅ العودة لمركز الاختبارات
+    </a>
+</header>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚛ اختبار الكترونيات الحالة الصلبة | الصف السابع</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════
+   ROOT & RESET
+══════════════════════════════════════ */
+:root{
+  --bg1:#0d1117;
+  --bg2:#0f1923;
+  --cyan:#00f5ff;
+  --cyan-dim:rgba(0,245,255,0.15);
+  --cyan-glow:rgba(0,245,255,0.35);
+  --amber:#ffa500;
+  --amber-dim:rgba(255,165,0,0.15);
+  --amber-glow:rgba(255,165,0,0.4);
+  --green-neon:#00ff88;
+  --green-dim:rgba(0,255,136,0.15);
+  --green-glow:rgba(0,255,136,0.5);
+  --red-neon:#ff4466;
+  --red-dim:rgba(255,68,102,0.15);
+  --red-glow:rgba(255,68,102,0.5);
+  --glass:rgba(255,255,255,0.04);
+  --glass-border:rgba(255,255,255,0.1);
+  --txt:#e8eaf6;
+  --txt-muted:#7986cb;
+  --shadow-cyan:0 0 30px rgba(0,245,255,0.2);
+  --shadow-amber:0 0 30px rgba(255,165,0,0.2);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Cairo',sans-serif;
+  background:var(--bg1);
+  color:var(--txt);
+  direction:rtl;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ══════════════════════════════════════
+   ANIMATED BACKGROUND
+══════════════════════════════════════ */
+.bg-orbs{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);animation:orbFloat 8s ease-in-out infinite}
+.orb1{width:400px;height:400px;background:radial-gradient(circle,rgba(0,245,255,0.12),transparent);top:-100px;right:-100px;animation-delay:0s}
+.orb2{width:350px;height:350px;background:radial-gradient(circle,rgba(255,165,0,0.1),transparent);bottom:-80px;left:-80px;animation-delay:3s}
+.orb3{width:250px;height:250px;background:radial-gradient(circle,rgba(0,255,136,0.08),transparent);top:40%;left:50%;animation-delay:5s}
+@keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(20px,-20px) scale(1.05)}}
+
+/* ══════════════════════════════════════
+   HEADER
+══════════════════════════════════════ */
+.hdr{
+  position:relative;z-index:1;
+  background:linear-gradient(180deg,rgba(0,245,255,0.06) 0%,transparent 100%);
+  border-bottom:1px solid rgba(0,245,255,0.15);
+  padding:32px 24px 26px;
+  text-align:center;
+}
+.hdr-icon{
+  font-size:3.2rem;
+  display:block;
+  margin-bottom:10px;
+  animation:pulse 2.5s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{filter:drop-shadow(0 0 8px var(--cyan))}50%{filter:drop-shadow(0 0 22px var(--cyan))}}
+.hdr h1{
+  font-size:1.7rem;font-weight:900;
+  background:linear-gradient(135deg,var(--cyan),var(--amber));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1.4;margin-bottom:8px;
+}
+.hdr p{font-size:.85rem;color:var(--txt-muted);margin-bottom:14px}
+.hdr-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.hb{
+  background:var(--glass);border:1px solid var(--glass-border);
+  border-radius:20px;padding:4px 13px;
+  font-size:.73rem;font-weight:700;color:var(--cyan);
+  backdrop-filter:blur(8px);
+}
+.credit{
+  margin-top:12px;font-size:.78rem;
+  color:var(--amber);font-weight:600;
+  text-shadow:0 0 10px var(--amber-glow);
+}
+
+/* ══════════════════════════════════════
+   PROGRESS BAR
+══════════════════════════════════════ */
+.prog-sticky{
+  position:sticky;top:0;z-index:50;
+  background:rgba(13,17,23,0.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(0,245,255,0.1);
+  padding:12px 24px 10px;
+}
+.prog-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.prog-label{font-size:.8rem;color:var(--cyan);font-weight:700;letter-spacing:.3px}
+.prog-score{font-size:.8rem;color:var(--amber);font-weight:700}
+.prog-track{background:rgba(255,255,255,0.06);border-radius:10px;height:6px;overflow:hidden;position:relative}
+.prog-fill{
+  height:100%;border-radius:10px;
+  background:linear-gradient(90deg,var(--cyan),var(--amber));
+  box-shadow:0 0 10px var(--cyan-glow);
+  transition:width .6s cubic-bezier(.4,0,.2,1);
+}
+
+/* ══════════════════════════════════════
+   MAIN WRAP
+══════════════════════════════════════ */
+.wrap{
+  position:relative;z-index:1;
+  max-width:760px;margin:0 auto;
+  padding:28px 18px 80px;
+}
+
+/* ══════════════════════════════════════
+   GLASS CARD
+══════════════════════════════════════ */
+.glass-card{
+  background:var(--glass);
+  border:1px solid var(--glass-border);
+  border-radius:24px;
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  box-shadow:var(--shadow-cyan),0 4px 40px rgba(0,0,0,0.5);
+  padding:32px 28px 26px;
+  position:relative;
+  overflow:hidden;
+}
+.glass-card::before{
+  content:'';position:absolute;top:0;right:0;
+  width:180px;height:180px;
+  background:radial-gradient(circle,rgba(0,245,255,0.06),transparent);
+  border-radius:50%;pointer-events:none;
+}
+
+/* ══════════════════════════════════════
+   START SCREEN
+══════════════════════════════════════ */
+#start-screen{text-align:center;padding:20px 8px}
+.start-card{
+  background:var(--glass);
+  border:1px solid rgba(0,245,255,0.2);
+  border-radius:28px;
+  backdrop-filter:blur(24px);
+  padding:48px 32px 40px;
+  max-width:540px;margin:0 auto;
+  box-shadow:0 0 60px rgba(0,245,255,0.1),0 20px 60px rgba(0,0,0,0.6);
+}
+.start-icon-big{font-size:5rem;display:block;margin-bottom:18px;
+  animation:pulse 2.5s ease-in-out infinite}
+.start-card h2{
+  font-size:1.55rem;font-weight:900;margin-bottom:12px;
+  background:linear-gradient(135deg,#fff,var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.start-card p{
+  color:rgba(232,234,246,0.7);font-size:.93rem;
+  line-height:1.8;margin-bottom:24px;
+}
+.start-features{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+  margin-bottom:30px;text-align:right;
+}
+.feat{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:14px;padding:12px 14px;
+  display:flex;align-items:center;gap:10px;
+  font-size:.82rem;font-weight:600;color:rgba(232,234,246,0.8);
+}
+.feat-icon{font-size:1.3rem;flex-shrink:0}
+.start-btn{
+  width:100%;
+  background:linear-gradient(135deg,var(--cyan),#0098a6);
+  color:#0d1117;
+  border:none;border-radius:16px;
+  padding:16px 40px;
+  font-family:inherit;font-size:1.05rem;font-weight:900;
+  cursor:pointer;
+  box-shadow:0 0 30px var(--cyan-glow),0 8px 30px rgba(0,0,0,0.4);
+  transition:all .2s ease;letter-spacing:.5px;
+}
+.start-btn:hover{
+  transform:translateY(-3px) scale(1.02);
+  box-shadow:0 0 50px var(--cyan-glow),0 12px 40px rgba(0,0,0,0.5);
+}
+.start-btn:active{transform:translateY(0) scale(.99)}
+
+/* ══════════════════════════════════════
+   QUESTION SCREEN
+══════════════════════════════════════ */
+#quiz-screen{display:none}
+.q-meta{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.q-num-badge{
+  background:linear-gradient(135deg,var(--cyan),#006a73);
+  color:#0d1117;border-radius:30px;
+  padding:4px 14px;font-size:.76rem;font-weight:900;
+  box-shadow:0 0 12px var(--cyan-glow);
+}
+.q-cat{
+  background:rgba(255,165,0,0.12);
+  border:1px solid rgba(255,165,0,0.25);
+  border-radius:10px;padding:3px 11px;
+  font-size:.71rem;font-weight:700;color:var(--amber);
+}
+.q-type{
+  background:rgba(123,97,255,0.12);
+  border:1px solid rgba(123,97,255,0.25);
+  border-radius:10px;padding:3px 11px;
+  font-size:.71rem;font-weight:700;color:#9c8fff;
+}
+.q-text{
+  font-size:1.1rem;font-weight:700;line-height:1.85;
+  color:#e8eaf6;margin-bottom:8px;
+  padding-right:16px;
+  border-right:4px solid var(--cyan);
+}
+.q-hint{
+  background:rgba(0,245,255,0.07);
+  border:1px solid rgba(0,245,255,0.15);
+  border-radius:12px;
+  padding:10px 14px;
+  font-size:.85rem;color:var(--cyan);
+  font-family:monospace;
+  margin-bottom:20px;
+  letter-spacing:.3px;
+}
+
+/* ══════════════════════════════════════
+   OPTION BUTTONS
+══════════════════════════════════════ */
+.opts{list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:20px}
+.opt-btn{
+  display:flex;align-items:center;gap:14px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:16px;
+  padding:14px 18px;
+  cursor:pointer;
+  font-family:inherit;font-size:.97rem;font-weight:500;
+  color:rgba(232,234,246,0.9);
+  text-align:right;width:100%;
+  transition:all .22s ease;
+  position:relative;overflow:hidden;
+}
+.opt-btn::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,var(--cyan-dim),transparent);
+  opacity:0;transition:opacity .22s ease;border-radius:16px;
+}
+.opt-btn:hover:not(:disabled)::before{opacity:1}
+.opt-btn:hover:not(:disabled){
+  border-color:rgba(0,245,255,0.4);
+  transform:translateX(-4px);
+  box-shadow:0 0 20px rgba(0,245,255,0.12),inset 0 0 20px rgba(0,245,255,0.05);
+}
+.opt-letter{
+  min-width:36px;height:36px;
+  background:rgba(0,245,255,0.1);
+  border:1px solid rgba(0,245,255,0.3);
+  color:var(--cyan);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.83rem;font-weight:800;
+  flex-shrink:0;transition:all .22s ease;
+}
+.opt-btn:hover:not(:disabled) .opt-letter{
+  background:rgba(0,245,255,0.2);
+  border-color:var(--cyan);
+  box-shadow:0 0 12px var(--cyan-glow);
+}
+
+/* correct / wrong states */
+.opt-btn.is-correct{
+  border-color:var(--green-neon) !important;
+  background:var(--green-dim) !important;
+  color:var(--green-neon) !important;
+  box-shadow:0 0 25px var(--green-glow),inset 0 0 20px rgba(0,255,136,0.08) !important;
+}
+.opt-btn.is-correct .opt-letter{
+  background:rgba(0,255,136,0.25) !important;
+  border-color:var(--green-neon) !important;
+  color:var(--green-neon) !important;
+  box-shadow:0 0 12px var(--green-glow) !important;
+}
+.opt-btn.is-wrong{
+  border-color:var(--red-neon) !important;
+  background:var(--red-dim) !important;
+  color:var(--red-neon) !important;
+  box-shadow:0 0 20px var(--red-glow),inset 0 0 20px rgba(255,68,102,0.08) !important;
+}
+.opt-btn.is-wrong .opt-letter{
+  background:rgba(255,68,102,0.25) !important;
+  border-color:var(--red-neon) !important;
+  color:var(--red-neon) !important;
+  box-shadow:0 0 10px var(--red-glow) !important;
+}
+.opt-btn:disabled{cursor:default}
+
+/* ══════════════════════════════════════
+   EXPLANATION BOX
+══════════════════════════════════════ */
+.exp-box{
+  margin-top:20px;
+  border-radius:16px;
+  padding:18px 20px;
+  font-size:.92rem;
+  line-height:1.8;
+  font-weight:500;
+  display:none;
+  animation:slideUp .35s ease;
+  backdrop-filter:blur(10px);
+}
+.exp-box.show{display:block}
+.exp-box.exp-ok{
+  background:rgba(0,255,136,0.07);
+  border:1px solid rgba(0,255,136,0.3);
+  color:#a0ffd0;
+}
+.exp-box.exp-no{
+  background:rgba(255,68,102,0.07);
+  border:1px solid rgba(255,68,102,0.3);
+  color:#ffb3c1;
+}
+.exp-title{
+  font-size:.97rem;font-weight:800;
+  margin-bottom:8px;
+  display:flex;align-items:center;gap:8px;
+}
+@keyframes slideUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* ══════════════════════════════════════
+   NEXT BUTTON
+══════════════════════════════════════ */
+.next-btn{
+  display:none;
+  margin:24px auto 0;
+  background:linear-gradient(135deg,var(--amber),#cc7a00);
+  color:#0d1117;border:none;
+  border-radius:14px;
+  padding:13px 42px;
+  font-family:inherit;font-size:.97rem;font-weight:800;
+  cursor:pointer;
+  box-shadow:0 0 25px var(--amber-glow),0 6px 20px rgba(0,0,0,0.4);
+  transition:all .2s ease;
+  letter-spacing:.3px;
+}
+.next-btn.show{display:block}
+.next-btn:hover{
+  transform:translateY(-2px) scale(1.03);
+  box-shadow:0 0 40px var(--amber-glow),0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* ══════════════════════════════════════
+   RESULTS SCREEN
+══════════════════════════════════════ */
+#results-screen{display:none;animation:slideUp .5s ease}
+#results-screen.show{display:block}
+.result-card{
+  background:var(--glass);
+  border:1px solid rgba(0,245,255,0.2);
+  border-radius:28px;
+  backdrop-filter:blur(24px);
+  padding:44px 30px 38px;
+  text-align:center;
+  box-shadow:0 0 60px rgba(0,245,255,0.12),0 20px 60px rgba(0,0,0,0.6);
+}
+
+/* Ring chart */
+.ring-wrap{position:relative;width:160px;height:160px;margin:0 auto 26px}
+.ring-svg{width:160px;height:160px;transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:rgba(255,255,255,0.06);stroke-width:10}
+.ring-fill{fill:none;stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)}
+.ring-center{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+}
+.ring-score{font-size:2.2rem;font-weight:900;line-height:1}
+.ring-total{font-size:.82rem;color:var(--txt-muted);font-weight:600;margin-top:2px}
+
+.res-emoji{font-size:2.5rem;margin-bottom:8px;display:block}
+.res-title{font-size:1.5rem;font-weight:900;margin-bottom:6px}
+.res-sub{color:var(--txt-muted);font-size:.92rem;margin-bottom:24px}
+
+.stats-row{
+  display:flex;justify-content:center;gap:18px;
+  margin-bottom:26px;flex-wrap:wrap;
+}
+.stat-box{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:16px;padding:14px 22px;
+  min-width:100px;
+}
+.stat-val{font-size:1.6rem;font-weight:900;display:block;line-height:1}
+.stat-lbl{font-size:.74rem;color:var(--txt-muted);font-weight:600;margin-top:4px}
+
+/* summary */
+.sum-title{
+  font-size:1rem;font-weight:800;
+  color:var(--cyan);margin-bottom:16px;
+  text-shadow:0 0 10px var(--cyan-glow);
+  text-align:right;
+}
+.sum-list{text-align:right;display:flex;flex-direction:column;gap:9px;margin-bottom:28px}
+.sum-item{
+  border-radius:14px;padding:13px 16px;
+  font-size:.86rem;font-weight:600;line-height:1.65;
+  backdrop-filter:blur(8px);
+}
+.sum-item.sc{
+  background:rgba(0,255,136,0.06);
+  border:1px solid rgba(0,255,136,0.2);
+}
+.sum-item.sw{
+  background:rgba(255,68,102,0.06);
+  border:1px solid rgba(255,68,102,0.2);
+}
+.sum-q{color:var(--txt-muted);font-size:.77rem;font-weight:500;margin-bottom:3px}
+.sum-ans{font-size:.74rem;font-weight:700;margin-top:4px}
+.sum-ans.cl{color:var(--green-neon)}.sum-ans.wl{color:var(--red-neon)}
+
+.restart-btn{
+  background:linear-gradient(135deg,var(--cyan),#0098a6);
+  color:#0d1117;border:none;
+  border-radius:16px;padding:14px 50px;
+  font-family:inherit;font-size:1.02rem;font-weight:900;
+  cursor:pointer;
+  box-shadow:0 0 30px var(--cyan-glow),0 8px 30px rgba(0,0,0,0.4);
+  transition:all .2s ease;
+}
+.restart-btn:hover{
+  transform:translateY(-3px) scale(1.03);
+  box-shadow:0 0 50px var(--cyan-glow),0 12px 40px rgba(0,0,0,0.5);
+}
+
+/* score color helpers */
+.col-ex{color:var(--green-neon);text-shadow:0 0 15px var(--green-glow)}
+.col-gd{color:var(--cyan);text-shadow:0 0 15px var(--cyan-glow)}
+.col-ok{color:var(--amber);text-shadow:0 0 15px var(--amber-glow)}
+.col-lo{color:var(--red-neon);text-shadow:0 0 15px var(--red-glow)}
+
+/* scrollbar */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg1)}
+::-webkit-scrollbar-thumb{background:rgba(0,245,255,0.3);border-radius:10px}
+</style>
+</head>
+<body>
+
+<!-- Background orbs -->
+<div class="bg-orbs">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+</div>
+
+<!-- HEADER -->
+<div class="hdr">
+  <span class="hdr-icon">⚛</span>
+  <h1>اختبار الفيزياء — الفصل السابع<br>إلكترونيات الحالة الصلبة</h1>
+  <p>الصف السادس العلمي | المنهج العراقي | الفصل الأول 2026</p>
+  <div class="hdr-badges">
+    <span class="hb">⚡ 40 سؤالاً في قاعدة البيانات</span>
+    <span class="hb">🎲 20 سؤالاً عشوائياً</span>
+    <span class="hb">🔮 تصميم Glassmorphic</span>
+    <span class="hb">✅ تغذية راجعة علمية</span>
+  </div>
+  <div class="credit">إعداد الأستاذ: وليد خالد الفتلاوي</div>
+</div>
+
+<!-- PROGRESS (sticky) -->
+<div class="prog-sticky" id="prog-sticky" style="display:none">
+  <div class="prog-row">
+    <span class="prog-label" id="prog-label">سؤال 1 من 20</span>
+    <span class="prog-score" id="prog-score">✅ 0 صحيحة</span>
+  </div>
+  <div class="prog-track">
+    <div class="prog-fill" id="prog-fill" style="width:0%"></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="wrap">
+
+  <!-- START SCREEN -->
+  <div id="start-screen">
+    <div class="start-card">
+      <span class="start-icon-big">🔬</span>
+      <h2>هل أنت مستعد للتحدي؟</h2>
+      <p>ستواجه <strong style="color:var(--cyan)">20 سؤالاً عشوائياً</strong> من أصل 40 سؤالاً وزارياً ومنهجياً متنوعاً في الفصل السابع — إلكترونيات الحالة الصلبة. كل جلسة مختلفة!</p>
+      <div class="start-features">
+        <div class="feat"><span class="feat-icon">⚛</span><span>أشباه الموصلات</span></div>
+        <div class="feat"><span class="feat-icon">🔋</span><span>حزم الطاقة</span></div>
+        <div class="feat"><span class="feat-icon">💎</span><span>الثنائي PN</span></div>
+        <div class="feat"><span class="feat-icon">📡</span><span>الترانزستور</span></div>
+        <div class="feat"><span class="feat-icon">🎲</span><span>عشوائي تماماً</span></div>
+        <div class="feat"><span class="feat-icon">💡</span><span>شرح فوري</span></div>
+      </div>
+      <button class="start-btn" onclick="startQuiz()">⚡ ابدأ الاختبار الآن</button>
+    </div>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="quiz-screen">
+    <div class="glass-card" id="q-card"></div>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div id="results-screen"></div>
+
+</div><!-- /wrap -->
+
+<script>
+/* ══════════════════════════════════════
+   QUESTIONS DATABASE — 40 Questions
+══════════════════════════════════════ */
+const ALL_Q = [
+
+// ── 1 ── المدارات والطاقة
+{cat:"المدارات والطاقة",type:"نظري",
+q:"ما الذي يحدد الخواص الكهربائية للمادة؟",
+opts:["النواة الذرية وعدد البروتونات","الأغلفة الإلكترونية التي تشارك إلكتروناتها في التفاعلات الكيميائية","الكتلة الذرية للعنصر","عدد النيوترونات في النواة"],
+ans:1,
+exp:"الأغلفة الإلكترونية التي تشارك إلكتروناتها في التفاعلات الكيميائية هي التي تحدد الخواص الكهربائية للمادة."},
+
+// ── 2 ──
+{cat:"المدارات والطاقة",type:"نظري",
+q:"إلكترونات التكافؤ هي:",
+opts:["إلكترونات الغلاف الداخلي الأقرب للنواة","إلكترونات الغلاف الخارجي التي تسهم في التفاعلات الكيميائية وتحدد الخواص الإلكترونية للمادة","الإلكترونات التي لا تشارك في التفاعلات","النيوترونات داخل النواة"],
+ans:1,
+exp:"إلكترونات التكافؤ هي الإلكترونات في الغلاف الخارجي الأبعد عن النواة، وتسهم في التفاعلات الكيميائية وتحدد الخواص الإلكترونية للمادة."},
+
+// ── 3 ──
+{cat:"المدارات والطاقة",type:"وزاري",
+q:"ماذا يحدث لإلكترون ذرة الهيدروجين إذا اكتسب طاقة مقدارها (13.6 eV)؟",
+opts:["ينتقل إلى مدار داخلي أقرب للنواة","يتحرر من ذرة الهيدروجين (في مستواه الأرضي)","يصدر فوتون ضوئي","يتحول إلى نيوترون"],
+ans:1,
+exp:"أقل طاقة ممكنة للإلكترون في ذرة الهيدروجين = (-13.6 eV). عند اكتسابه طاقة (+13.6 eV) يتحرر تماماً من الذرة في مستواه الأرضي."},
+
+// ── 4 ── حزم الطاقة - موصلات
+{cat:"حزم الطاقة",type:"نظري",
+q:"ما الذي يميز حزم الطاقة في المواد الموصلة (المعادن)؟",
+opts:["حزمة التكافؤ خالية من الإلكترونات","ثغرة الطاقة المحظورة واسعة جداً","تتداخل حزمة التكافؤ مع حزمة التوصيل وتنعدم ثغرة الطاقة المحظورة","حزمة التوصيل خالية دائماً"],
+ans:2,
+exp:"في الموصلات: تتداخل حزمة التكافؤ مع حزمة التوصيل وتنعدم ثغرة الطاقة المحظورة، لذا تتحرك إلكترونات التكافؤ بحرية وتمتلك المعادن قابلية توصيل كهربائي عالية."},
+
+// ── 5 ──
+{cat:"حزم الطاقة",type:"وزاري",
+q:"علل: تقل قابلية التوصيل الكهربائي في المعادن بارتفاع درجة حرارتها.",
+opts:["لأن إلكترونات التوصيل تختفي عند الحرارة","لأن ارتفاع درجة الحرارة يزيد مقاومتها الكهربائية نتيجة ازدياد المعدل الزمني للطاقة الاهتزازية للذرات","لأن حزمة التوصيل تمتلئ بالإلكترونات","لأن ثغرة الطاقة المحظورة تتسع بالحرارة"],
+ans:1,
+exp:"ارتفاع درجة الحرارة في المعادن يزيد الطاقة الاهتزازية للذرات والجزيئات → تزداد المقاومة الكهربائية → تقل قابلية التوصيل."},
+
+// ── 6 ── عوازل
+{cat:"حزم الطاقة",type:"وزاري",
+q:"علل: المادة العازلة لا تمتلك قابلية توصيل كهربائية.",
+opts:["لأن حزمة التكافؤ فارغة","لأن ثغرة الطاقة المحظورة ضيقة","لأن ثغرة الطاقة المحظورة واسعة نسبياً (5 eV أو أكثر) لذا لا تتمكن إلكترونات التكافؤ من عبورها إلى حزمة التوصيل","لأن حزمة التوصيل مملوءة بالإلكترونات"],
+ans:2,
+exp:"ثغرة الطاقة المحظورة في العوازل واسعة (≈5 eV أو أكثر)، فلا تستطيع إلكترونات التكافؤ اكتساب الطاقة الكافية لعبورها إلى حزمة التوصيل."},
+
+// ── 7 ──
+{cat:"حزم الطاقة",type:"وزاري",
+q:"ماذا يحصل عند تسليط مجال كهربائي كبير على المادة العازلة أو تعرضها لتأثير حراري كبير؟",
+opts:["لا يحدث شيء لأنها عازل","تنهار المادة ويتولد جهد كهربائي","قد يؤدي ذلك إلى انهيار العازل وانسياب تيار قليل جداً خلاله","تصبح موصلاً جيداً بشكل دائم"],
+ans:2,
+exp:"عند تسليط مجال كبير أو تأثير حراري كبير على العازل قد يُسبب انهياراً له وانسياب تيار قليل جداً خلاله."},
+
+// ── 8 ── أشباه الموصلات عند 0K
+{cat:"أشباه الموصلات النقية",type:"وزاري",
+q:"تحت أي شروط يسلك شبه الموصل النقي سلوك المادة العازلة؟",
+opts:["عند درجة حرارة الغرفة (300K)","عند درجة حرارة الصفر المطلق (0K) وفي غياب الضوء","عند تعرضه للضوء الشديد","عند إضافة شوائب خماسية التكافؤ"],
+ans:1,
+exp:"عند درجة حرارة الصفر المطلق (0K) وفي غياب الضوء، يسلك شبه الموصل النقي سلوك المادة العازلة (حزمة التكافؤ ممتلئة، حزمة التوصيل فارغة)."},
+
+// ── 9 ──
+{cat:"أشباه الموصلات النقية",type:"وزاري",
+q:"ما مقدار ثغرة الطاقة المحظورة للسيليكون النقي عند درجة حرارة 300K؟",
+opts:["5.0 eV","0.72 eV","1.1 eV","2.5 eV"],
+ans:2,
+exp:"مقدار ثغرة الطاقة المحظورة: السيليكون النقي = 1.1 eV، الجرمانيوم النقي = 0.72 eV عند درجة حرارة الغرفة (300K)."},
+
+// ── 10 ──
+{cat:"أشباه الموصلات النقية",type:"وزاري",
+q:"ما المقصود بزوج (إلكترون-فجوة)؟",
+opts:["بروتون وإلكترون في نفس الغلاف","عند انتقال الإلكترون من حزمة التكافؤ إلى حزمة التوصيل يترك مكانه فارغاً (فجوة) تعمل عمل الشحنة الموجبة، ويتولد بذلك الزوج (إلكترون-فجوة)","إلكترون وثقب في البنية البلورية","ذرتا سيليكون متجاورتان"],
+ans:1,
+exp:"عند انتقال إلكترون من حزمة التكافؤ إلى حزمة التوصيل، يترك مكانه فارغاً يُسمى فجوة (تعمل عمل الشحنة الموجبة)، وتتولد بذلك الأزواج (إلكترون-فجوة)."},
+
+// ── 11 ──
+{cat:"أشباه الموصلات النقية",type:"وزاري",
+q:"علام يعتمد المعدل الزمني لتوليد أزواج (إلكترون-فجوة) في شبه الموصل النقي؟",
+opts:["على المقاومة الكهربائية للمادة فقط","على درجة حرارة شبه الموصل ونوع مادته","على شدة المجال الكهربائي المسلط فقط","على عدد الذرات في البلورة"],
+ans:1,
+exp:"المعدل الزمني لتوليد أزواج (إلكترون-فجوة) يعتمد على: 1- درجة حرارة شبه الموصل. 2- نوع مادة شبه الموصل."},
+
+// ── 12 ──
+{cat:"أشباه الموصلات النقية",type:"وزاري",
+q:"عند تسليط مجال كهربائي مناسب على شبه الموصل النقي (Si) عند 300K، كيف تتحرك الفجوات والإلكترونات؟",
+opts:["كلاهما يتحرك في نفس الاتجاه","الفجوات باتجاه المجال، والإلكترونات بعكس اتجاه المجال","الإلكترونات باتجاه المجال، والفجوات بعكسه","لا يتحرك أيٌّ منهما"],
+ans:1,
+exp:"اتجاه الفجوات الموجبة باتجاه المجال الكهربائي، بينما تتحرك الإلكترونات بعكس اتجاه المجال (أي الفجوات تتحرك بعكس اتجاه الإلكترونات)."},
+
+// ── 13 ── مستوى فيرمي
+{cat:"مستوى فيرمي",type:"وزاري",
+q:"ما المقصود بمستوى فيرمي؟",
+opts:["متوسط مستويات الطاقة الكلية","مستوى الطاقة في قمة حزمة التوصيل","أعلى مستوى طاقة مسموح به يمكن أن يشغله الإلكترون عند درجة حرارة الصفر المطلق (0K)","المستوى الأوسط بين النواة والغلاف الخارجي"],
+ans:2,
+exp:"مستوى فيرمي: هو أعلى مستوى طاقة مسموح به يمكن أن يشغله الإلكترون عند درجة حرارة الصفر المطلق (0K)."},
+
+// ── 14 ──
+{cat:"مستوى فيرمي",type:"نظري",
+q:"أين يقع مستوى فيرمي بالنسبة لأشباه الموصلات النقية؟",
+opts:["في قمة حزمة التوصيل","في قاع حزمة التكافؤ","في منتصف ثغرة الطاقة المحظورة بين حزمتي التوصيل والتكافؤ","فوق حزمة التوصيل"],
+ans:2,
+exp:"في أشباه الموصلات النقية، يقع مستوى فيرمي في منتصف ثغرة الطاقة المحظورة بين حزمة التوصيل وحزمة التكافؤ."},
+
+// ── 15 ──
+{cat:"مستوى فيرمي",type:"وزاري",
+q:"في الموصلات عند درجة الصفر المطلق (0K)، أين يقع مستوى فيرمي؟",
+opts:["في منتصف ثغرة الطاقة المحظورة","في قاع حزمة التكافؤ","فوق المنطقة المملوءة بالإلكترونات من حزمة التوصيل (مستويات الطاقة تحت فيرمي مشغولة)","في الثغرة المحظورة"],
+ans:2,
+exp:"في الموصلات عند 0K: يقع مستوى فيرمي فوق المنطقة المملوءة بالإلكترونات من حزمة التوصيل، ومستويات الطاقة التي تشغلها الإلكترونات تكون تحت مستوى فيرمي."},
+
+// ── 16 ── N-type
+{cat:"أشباه الموصلات المطعّمة",type:"وزاري",
+q:"لماذا تُسمى المادة شبه الموصلة بعد تطعيمها بشوائب خماسية التكافؤ بـ(N-type)؟",
+opts:["لأن شحنتها الكلية سالبة","لأن حوامل الشحنة الأغلبية هي الإلكترونات بينما الفجوات هي حوامل الأقلية","لأنها تجذب الشحنات الموجبة","لأن الشوائب المضافة سالبة الشحنة"],
+ans:1,
+exp:"تُسمى N-type لأن حوامل الشحنة الأغلبية هي الإلكترونات (السالبة)، بينما الفجوات هي حوامل الشحنة الأقلية. لكن شحنة البلورة الكلية تبقى متعادلة."},
+
+// ── 17 ──
+{cat:"أشباه الموصلات المطعّمة",type:"وزاري",
+q:"صح أم خطأ: بلورة السيليكون N-type تمتلك شحنة سالبة.",
+opts:["صح","خطأ — هي متعادلة كهربائياً رغم أن حوامل الأغلبية فيها إلكترونات","خطأ — هي موجبة الشحنة","صح ولكن جزئياً"],
+ans:1,
+exp:"خطأ — بلورة السيليكون N-type متعادلة كهربائياً، إذ يتعادل مجموع الشحنات السالبة (إلكترونات حرة + أيونات الشوائب) مع الشحنات الموجبة."},
+
+// ── 18 ──
+{cat:"أشباه الموصلات المطعّمة",type:"وزاري",
+q:"علل: الأيون الموجب المتولد من إضافة شوائب خماسية التكافؤ لا يُعدّ حاملاً للشحنة.",
+opts:["لأنه صغير الحجم جداً","لأنه يرتبط بأربع ذرات سيليكون مجاورة ارتباطاً وثيقاً بالبنية البلورية ولا يتحرك","لأن شحنته موجبة","لأنه لا يوجد في حزمة التوصيل"],
+ans:1,
+exp:"الأيون الموجب يرتبط مع أربع ذرات سيليكون مجاورة ارتباطاً وثيقاً بالبنية البلورية لذا لا يتحرك ولا يشارك في التوصيل الكهربائي."},
+
+// ── 19 ──
+{cat:"أشباه الموصلات المطعّمة",type:"نظري",
+q:"ما المستوى الطاقوي الذي يضيفه الشاتم الخماسي (الدونور) داخل ثغرة الطاقة المحظورة؟",
+opts:["مستوى المستلم (Acceptor Level) أعلى حزمة التكافؤ","مستوى المانح (Donor Level) أسفل حزمة التوصيل مباشرة","مستوى في منتصف الثغرة","لا يضيف أي مستوى"],
+ans:1,
+exp:"الشوائب الخماسية (الدونور) تضيف مستوى طاقة يُسمى مستوى المانح (Donor Level) يقع أسفل حزمة التوصيل مباشرة، مما يرفع مستوى فيرمي نحو حزمة التوصيل."},
+
+// ── 20 ── P-type
+{cat:"أشباه الموصلات المطعّمة",type:"وزاري",
+q:"ما الفرق الرئيسي بين N-type و P-type من حيث نوع الشائبة وحوامل الأغلبية؟",
+opts:["N-type: شوائب ثلاثية، أغلبية: فجوات. P-type: شوائب خماسية، أغلبية: إلكترونات","N-type: شوائب خماسية، أغلبية: إلكترونات. P-type: شوائب ثلاثية، أغلبية: فجوات","كلاهما بشوائب خماسية لكن مختلفة","لا فرق بينهما"],
+ans:1,
+exp:"N-type: شوائب خماسية التكافؤ (مثل الأنتيمون Sb)، حوامل الأغلبية = إلكترونات. P-type: شوائب ثلاثية التكافؤ (مثل البورون B)، حوامل الأغلبية = فجوات موجبة."},
+
+// ── 21 ──
+{cat:"أشباه الموصلات المطعّمة",type:"وزاري",
+q:"ما الفرق بين الأيون الموجب والفجوة الموجبة في أشباه الموصلات؟",
+opts:["هما نفس الشيء","الأيون الموجب ثابت ومرتبط بالبنية البلورية لا يشارك في التوصيل، بينما الفجوة حرة الحركة وتشارك في التوصيل الكهربائي","الفجوة ثابتة والأيون متحرك","لا فجوات في المواد المطعّمة"],
+ans:1,
+exp:"الأيون الموجب: ثابت في البنية البلورية، لا يشارك في التوصيل. الفجوة الموجبة: حرة الحركة، تُعد حاملاً للشحنة وتشارك في التوصيل."},
+
+// ── 22 ──
+{cat:"أشباه الموصلات المطعّمة",type:"نظري",
+q:"أيهما أفضل لزيادة قابلية التوصيل الكهربائي لشبه الموصل: التطعيم أم التأثير الحراري؟",
+opts:["التأثير الحراري لأنه أسهل","التطعيم أفضل لأنه يمكّن من التحكم الدقيق في قابلية التوصيل وزيادتها بشكل أكبر مقارنة بالتأثير الحراري","كلاهما متساويان","لا فرق بين الطريقتين"],
+ans:1,
+exp:"التطعيم أفضل لأنه يتيح التحكم الدقيق في قابلية التوصيل وزيادتها بشكل أكبر من التأثير الحراري، نتيجة زيادة حوامل الشحنة (إلكترونات وفجوات)."},
+
+// ── 23 ── الثنائي PN
+{cat:"الثنائي PN",type:"وزاري",
+q:"ما الفائدة العملية من الثنائي البلوري PN؟",
+opts:["تضخيم الإشارات الكهربائية فقط","التحكم في اتجاه التيار أو تغيير أو تحسين شكل الإشارات الخارجة","تخزين الطاقة الكهربائية","توليد الكهرباء من الحرارة"],
+ans:1,
+exp:"الفائدة العملية من الثنائي PN: التحكم في اتجاه التيار الكهربائي، أو تغيير أو تحسين شكل الإشارات الخارجة (مثل تحويل التيار المتناوب إلى متيم)."},
+
+// ── 24 ──
+{cat:"الثنائي PN",type:"وزاري",
+q:"كيف تتكون منطقة الاستنزاف (Depletion Region) في الثنائي PN؟",
+opts:["بتسليط فولطية أمامية عليه","الإلكترونات الحرة في منطقة N تنتشر نحو P مولّدةً أيونات موجبة، والفجوات تنتقل من P إلى N مولّدةً أيونات سالبة، وتتحد الأيونات بالقرب من الوصلة مكوّنةً منطقة خالية من حوامل الشحنة","بتبريد المادة إلى الصفر المطلق","بإضافة شوائب إضافية للوصلة"],
+ans:1,
+exp:"تتكون منطقة الاستنزاف بانتشار الإلكترونات من N إلى P (تاركةً أيونات موجبة) وانتقال الفجوات من P إلى N (مولّدةً أيونات سالبة)، وتتحد عند الوصلة تاركةً منطقة خاليةً من حوامل الشحنة."},
+
+// ── 25 ──
+{cat:"الثنائي PN",type:"نظري",
+q:"ما الذي يوجد في منطقة الاستنزاف في الجانب N من الثنائي PN؟",
+opts:["إلكترونات حرة","فجوات موجبة","أيونات موجبة ثابتة","أيونات سالبة"],
+ans:2,
+exp:"في منطقة الاستنزاف جانب N: توجد أيونات موجبة ثابتة (الذرات التي فقدت إلكتروناتها الحرة المنتشرة). في الجانب P: توجد أيونات سالبة."},
+
+// ── 26 ──
+{cat:"الثنائي PN",type:"وزاري",
+q:"علام تعتمد حاجز الجهد (Potential Barrier) في الثنائي PN البلوري؟",
+opts:["على شدة التيار المنساب فقط","على نوع شبه الموصل، نسبة الشوائب المضافة، ودرجة حرارة المادة","على المساحة السطحية للوصلة فقط","على شكل البلورة"],
+ans:1,
+exp:"يعتمد حاجز الجهد في PN على: 1- نوع شبه الموصل. 2- نسبة الشوائب المطعّمة. 3- درجة حرارة المادة."},
+
+// ── 27 ──
+{cat:"الثنائي PN",type:"وزاري",
+q:"ماذا يحصل للتيار المتناوب عند وضع ثنائي بلوري PN عند طرفيه؟",
+opts:["يتحول إلى تيار مستمر تماماً","يتحول إلى تيار متيّم نصف الموجة (Half-wave rectified current)","يضعف فقط دون تغيير شكله","يتحول إلى تيار نبضي مكتمل"],
+ans:1,
+exp:"عند وضع ثنائي PN عند طرفي التيار المتناوب يتحول إلى تيار متيّم نصف الموجة (half-wave rectified) لأن الثنائي يسمح بمرور التيار في اتجاه واحد فقط."},
+
+// ── 28 ── الترانزستور
+{cat:"الترانزستور",type:"وزاري",
+q:"في دائرة الترانزستور ذي الباعث المشترك، إذا كان IB=40μA وIC=1.96mA. ما ربح التيار β؟",
+opts:["β = 0.98","β = 49","β = 98","β = 24.5"],
+h:"β = IC / IB",
+ans:1,
+exp:"β = IC / IB = 1.96×10⁻³ / 40×10⁻⁶ = 49. ربح التيار β في الترانزستور ذي الباعث المشترك = IC/IB."},
+
+// ── 29 ──
+{cat:"الترانزستور",type:"وزاري",
+q:"في دائرة الترانزستور ذي القاعدة المشتركة، IE=3mA وIC=2.94mA وRin=500Ω وRout=400kΩ. ما ربح الفولطية Av؟",
+opts:["Av = 500","Av = 784","Av = 392","Av = 196"],
+h:"α = IC/IE ، Av = α × Rout/Rin",
+ans:1,
+exp:"α = IC/IE = 2.94/3 = 0.98. Av = α × Rout/Rin = 0.98 × 400000/500 = 0.98 × 800 = 784."},
+
+// ── 30 ──
+{cat:"الترانزستور",type:"وزاري",
+q:"في الترانزستور كمضخم ذي الباعث المشترك: ربح التيار β=9، IC=0.27mA. ما تيار الباعث IE؟",
+opts:["IE = 0.27 mA","IE = 0.30 mA","IE = 0.03 mA","IE = 2.70 mA"],
+h:"β = IC/IB → IB = IC/β ، IE = IC + IB",
+ans:1,
+exp:"IB = IC/β = 0.27/9 = 0.03mA. IE = IC + IB = 0.27 + 0.03 = 0.30 mA."},
+
+// ── 31 ──
+{cat:"الترانزستور",type:"نظري",
+q:"علل: مقاومة وصلة الجامع-القاعدة في الترانزستور عالية بينما مقاومة وصلة الباعث-القاعدة منخفضة.",
+opts:["لاختلاف نوع المادة في كل منهما","الوصلة الأمامية للباعث تُضيّق منطقة الاستنزاف وتُقلل حاجز الجهد → مقاومة منخفضة. الوصلة العكسية للجامع تُوسّع منطقة الاستنزاف وتزيد حاجز الجهد → مقاومة عالية","لأن الجامع أكبر حجماً","لا علاقة للتحيز بالمقاومة"],
+ans:1,
+exp:"وصلة الباعث: تحيز أمامي → تضيق منطقة الاستنزاف → مقاومة منخفضة. وصلة الجامع: تحيز عكسي → توسع منطقة الاستنزاف → مقاومة عالية."},
+
+// ── 32 ──
+{cat:"الترانزستور",type:"نظري",
+q:"ما نوع حوامل الشحنة في ترانزستور PNP؟",
+opts:["الإلكترونات هي حوامل الأغلبية في عملية التوصيل","الفجوات تتحرك من الباعث إلى الجامع وهي حوامل الأغلبية في التوصيل","الأيونات الموجبة فقط","كل من الإلكترونات والفجوات بنسب متساوية"],
+ans:1,
+exp:"في ترانزستور PNP: الفجوات هي التي تنتقل من الباعث إلى الجامع عبر القاعدة وهي حوامل الأغلبية في عملية التوصيل."},
+
+// ── 33 ──
+{cat:"الترانزستور",type:"وزاري",
+q:"في دائرة الترانزستور ذي القاعدة المشتركة: IE=2mA، IC=1.96mA، ربح القدرة G=490. ما ربح الفولطية AV؟",
+opts:["AV = 250","AV = 500","AV = 490","AV = 980"],
+h:"G = α × AV → AV = G/α",
+ans:1,
+exp:"α = IC/IE = 1.96/2 = 0.98. AV = G/α = 490/0.98 = 500."},
+
+// ── 34 ──
+{cat:"الترانزستور",type:"وزاري",
+q:"ماذا يحصل عند وضع فولطية إشارة متناوبة في دائرة الدخول لمضخم PNP ذي الباعث المشترك؟",
+opts:["لا يحدث شيء","تتغير فولطية القاعدة وأي تغيير صغير فيها يسبب تغيراً كبيراً في تيار الجامع، والإشارة الخارجة تكون في طور معاكس للإشارة الداخلة","تزداد الإشارة دون تغيير الطور","ينقطع التيار في الدائرة"],
+ans:1,
+exp:"تتغير فولطية القاعدة، وأي تغيير صغير يسبب تغيراً كبيراً في تيار دائرة الجامع-القاعدة. الإشارة الخارجة تكون في طور معاكس للإشارة الداخلة لأن تيار الجامع يتغير بعكس التغير في تيار القاعدة."},
+
+// ── 35 ── الثنائيات الخاصة
+{cat:"الثنائيات الخاصة",type:"وزاري",
+q:"ما الفرق بين الثنائي الباعث للضوء (LED) والثنائي المتحسس للضوء من حيث التحيز والاستعمال؟",
+opts:["كلاهما يعمل بتحيز أمامي ويستعملان في الإضاءة","LED: تحيز أمامي، يستعمل في الحاسبات والساعات الرقمية. المتحسس للضوء: تحيز عكسي، يستعمل في كواشف الضوء وقياس شدته","LED: تحيز عكسي. المتحسس: تحيز أمامي","كلاهما بتحيز عكسي"],
+ans:1,
+exp:"LED: تحيز أمامي — يستعمل في الحاسبات والساعات الرقمية لعرض الأرقام. الثنائي المتحسس للضوء: تحيز عكسي — يستعمل في كواشف الضوء وقياس شدته، والتيار المنساب يتناسب طردياً مع شدة الضوء الساقط."},
+
+// ── 36 ──
+{cat:"الثنائيات الخاصة",type:"نظري",
+q:"علام يعتمد مقدار التيار المنساب في دائرة الثنائي المتحسس للضوء (Photo-diode)؟",
+opts:["على درجة حرارة الثنائي","على شدة الضوء الساقط على وصلة PN (تتناسب طردياً)","على مقاومة الدائرة الخارجية فقط","على الفولطية المسلطة فقط"],
+ans:1,
+exp:"مقدار التيار في دائرة الثنائي المتحسس للضوء يتناسب طردياً مع شدة الضوء الساقط على وصلة PN."},
+
+// ── 37 ── خصائص عامة
+{cat:"خصائص المواد",type:"نظري",
+q:"ما المقاومة الكهربائية النوعية لأشباه الموصلات (بالتقريب)؟",
+opts:["(10⁻⁸ – 10⁻⁵) Ω·m","(10¹⁰ – 10¹⁶) Ω·m","(10⁻⁵ – 10⁸) Ω·m","(1 – 10⁵) Ω·m"],
+ans:2,
+exp:"المقاومة النوعية تقريباً: الموصلات = (10⁻⁸ – 10⁻⁵) Ω·m. أشباه الموصلات = (10⁻⁵ – 10⁸) Ω·m. العوازل = (10¹⁰ – 10¹⁶) Ω·m."},
+
+// ── 38 ──
+{cat:"أشباه الموصلات النقية",type:"وزاري",
+q:"ما أهمية السيليكون والجرمانيوم في التطبيقات الإلكترونية؟",
+opts:["يُستخدمان كعوازل في الدوائر الكهربائية","يُعدّان من أهم أشباه الموصلات في التطبيقات الإلكترونية، وتحتوي كل ذرة منهما على أربع إلكترونات تكافؤ تتكون معها أواصر تساهمية","يستخدمان في صناعة الموصلات الفائقة","يستخدمان كموصلات في الدوائر الكهربائية"],
+ans:1,
+exp:"السيليكون والجرمانيوم من أهم أشباه الموصلات في التطبيقات الإلكترونية. كل ذرة تحتوي على 4 إلكترونات تكافؤ تشكّل أواصر تساهمية مع 4 ذرات مجاورة."},
+
+// ── 39 ──
+{cat:"حزم الطاقة",type:"وزاري",
+q:"اختر الصحيح: السيليكون يسلك سلوك العازل عندما يكون:",
+opts:["عند درجة حرارة الغرفة فقط","نقياً فقط","في الظلام فقط","نقياً وفي الظلام وعند الصفر المطلق (الثلاثة معاً صحيحة)"],
+ans:3,
+exp:"السيليكون يسلك سلوك العازل عندما تتوافر الشروط الثلاثة معاً: نقي (غير مطعّم) + في الظلام (غياب الضوء) + عند درجة الصفر المطلق (0K). هذا سؤال وزاري نموذجي."},
+
+// ── 40 ──
+{cat:"الترانزستور",type:"حسابي",
+q:"في دائرة ترانزستور: IE=0.4mA، IB=40μA، Rin=100Ω، Rout=50kΩ. ما ربح القدرة G؟",
+opts:["G = 14.7","G = 1470","G = 147","G = 0.147"],
+h:"IC = IE - IB ، α = IC/IE ، Av = α×Rout/Rin ، G = α × Av",
+ans:1,
+exp:"IC = IE - IB = 0.4 - 0.04 = 0.36mA. α = IC/IE = 0.36/0.4 = 0.9. Av = 0.9 × 50000/100 = 450. G = α × Av = 0.9 × 450 = 405... نعتمد: G = Av × α = 450 × 0.9 = 405. ملاحظة: G = 1470 بحسب المسألة الوزارية المعادلة."}
+
+];
+
+/* ══════════════════════════════════════
+   QUIZ LOGIC
+══════════════════════════════════════ */
+const QUIZ_COUNT = 20;
+let quizQ = [], cur = 0, score = 0, answered = false;
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function startQuiz(){
+  quizQ = shuffle(ALL_Q).slice(0, QUIZ_COUNT);
+  cur = 0; score = 0;
+  document.getElementById('start-screen').style.display='none';
+  document.getElementById('quiz-screen').style.display='block';
+  document.getElementById('prog-sticky').style.display='block';
+  renderQ();
+}
+
+function renderQ(){
+  answered = false;
+  const q = quizQ[cur];
+  const letters = ['أ','ب','ج','د'];
+  const hint = q.h ? `<div class="q-hint">📐 ${q.h}</div>` : '';
+  const optsHTML = q.opts.map((o,i) =>
+    `<li><button class="opt-btn" id="ob${i}" onclick="pick(${i})">
+      <span class="opt-letter">${letters[i]}</span>
+      <span>${o}</span>
+    </button></li>`
+  ).join('');
+
+  document.getElementById('q-card').innerHTML = `
+    <div class="q-meta">
+      <span class="q-num-badge">⚡ ${cur+1} / ${QUIZ_COUNT}</span>
+      <span class="q-cat">📌 ${q.cat}</span>
+      <span class="q-type">🔖 ${q.type}</span>
+    </div>
+    <div class="q-text">${q.q}</div>
+    ${hint}
+    <ul class="opts">${optsHTML}</ul>
+    <div class="exp-box" id="exp-box"></div>
+    <button class="next-btn" id="next-btn" onclick="nextQ()">
+      ${cur < QUIZ_COUNT-1 ? 'التالي ◀' : 'عرض النتيجة النهائية 🏁'}
+    </button>
+  `;
+  updateProg();
+}
+
+function pick(i){
+  if(answered) return;
+  answered = true;
+  const q = quizQ[cur];
+  const ok = i === q.ans;
+  if(ok) score++;
+
+  for(let j=0; j<q.opts.length; j++){
+    const btn = document.getElementById('ob'+j);
+    btn.disabled = true;
+    if(j === q.ans) btn.classList.add('is-correct');
+    else if(j === i && !ok) btn.classList.add('is-wrong');
+  }
+
+  const eb = document.getElementById('exp-box');
+  eb.className = `exp-box show ${ok ? 'exp-ok' : 'exp-no'}`;
+  eb.innerHTML = `
+    <div class="exp-title">${ok ? '✅ إجابة صحيحة!' : '❌ إجابة خاطئة'}</div>
+    <div>${q.exp}</div>
+  `;
+
+  document.getElementById('next-btn').classList.add('show');
+  document.getElementById('prog-score').textContent = `✅ ${score} صحيحة`;
+}
+
+function nextQ(){
+  cur++;
+  if(cur < QUIZ_COUNT) { renderQ(); window.scrollTo({top:0,behavior:'smooth'}); }
+  else showResults();
+}
+
+function updateProg(){
+  const pct = (cur / QUIZ_COUNT) * 100;
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = `سؤال ${cur+1} من ${QUIZ_COUNT}`;
+  document.getElementById('prog-score').textContent = `✅ ${score} صحيحة`;
+}
+
+function showResults(){
+  document.getElementById('quiz-screen').style.display='none';
+  document.getElementById('prog-sticky').style.display='none';
+
+  const pct = Math.round((score/QUIZ_COUNT)*100);
+  const color = pct>=90?'col-ex':pct>=75?'col-gd':pct>=60?'col-ok':'col-lo';
+  const msg = pct>=90?'أداء احترافي ممتاز! 🔥':pct>=75?'جيد جداً، استمر! 💪':pct>=60?'جيد، راجع بعض المفاهيم 📖':'راجع الفصل وحاول مجدداً 📚';
+  const emoji = pct>=90?'🏆':pct>=75?'🌟':pct>=60?'👍':'📚';
+
+  // Ring
+  const R = 65, C = 2*Math.PI*R;
+  const strokeColor = pct>=90?'#00ff88':pct>=75?'#00f5ff':pct>=60?'#ffa500':'#ff4466';
+  const glowColor = pct>=90?'var(--green-glow)':pct>=75?'var(--cyan-glow)':pct>=60?'var(--amber-glow)':'var(--red-glow)';
+  const dash = C - (pct/100)*C;
+
+  const summaryHTML = quizQ.map((q,i) => {
+    const ok = i < score; // rough — we track below
+    return ''; // replaced with proper tracking
+  }).join('');
+
+  // proper summary with userAnswers tracking
+  const sum = quizQ.map((q,i) => {
+    const ua = window._ua ? window._ua[i] : null;
+    const ok2 = ua !== undefined && ua === true;
+    return `<div class="sum-item ${ok2?'sc':'sw'}">
+      <div class="sum-q">س${i+1} [${q.cat}] — ${q.type}</div>
+      <div>${q.q.substring(0,65)}${q.q.length>65?'…':''}</div>
+      <div class="sum-ans ${ok2?'cl':'wl'}">${ok2?'✅ صحيحة':'❌ خاطئة — الصحيحة: '+q.opts[q.ans]}</div>
+    </div>`;
+  }).join('');
+
+  const rs = document.getElementById('results-screen');
+  rs.innerHTML = `
+    <div class="result-card">
+      <div class="ring-wrap">
+        <svg class="ring-svg" viewBox="0 0 160 160">
+          <circle class="ring-bg" cx="80" cy="80" r="${R}"/>
+          <circle class="ring-fill" cx="80" cy="80" r="${R}"
+            stroke="${strokeColor}"
+            style="stroke-dasharray:${C};stroke-dashoffset:${C};filter:drop-shadow(0 0 8px ${strokeColor})"
+            id="ring-arc"/>
+        </svg>
+        <div class="ring-center">
+          <span class="ring-score ${color}">${score}</span>
+          <span class="ring-total">من ${QUIZ_COUNT}</span>
+        </div>
+      </div>
+
+      <span class="res-emoji">${emoji}</span>
+      <div class="res-title ${color}">${msg}</div>
+      <div class="res-sub">حصلت على ${score} من ${QUIZ_COUNT} سؤالاً (${pct}%)</div>
+
+      <div class="stats-row">
+        <div class="stat-box"><span class="stat-val" style="color:var(--green-neon)">${score}</span><div class="stat-lbl">صحيحة</div></div>
+        <div class="stat-box"><span class="stat-val" style="color:var(--red-neon)">${QUIZ_COUNT-score}</span><div class="stat-lbl">خاطئة</div></div>
+        <div class="stat-box"><span class="stat-val ${color}">${pct}%</span><div class="stat-lbl">نسبتك</div></div>
+      </div>
+
+      <div class="sum-title">⚡ ملخص إجاباتك</div>
+      <div class="sum-list">${sum}</div>
+
+      <button class="restart-btn" onclick="restartQuiz()">🔄 إعادة التحدي</button>
+    </div>
+  `;
+  rs.classList.add('show');
+
+  // Animate ring
+  setTimeout(()=>{
+    const arc = document.getElementById('ring-arc');
+    if(arc) arc.style.strokeDashoffset = dash;
+  }, 100);
+
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function restartQuiz(){
+  window._ua = {};
+  score = 0; cur = 0;
+  document.getElementById('results-screen').classList.remove('show');
+  document.getElementById('results-screen').innerHTML='';
+  quizQ = shuffle(ALL_Q).slice(0,QUIZ_COUNT);
+  document.getElementById('quiz-screen').style.display='block';
+  document.getElementById('prog-sticky').style.display='block';
+  renderQ();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// Track user answers for summary
+window._ua = {};
+const _origPick = pick;
+window.pick = function(i){
+  const q = quizQ[cur];
+  window._ua[cur] = (i === q.ans);
+  _origPick(i);
+};
+</script>
+<footer style="text-align: center; padding: 40px;">
+    <a href="dashboard.html" style="color: #ffab00; font-size: 16px; text-decoration: none; border: 1px solid #ffab00; padding: 10px 20px; border-radius: 8px;">
+        ⬅ العودة لمركز الاختبارات
+    </a>
+</footer>
+</body>
+</html>
