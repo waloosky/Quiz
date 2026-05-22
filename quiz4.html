@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <header style="text-align: center; padding: 20px;">
+    <h1>الاختبار الأول</h1>
+    <a href="dashboard.html" style="color: #ffab00; font-size: 16px; text-decoration: none;">
+        ⬅ العودة لمركز الاختبارات
+    </a>
+</header>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اختبار الفصل الرابع – الموجات الكهرومغناطيسية</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b1120;
+    --surface: #131d35;
+    --card: #1a2847;
+    --border: #263660;
+    --accent: #4fa3e8;
+    --accent2: #7c3aed;
+    --gold: #f5c842;
+    --correct: #22c55e;
+    --wrong: #ef4444;
+    --text: #e8eaf6;
+    --muted: #8899bb;
+    --radius: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Cairo', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated starfield background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(79,163,232,0.07) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(124,58,237,0.07) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .stars {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    background: white;
+    animation: twinkle var(--d) infinite ease-in-out alternate;
+    opacity: 0.4;
+  }
+  @keyframes twinkle {
+    from { opacity: 0.1; transform: scale(0.8); }
+    to   { opacity: 0.7; transform: scale(1.2); }
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 24px 16px 60px;
+  }
+
+  /* ── Header ── */
+  .header {
+    text-align: center;
+    padding: 40px 20px 32px;
+    animation: fadeDown 0.6s ease both;
+  }
+  .header .badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 18px;
+    border-radius: 999px;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+  .header h1 {
+    font-size: clamp(22px, 5vw, 34px);
+    font-weight: 900;
+    line-height: 1.3;
+    background: linear-gradient(135deg, #fff 30%, var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header p {
+    color: var(--muted);
+    font-size: 15px;
+    margin-top: 10px;
+  }
+
+  /* ── Progress ── */
+  .progress-wrap {
+    margin-bottom: 28px;
+    animation: fadeDown 0.6s 0.15s ease both;
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .progress-meta span:last-child {
+    color: var(--gold);
+    font-weight: 700;
+  }
+  .progress-bar-bg {
+    height: 8px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    border-radius: 999px;
+    transition: width 0.5s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* ── Question Card ── */
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px 28px 28px;
+    margin-bottom: 20px;
+    animation: slideUp 0.45s ease both;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.35);
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .question-num {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .question-num::before {
+    content: '';
+    display: inline-block;
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+  .question-text {
+    font-size: clamp(16px, 2.5vw, 19px);
+    font-weight: 700;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+
+  /* ── Options ── */
+  .options { display: flex; flex-direction: column; gap: 12px; }
+  .option-btn {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    text-align: right;
+    font-family: 'Cairo', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.22s ease;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .option-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    opacity: 0;
+    transition: opacity 0.22s;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    transform: translateX(-4px);
+  }
+  .option-btn:hover:not(:disabled)::before { opacity: 0.07; }
+
+  .option-label {
+    min-width: 32px;
+    height: 32px;
+    background: var(--border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 900;
+    flex-shrink: 0;
+    transition: all 0.22s;
+    position: relative;
+    z-index: 1;
+  }
+  .option-text { position: relative; z-index: 1; }
+
+  /* States */
+  .option-btn.correct {
+    border-color: var(--correct);
+    background: rgba(34,197,94,0.1);
+    animation: popIn 0.35s ease;
+  }
+  .option-btn.correct .option-label { background: var(--correct); color: white; }
+
+  .option-btn.wrong {
+    border-color: var(--wrong);
+    background: rgba(239,68,68,0.1);
+    animation: shake 0.4s ease;
+  }
+  .option-btn.wrong .option-label { background: var(--wrong); color: white; }
+
+  .option-btn.dimmed { opacity: 0.4; }
+  .option-btn:disabled { cursor: default; }
+
+  @keyframes popIn {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.03) translateX(-3px); }
+    100% { transform: scale(1) translateX(-4px); }
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(2px); }
+  }
+
+  /* ── Explanation ── */
+  .explanation {
+    background: rgba(79,163,232,0.08);
+    border: 1px solid rgba(79,163,232,0.25);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-top: 20px;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #c8d8f0;
+    animation: fadeIn 0.4s ease;
+    display: none;
+  }
+  .explanation.show { display: block; }
+  .explanation strong {
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── Next Button ── */
+  .next-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-family: 'Cairo', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 20px;
+    display: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(79,163,232,0.3);
+  }
+  .next-btn.show { display: block; animation: fadeIn 0.3s ease; }
+  .next-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(79,163,232,0.4); }
+  .next-btn:active { transform: translateY(0); }
+
+  /* ── Score Panel ── */
+  .score-panel {
+    display: none;
+    text-align: center;
+    animation: slideUp 0.5s ease both;
+  }
+  .score-panel.show { display: block; }
+
+  .score-circle-wrap {
+    margin: 30px auto 24px;
+    width: 180px; height: 180px;
+    position: relative;
+  }
+  .score-circle-wrap svg {
+    transform: rotate(-90deg);
+    width: 100%; height: 100%;
+  }
+  .score-circle-bg { fill: none; stroke: var(--border); stroke-width: 12; }
+  .score-circle-fg {
+    fill: none;
+    stroke-width: 12;
+    stroke-linecap: round;
+    stroke: url(#grad);
+    stroke-dasharray: 502;
+    stroke-dashoffset: 502;
+    transition: stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1);
+  }
+  .score-number {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-number .big { font-size: 44px; font-weight: 900; color: white; }
+  .score-number .label { font-size: 13px; color: var(--muted); }
+
+  .score-msg {
+    font-size: 22px;
+    font-weight: 900;
+    margin-bottom: 8px;
+  }
+  .score-msg.excellent { color: var(--gold); }
+  .score-msg.good { color: var(--correct); }
+  .score-msg.fair { color: var(--accent); }
+  .score-msg.poor { color: var(--wrong); }
+
+  .score-sub { color: var(--muted); font-size: 15px; margin-bottom: 32px; }
+
+  .stats-row {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+  .stat-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 24px;
+    text-align: center;
+    min-width: 100px;
+  }
+  .stat-box .num { font-size: 28px; font-weight: 900; }
+  .stat-box .lbl { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .stat-box.c .num { color: var(--correct); }
+  .stat-box.w .num { color: var(--wrong); }
+  .stat-box.t .num { color: var(--accent); }
+
+  .restart-btn {
+    padding: 16px 48px;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-family: 'Cairo', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 24px rgba(124,58,237,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .restart-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(124,58,237,0.5); }
+
+  /* responsive */
+  @media (max-width: 500px) {
+    .question-card { padding: 22px 16px 20px; }
+    .option-btn { font-size: 14px; padding: 14px 14px; }
+  }
+
+  /* ── Firework burst ── */
+  .burst { position: fixed; pointer-events: none; z-index: 99; }
+  .particle {
+    position: absolute;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    animation: burst var(--dur) ease-out forwards;
+  }
+  @keyframes burst {
+    0%   { transform: translate(0,0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="badge">الصف السادس العلمي – فيزياء 2024</div>
+    <h1>الفصل الرابع<br>الموجات الكهرومغناطيسية</h1>
+    <p>20 سؤالاً من الاختيار من متعدد · اختبر معلوماتك!</p>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-meta">
+      <span id="progressText">السؤال 1 من 20</span>
+      <span id="scoreText">النتيجة: 0</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar" id="progressBar" style="width:5%"></div>
+    </div>
+  </div>
+
+  <!-- Quiz -->
+  <div id="quizArea">
+    <div class="question-card" id="questionCard">
+      <div class="question-num" id="questionNum">السؤال 1</div>
+      <div class="question-text" id="questionText"></div>
+      <div class="options" id="optionsContainer"></div>
+      <div class="explanation" id="explanation">
+        <strong>💡 التوضيح العلمي</strong>
+        <span id="explanationText"></span>
+      </div>
+    </div>
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">السؤال التالي ←</button>
+  </div>
+
+  <!-- Score Panel -->
+  <div class="score-panel" id="scorePanel">
+    <div class="score-circle-wrap">
+      <svg viewBox="0 0 180 180">
+        <defs>
+          <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#7c3aed"/>
+            <stop offset="100%" stop-color="#4fa3e8"/>
+          </linearGradient>
+        </defs>
+        <circle class="score-circle-bg" cx="90" cy="90" r="80"/>
+        <circle class="score-circle-fg" id="scoreFg" cx="90" cy="90" r="80"/>
+      </svg>
+      <div class="score-number">
+        <div class="big" id="finalScore">0</div>
+        <div class="label">من 20</div>
+      </div>
+    </div>
+    <div class="score-msg" id="scoreMsg"></div>
+    <div class="score-sub" id="scoreSub"></div>
+    <div class="stats-row">
+      <div class="stat-box c"><div class="num" id="correctCount">0</div><div class="lbl">✓ صحيح</div></div>
+      <div class="stat-box w"><div class="num" id="wrongCount">0</div><div class="lbl">✗ خطأ</div></div>
+      <div class="stat-box t"><div class="num" id="pctCount">0%</div><div class="lbl">النسبة</div></div>
+    </div>
+    <button class="restart-btn" onclick="restartQuiz()">🔄 إعادة الاختبار</button>
+  </div>
+
+</div>
+
+<script>
+const questions = [
+  {
+    q: "ما الذي تولده الشحنة الكهربائية النقطية الساكنة في الفضاء حولها؟",
+    opts: ["مجال كهربائي فقط", "مجال مغناطيسي فقط", "مجالين كهربائي ومغناطيسي", "موجات كهرومغناطيسية"],
+    ans: 0,
+    exp: "الشحنة الساكنة تولد مجالاً كهربائياً فقط حولها. أما المجال المغناطيسي فينتج عن الشحنات المتحركة، والموجات الكهرومغناطيسية تنتج عن الشحنات المتذبذبة (المعجلة)."
+  },
+  {
+    q: "الموجة الكهرومغناطيسية هي موجة مستعرضة ينتج عن تغير المجالين الكهربائي والمغناطيسي. أين يكون كلا المجالين بالنسبة لاتجاه انتشار الموجة؟",
+    opts: ["موازيان لاتجاه الانتشار", "عموديان على اتجاه الانتشار وعلى بعضهما", "أحدهما موازٍ والآخر عمودي", "في الاتجاه نفسه لانتشار الموجة"],
+    ans: 1,
+    exp: "المجال الكهربائي والمجال المغناطيسي كلاهما عموديان على اتجاه انتشار الموجة وعموديان على بعضهما البعض، مما يجعل الموجة الكهرومغناطيسية موجةً مستعرضة."
+  },
+  {
+    q: "ما سرعة انتشار الموجات الكهرومغناطيسية في الفراغ؟",
+    opts: ["3 × 10⁶ م/ث", "3 × 10⁸ م/ث", "3 × 10¹⁰ م/ث", "340 م/ث"],
+    ans: 1,
+    exp: "جميع الموجات الكهرومغناطيسية تنتشر في الفراغ بسرعة الضوء التي تساوي 3×10⁸ م/ث (ثلاثمئة مليون متر في الثانية)."
+  },
+  {
+    q: "ما المقصود بتيار الإزاحة (Id)؟",
+    opts: ["التيار المار خلال الموصل", "تيار ناتج عن شحنات متحركة في وسط مادي", "تيار يتناسب مع المعدل الزمني للتغير في المجال الكهربائي", "تيار التوصيل في الدوائر الكهربائية"],
+    ans: 2,
+    exp: "تيار الإزاحة (Id) هو تيار خالٍ من الشحنات يتناسب طردياً مع المعدل الزمني للتغير في المجال الكهربائي وفق العلاقة: Id ∝ ΔE/Δt. وهو يرافق الموجة الكهرومغناطيسية المنتشرة في الفضاء."
+  },
+  {
+    q: "ما الفرق الرئيسي بين تيار التوصيل وتيار الإزاحة من حيث انتقاله؟",
+    opts: ["تيار التوصيل ينتقل في الفراغ وتيار الإزاحة في الموصلات", "تيار التوصيل ينتقل في الموصلات فقط وتيار الإزاحة يرافق الموجة في الفضاء", "كلاهما ينتقل في الموصلات", "لا فرق بينهما في الانتقال"],
+    ans: 1,
+    exp: "تيار التوصيل ينتقل خلال الموصلات فقط، بينما تيار الإزاحة يرافق الموجة الكهرومغناطيسية المنتشرة في الفضاء وهو تيار خالٍ من الشحنات."
+  },
+  {
+    q: "كيف تتوزع طاقة الموجة الكهرومغناطيسية عند انتشارها في الفراغ؟",
+    opts: ["تتركز في المجال الكهربائي فقط", "تتركز في المجال المغناطيسي فقط", "تتوزع بالتساوي بين المجالين الكهربائي والمغناطيسي", "تتناسب مع تردد الموجة"],
+    ans: 2,
+    exp: "من أهم خصائص الموجة الكهرومغناطيسية أن طاقتها تتوزع بالتساوي بين المجال الكهربائي والمجال المغناطيسي عند انتشارها في الفراغ."
+  },
+  {
+    q: "ما أصل نشوء الموجات الكهرومغناطيسية؟",
+    opts: ["الشحنات الساكنة", "الشحنات المتحركة بسرعة ثابتة", "الشحنات المعجلة (المتذبذبة)", "المجال المغناطيسي الثابت"],
+    ans: 2,
+    exp: "أصل نشوء الموجة الكهرومغناطيسية هو الشحنات الكهربائية المتذبذبة (المعجلة)؛ إذ ينتج عن تذبذب الشحنات مجالان كهربائي ومغناطيسي متغيران ينتشران في الفضاء على شكل موجة."
+  },
+  {
+    q: "أي الموجات التالية تقع في الطيف الكهرومغناطيسي بين الموجات المرئية والأشعة السينية؟",
+    opts: ["الموجات الراديوية", "الأشعة تحت الحمراء", "الأشعة فوق البنفسجية", "أشعة غاما"],
+    ans: 2,
+    exp: "الأشعة فوق البنفسجية تقع في الطيف الكهرومغناطيسي بين الضوء المرئي (380-780 نانومتر) والأشعة السينية، وتُستخدم في التعقيم الطبي."
+  },
+  {
+    q: "ما مدى الطول الموجي للضوء المرئي في الطيف الكهرومغناطيسي؟",
+    opts: ["من 10 nm إلى 380 nm", "من 380 nm إلى 780 nm", "من 780 nm إلى 10⁵ nm", "من 10⁵ nm إلى 10⁸ nm"],
+    ans: 1,
+    exp: "يقع الضوء المرئي في الطيف الكهرومغناطيسي بين 380 نانومتر (البنفسجي) و780 نانومتر (الأحمر)، وهو الجزء الوحيد الذي تستطيع العين البشرية رؤيته."
+  },
+  {
+    q: "من هو العالم الذي تمكن لأول مرة عام 1887 من توليد الموجات الكهرومغناطيسية تجريبياً؟",
+    opts: ["إسحاق نيوتن", "ماكسويل", "هنري هرتز", "فاراداي"],
+    ans: 2,
+    exp: "العالم الألماني هنري هرتز (Heinrich Hertz) هو أول من ولّد الموجات الكهرومغناطيسية تجريبياً عام 1887، وذلك بإحداث شرارة كهربائية بين قطبي الملف الثانوي لجهاز ملف الحث."
+  },
+  {
+    q: "ما العلاقة بين تردد الموجة الكهرومغناطيسية وطولها الموجي في الفراغ إذا كانت سرعة الضوء (c) ثابتة؟",
+    opts: ["التردد يتناسب طردياً مع الطول الموجي", "التردد يتناسب عكسياً مع الطول الموجي (f = c/λ)", "التردد لا علاقة له بالطول الموجي", "الطول الموجي يتناسب مع مربع التردد"],
+    ans: 1,
+    exp: "تربط الموجة الكهرومغناطيسية علاقة: c = f × λ، أي أن f = c/λ. فكلما زاد التردد قلّ الطول الموجي والعكس صحيح، بحيث يبقى حاصل ضربهما ثابتاً يساوي سرعة الضوء."
+  },
+  {
+    q: "ما الغرض الأساسي من الدائرة المهتزة (دائرة الرنين) في أجهزة الإرسال والاستقبال؟",
+    opts: ["تضخيم الصوت", "توليد تردد رنيني محدد", "تحويل الطاقة الكيميائية إلى كهربائية", "فصل الموجات الصوتية عن الكهرومغناطيسية"],
+    ans: 1,
+    exp: "الدائرة المهتزة تتألف من ملف (L) ومتسعة متغيرة السعة (C)، وتولد تردداً رنينياً وفق العلاقة: fr = 1/(2π√LC)، ويُستخدم هذا التردد في الضبط (التوليف) للإرسال والاستقبال."
+  },
+  {
+    q: "ما المقصود بالتضمين السعوي (AM)؟",
+    opts: ["تغيير تردد الموجة الحاملة تبعاً للموجة المحمولة", "تغيير سعة الموجة الحاملة كدالة خطية مع سعة الموجة المحمولة", "تغيير طور الموجة الحاملة", "تغيير سرعة الموجة الحاملة"],
+    ans: 1,
+    exp: "التضمين السعوي (AM – Amplitude Modulation) هو تغيير في سعة الموجة الحاملة كدالة خطية مع سعة الموجة المحمولة، على وفق تردد الإشارة المحمولة."
+  },
+  {
+    q: "ما الطول الأمثل لهوائي الإرسال لتحقيق أكبر طاقة إرسال؟",
+    opts: ["ربع الطول الموجي للإشارة المرسلة", "نصف الطول الموجي للإشارة المرسلة", "الطول الموجي الكامل للإشارة المرسلة", "ضعف الطول الموجي للإشارة المرسلة"],
+    ans: 1,
+    exp: "قدرة الهوائي في الإرسال أو التسلم تعتمد على طوله؛ فعندما يكون طول الهوائي يساوي نصف الطول الموجي للإشارة المرسلة أو المستلمة، يحقق إرسالاً بأكبر طاقة ممكنة."
+  },
+  {
+    q: "ما الطبقة الأيونوسفيرية المسؤولة عن توهين الموجات الراديوية خلال النهار؟",
+    opts: ["الطبقة F", "الطبقة E", "الطبقة D", "طبقة الأوزون"],
+    ans: 2,
+    exp: "الطبقة السفلى (D-layer) في الأيونوسفير مسؤولة عن انعكاس وتوهين الموجات الراديوية خلال النهار مما يقلل مدى الاستقبال، بينما تختفي هذه الطبقة ليلاً فيزداد مدى الاستقبال."
+  },
+  {
+    q: "ما مدى ترددات الموجات الأرضية (Ground Waves)؟",
+    opts: ["أكثر من 30 MHz", "بين 2–30 MHz", "بين 530 kHz – 2 MHz", "أقل من 530 kHz"],
+    ans: 2,
+    exp: "الموجات الأرضية تردداتها بين 530 kHz و 2 MHz، وتنتشر بمسارات قريبة جداً من سطح الأرض وتنحني مع انحناء سطح الأرض، وتُستخدم في أنظمة اتصالات محدودة المسافة."
+  },
+  {
+    q: "ما المقصود بالرادار؟",
+    opts: ["جهاز لقياس شدة الصوت", "نظام إلكتروني يرسل موجات راديوية ويستقبل انعكاساتها لكشف الأهداف وتحديد مواقعها", "جهاز لتضمين الإشارات الصوتية", "جهاز لقياس شدة المجال الكهرومغناطيسي"],
+    ans: 1,
+    exp: "الرادار (RADAR) هو نظام إلكتروني يعمل بإرسال موجات راديوية باتجاه هدف، ثم استقبال الموجات المنعكسة عنه لكشف الأهداف المتحركة أو الثابتة وتحديد مواقعها ومساراتها."
+  },
+  {
+    q: "لماذا تعدّ الموجة الكهرومغناطيسية موجةً مستعرضة (Transverse Wave)؟",
+    opts: ["لأنها تنتقل في وسط مادي", "لأن المجالين يتذبذبان بالتوازي مع اتجاه الانتشار", "لأن المجالين الكهربائي والمغناطيسي يتذبذبان عمودياً على خط انتشار الموجة", "لأنها تنتقل بسرعة الصوت"],
+    ans: 2,
+    exp: "الموجة الكهرومغناطيسية مستعرضة لأن المجالين الكهربائي والمغناطيسي يتذبذبان عمودياً على خط انتشار الموجة ويتذبذبان في الطور نفسه، على عكس الموجات الطولية كموجات الصوت."
+  },
+  {
+    q: "إذا كان تردد محطة راديوية 540 kHz، فما الطول الموجي للإشارة المرسلة؟ (c = 3×10⁸ م/ث)",
+    opts: ["555 م", "5.55 م", "55.5 م", "5555 م"],
+    ans: 0,
+    exp: "نطبق العلاقة λ = c/f = (3×10⁸) / (540×10³) = 555.5 ≈ 555 متراً. وهذا نموذج على حساب الطول الموجي من التردد المعطى."
+  },
+  {
+    q: "ما أهم ما استنتجه ماكسويل بشأن المجالين الكهربائي والمغناطيسي المتغيرين مع الزمن؟",
+    opts: ["يلغي أحدهما الآخر في الفراغ", "يمكن أن ينتشرا معاً في الفضاء على شكل موجة كهرومغناطيسية", "لا يمكن أن يتواجدا في الفراغ", "يتحولان إلى طاقة حرارية"],
+    ans: 1,
+    exp: "استنتج ماكسويل أن المجالين الكهربائي والمغناطيسي المتغيرين مع الزمن والمتلازمين يمكن أن ينتشرا بشكل موجة في الفضاء تسمى الموجة الكهرومغناطيسية، وقد أثبت هرتز ذلك تجريبياً لاحقاً."
+  }
+];
+
+const labels = ['أ', 'ب', 'ج', 'د'];
+let current = 0, score = 0, answered = false;
+
+// Build stars
+(function buildStars() {
+  const s = document.getElementById('stars');
+  for (let i = 0; i < 70; i++) {
+    const el = document.createElement('div');
+    el.className = 'star';
+    const size = Math.random() * 2.5 + 1;
+    el.style.cssText = `width:${size}px;height:${size}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${(Math.random()*3+2).toFixed(1)}s;animation-delay:${(Math.random()*4).toFixed(1)}s`;
+    s.appendChild(el);
+  }
+})();
+
+function renderQuestion() {
+  const q = questions[current];
+  answered = false;
+  document.getElementById('questionNum').textContent = 'السؤال ' + (current + 1);
+  document.getElementById('questionText').textContent = q.q;
+  document.getElementById('progressText').textContent = `السؤال ${current + 1} من ${questions.length}`;
+  document.getElementById('scoreText').textContent = `النتيجة: ${score}`;
+  document.getElementById('progressBar').style.width = ((current + 1) / questions.length * 100) + '%';
+
+  const cont = document.getElementById('optionsContainer');
+  cont.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="option-label">${labels[i]}</span><span class="option-text">${opt}</span>`;
+    btn.onclick = () => selectOption(i, btn);
+    cont.appendChild(btn);
+  });
+
+  const exp = document.getElementById('explanation');
+  exp.classList.remove('show');
+  const nb = document.getElementById('nextBtn');
+  nb.classList.remove('show');
+  nb.textContent = current < questions.length - 1 ? 'السؤال التالي ←' : 'عرض النتيجة 🎉';
+
+  // Animate card
+  const card = document.getElementById('questionCard');
+  card.style.animation = 'none';
+  void card.offsetWidth;
+  card.style.animation = 'slideUp 0.45s ease both';
+}
+
+function selectOption(idx, btn) {
+  if (answered) return;
+  answered = true;
+  const correct = questions[current].ans;
+  const allBtns = document.querySelectorAll('.option-btn');
+
+  allBtns.forEach((b, i) => {
+    b.disabled = true;
+    if (i === correct) { b.classList.add('correct'); }
+    else if (i === idx && idx !== correct) { b.classList.add('wrong'); }
+    else { b.classList.add('dimmed'); }
+  });
+
+  if (idx === correct) {
+    score++;
+    burst(btn);
+  }
+
+  document.getElementById('scoreText').textContent = `النتيجة: ${score}`;
+  document.getElementById('explanationText').textContent = questions[current].exp;
+  document.getElementById('explanation').classList.add('show');
+  document.getElementById('nextBtn').classList.add('show');
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= questions.length) { showScore(); return; }
+  renderQuestion();
+}
+
+function showScore() {
+  document.getElementById('quizArea').style.display = 'none';
+  document.getElementById('progressWrap').style.display = 'none';
+  const panel = document.getElementById('scorePanel');
+  panel.classList.add('show');
+
+  const pct = Math.round(score / questions.length * 100);
+  document.getElementById('finalScore').textContent = score;
+  document.getElementById('correctCount').textContent = score;
+  document.getElementById('wrongCount').textContent = questions.length - score;
+  document.getElementById('pctCount').textContent = pct + '%';
+
+  // Animate circle
+  const circ = document.getElementById('scoreFg');
+  const circumference = 2 * Math.PI * 80; // ≈ 502
+  setTimeout(() => {
+    circ.style.strokeDashoffset = circumference * (1 - pct / 100);
+  }, 200);
+
+  let msg, cls, sub;
+  if (pct === 100)      { msg = '🏆 ممتاز! إنجاز رائع!';     cls = 'excellent'; sub = 'حصلت على العلامة الكاملة! أنت نجم الفيزياء.'; }
+  else if (pct >= 80)   { msg = '⭐ جيد جداً!';               cls = 'good';      sub = 'أداء رائع! قليل من المراجعة ستصل للقمة.'; }
+  else if (pct >= 60)   { msg = '📘 جيد – استمر!';            cls = 'fair';      sub = 'أساس جيد، راجع النقاط التي أخطأت فيها.'; }
+  else                  { msg = '📖 تحتاج مزيداً من المراجعة'; cls = 'poor';      sub = 'لا تيأس! راجع الفصل مجدداً وأعد الاختبار.'; }
+
+  const msgEl = document.getElementById('scoreMsg');
+  msgEl.textContent = msg;
+  msgEl.className = 'score-msg ' + cls;
+  document.getElementById('scoreSub').textContent = sub;
+
+  if (pct >= 80) bigBurst();
+}
+
+function restartQuiz() {
+  current = 0; score = 0;
+  document.getElementById('scorePanel').classList.remove('show');
+  document.getElementById('quizArea').style.display = '';
+  document.getElementById('progressWrap').style.display = '';
+  renderQuestion();
+}
+
+function burst(btn) {
+  const rect = btn.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  firework(cx, cy, ['#4fa3e8','#7c3aed','#f5c842','#22c55e','#fff']);
+}
+
+function bigBurst() {
+  setTimeout(() => firework(window.innerWidth/2, window.innerHeight/2, ['#f5c842','#ff6b6b','#4fa3e8','#fff','#7c3aed']), 100);
+  setTimeout(() => firework(window.innerWidth*0.3, window.innerHeight*0.4, ['#22c55e','#f5c842','#fff']), 600);
+  setTimeout(() => firework(window.innerWidth*0.7, window.innerHeight*0.4, ['#7c3aed','#4fa3e8','#fff']), 900);
+}
+
+function firework(cx, cy, colors) {
+  const wrap = document.createElement('div');
+  wrap.className = 'burst';
+  wrap.style.left = cx + 'px';
+  wrap.style.top  = cy + 'px';
+  document.body.appendChild(wrap);
+  for (let i = 0; i < 16; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const angle = (i / 16) * 2 * Math.PI;
+    const dist = 60 + Math.random() * 60;
+    p.style.background = colors[i % colors.length];
+    p.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+    p.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+    p.style.setProperty('--dur', (0.5 + Math.random() * 0.4) + 's');
+    wrap.appendChild(p);
+  }
+  setTimeout(() => wrap.remove(), 1200);
+}
+
+renderQuestion();
+</script>
+  <footer style="text-align: center; padding: 40px;">
+    <a href="dashboard.html" style="color: #ffab00; font-size: 16px; text-decoration: none; border: 1px solid #ffab00; padding: 10px 20px; border-radius: 8px;">
+        ⬅ العودة لمركز الاختبارات
+    </a>
+</footer>
+</body>
+</html>
